@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "npx sequelize-cli db:seed:all && node app.js",
     "dev": "nodemon app.js"
   },
   "type": "module",
@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/EmergenceDelft/server-new-media-em2#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "~4.16.1",
-    "express-ws": "^5.0.2",
     "middleware": "^1.0.0",
     "pg": "^8.11.5",
     "sequelize": "^6.37.3",
