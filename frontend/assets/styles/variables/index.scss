@@ -1,0 +1,8 @@
+/* 
+ * Variables file, only for scss variables/mixins 
+ * DO NOT ADD ACTUAL STYLES HERE,
+ * they will be injected into every sfc and result in a lot of duplicate css for the end-user
+ */
+
+@forward "responsive";
+@forward "color";

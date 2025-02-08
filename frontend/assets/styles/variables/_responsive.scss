@@ -1,0 +1,51 @@
+/* EXAMPLE USAGE:
+
+  .my-box {
+    padding: 10px;
+
+    @include for-desktop-up {
+      padding: 20px;
+    }
+}
+*/
+
+$border-radius: 5px;
+
+$phone-only: 809px;
+$tablet-portrait: 810px;
+$tablet-landscape: 1024px;
+$desktop: 1440px;
+
+@mixin for-phone-only {
+  @media (max-width: $phone-only) {
+    @content;
+  }
+}
+
+@mixin for-tablet-portrait-down {
+  @media (max-width: $tablet-portrait) {
+    @content;
+  }
+}
+
+@mixin for-tablet-landscape-down {
+  @media (max-width: $tablet-landscape) {
+    @content;
+  }
+}
+
+@mixin for-tablet-portrait-up {
+  @media (min-width: $tablet-portrait) {
+    @content;
+  }
+}
+@mixin for-tablet-landscape-up {
+  @media (min-width: $tablet-landscape) {
+    @content;
+  }
+}
+@mixin for-desktop-up {
+  @media (min-width: $desktop) {
+    @content;
+  }
+}
