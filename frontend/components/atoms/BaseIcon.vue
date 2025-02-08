@@ -4,9 +4,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  icon?: string
-  width?: number
-  height?: number
+  icon: string
 }>()
 
 // Auto-load icons

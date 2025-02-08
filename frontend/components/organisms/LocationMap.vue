@@ -19,6 +19,20 @@
 </template>
 
 <script setup lang="ts">
+import type { LocationDetails } from "~/types/types"
+
+const props = defineProps<{
+  locations: LocationDetails[]
+}>()
+
+const markers = props.locations.map((location, index) => ({
+  id: index,
+  lat: location.latLng.latitude,
+  lng: location.latLng.longitude,
+  title: location.name
+}))
+
+
 const mapConfig = {
   center: { lat: 52.1326, lng: 5.2913 },
   zoom: 8,
