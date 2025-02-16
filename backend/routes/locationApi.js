@@ -39,12 +39,14 @@ locationApi.get("/api/locations/:id", async (req, res) => {
 
 locationApi.get("/api/locations", async (req, res) => {
   try {
-    const locations = await readLocations()
-    res.json(locations)
+    const searchQuery = req.query.query || '';
+    const locations = await readLocations(searchQuery);
+    res.json(locations);
   } catch (error) {
-    res.status(500).send({ error: "Failed to fetch locations" })
+    res.status(500).send({ error: "Failed to fetch locations" });
   }
-})
+});
+
 
 /* Update */
 locationApi.put("/api/locations/:id", async (req, res) => {

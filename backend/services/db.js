@@ -2,8 +2,8 @@ import { Sequelize } from "sequelize"
 
 //Setup for the DB connection
 const sequelize = new Sequelize(
-  process.env.DB_NAME || "kraakkaart",
-  process.env.DB_USER || "kraakkaart",
+  process.env.DB_NAME || "ws",
+  process.env.DB_USER || "ws-admin",
   process.env.DB_PASSWORD || "fuckleegstand",
   {
     host: process.env.DB_HOST || "localhost",

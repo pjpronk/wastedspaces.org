@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "kraakkaart",
+    "database": "ws",
+    "username": "ws-admin",
     "password": "fuckleegstand",
-    "database": "kraakkaart",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

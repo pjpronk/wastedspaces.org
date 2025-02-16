@@ -1,10 +1,10 @@
 <template>
   <div class="location-list-item">
+    <BaseIcon icon="WS_location" />
     <BaseText>{{ location.address }}</BaseText>
-    <BaseText>{{ location.locality }}, {{ location.country }}</BaseText>
     <BaseText
-      >Latitude: {{ location.latLng.latitude }}, Longitude:
-      {{ location.latLng.longitude }}</BaseText
+      >Latitude: {{ location.latitude }}, Longitude:
+      {{ location.longitude }}</BaseText
     >
   </div>
 </template>
@@ -15,6 +15,11 @@ import type { LocationDetails } from "~/types/types"
 defineProps<{
   location: LocationDetails
 }>()
+
+onMounted(() => {
+  console.log("LocationListItem mounted")
+  console.log(location)
+})
 </script>
 
 <style scoped lang="scss">

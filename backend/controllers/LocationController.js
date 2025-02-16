@@ -1,4 +1,5 @@
 import db from "../models/index.js"
+import { Op } from "sequelize"
 import {v4 as uuidv4} from "uuid"
 
 const Location = db.Location
@@ -52,14 +53,23 @@ export async function readLocation(locationId) {
   }
 }
 
-export async function readLocations() {
+export async function readLocations(search = '') {
   try {
-    return await Location.findAll()
+    const whereClause = search
+      ? {
+        address: {
+            [Op.iLike]: `%${search}%` // Case-insensitive search for PostgreSQL
+          }
+        }
+      : {}; // Empty object means no filtering
+
+    return await Location.findAll({ where: whereClause });
   } catch (error) {
-    console.error("Error fetching locations:", error)
-    throw error
+    console.error("Error fetching locations:", error);
+    throw error;
   }
 }
+
 
 /* Update */
 export async function updateLocation(id, locationUpdates) {

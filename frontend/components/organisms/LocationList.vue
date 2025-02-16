@@ -2,7 +2,7 @@
   <div class="location-list">
     <LocationListItem
       v-for="location in locations"
-      :key="location.latLng.latitude + ',' + location.latLng.longitude"
+      :key="location.latitude + ',' + location.longitude"
       :location="location"
     />
   </div>
@@ -21,6 +21,5 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: $grey;
 }
 </style>

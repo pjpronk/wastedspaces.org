@@ -3,10 +3,8 @@ export interface LocationDetails {
   city: string
   type: LocationType
   vacantSince: Date
-  latLng: {
-    latitude: number
-    longitude: number
-  }
+  latitude: number
+  longitude: number
 }
 
 export enum LocationType {

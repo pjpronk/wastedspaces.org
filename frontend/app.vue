@@ -1,6 +1,5 @@
 <template>
   <div class="layout">
-    <TheNav />
     <NuxtPage />
   </div>
 </template>
@@ -20,7 +19,7 @@ html {
   @include for-phone-only {
     font-size: 12px;
   }
-  height: 100%;
+  height: 100vh;
 }
 
 .layout {
