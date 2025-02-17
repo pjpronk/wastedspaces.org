@@ -45,10 +45,10 @@ watch(() => route.query.s, fetchLocations);
   background-color: $primary-red;
 
   overflow: hidden;
-  margin : 1rem;
-  height: calc(100% - 2rem);
+  margin : 1.5rem;
+  height: calc(100% - 3rem);
   width: 320px;
-  padding: 1rem;
+  padding: 2rem;
   position: fixed;
   top: 0px;
   left: 0px;
@@ -62,6 +62,7 @@ watch(() => route.query.s, fetchLocations);
 }
 
 .logo {
-  width: 100px;
+  width: 80%;
+  margin-right: auto;
 }
 </style>

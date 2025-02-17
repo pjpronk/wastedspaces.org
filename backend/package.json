@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "seed:db": "npx sequelize-cli db:seed:all"
+    "migrate:db": "npx sequelize-cli db:migrate",
+    "seed:db": "npx sequelize-cli db:seed:all",
+    "clean:db": "npx sequelize-cli db:seed:undo:all"
   },
   "type": "module",
   "description": "Server for the kraakkaart.nl website.",

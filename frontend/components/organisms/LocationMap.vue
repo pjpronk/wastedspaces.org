@@ -5,12 +5,15 @@
         <BaseMap :google="google" :mapConfig="mapConfig">
           <template v-slot="{ map }">
             <BaseMarker
-              :google-config="google"
+              v-for="location in locations"
               :map="map"
-              :marker="marker"
-              v-for="marker in markers"
-              :key="marker.id"
-            />
+              :google="google"
+              :position="{ lat: location.latitude, lng: location.longitude }"
+              :title="location.address"
+              :key="location.id"
+            >
+            <LocationInfoWindow :location="location"/>
+            </BaseMarker>
           </template>
         </BaseMap>
       </template>
@@ -20,21 +23,13 @@
 
 <script setup lang="ts">
 import type { LocationDetails } from "~/types/types"
-
-const props = defineProps<{
+defineProps<{
   locations: LocationDetails[]
 }>()
 
-const markers = props.locations.map((location, index) => ({
-  id: index,
-  lat: location.latitude,
-  lng: location.longitude,
-  title: location.address
-}))
-
-
 const mapConfig = {
   center: { lat: 51.9146308, lng: 4.4709485 },
+//   mapId: "c3e2f336-8476-4de9-a033-c3249601d1d8",
   zoom: 12,
   disableDefaultUI: true,
   styles: [

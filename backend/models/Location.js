@@ -26,11 +26,11 @@ const Location = (sequelize) => {
       defaultValue: true
     },
     latitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       default: 0
     },
     longitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       default: 0
     },
   })

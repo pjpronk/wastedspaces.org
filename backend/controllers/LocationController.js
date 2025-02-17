@@ -84,7 +84,7 @@ export async function updateLocation(id, locationUpdates) {
       address,
       city,
       latitude,
-      longitude
+      longitude,
     } = locationUpdates;
 
     // Validate update fields

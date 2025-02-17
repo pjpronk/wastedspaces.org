@@ -9,8 +9,8 @@ module.exports = {
         vacatedSince: null,
         address: 'Westzeedijk 341',
         city: 'Rotterdam',
-        latitude: 515.911,
-        longitude: 438.775,
+        latitude: 51.910530,
+        longitude: 4.473490,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -18,10 +18,10 @@ module.exports = {
         id: uuidv4(),
         type: 'PUBLIEK',
         vacatedSince: null,
-        address: 'Museumpark 18-20',
+        address: 'Museumpark 25',
         city: 'Rotterdam',
-        latitude: 515.914,
-        longitude: 438.771,
+        latitude: 51.914488,
+        longitude: 4.470987,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -31,8 +31,8 @@ module.exports = {
         vacatedSince: null,
         address: 'Coolsingel 105',
         city: 'Rotterdam',
-        latitude: 515.922,
-        longitude: 438.779,
+        latitude: 51.920464,
+        longitude: 4.479193,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -40,10 +40,10 @@ module.exports = {
         id: uuidv4(),
         type: 'ONBEKEND',
         vacatedSince: null,
-        address: 'Witte de Withstraat 63',
+        address: 'Vlietlaan 45',
         city: 'Rotterdam',
-        latitude: 515.915,
-        longitude: 438.774,
+        latitude: 51.929336,
+        longitude: 4.501709,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -51,6 +51,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('locations', null, {});
+    await queryInterface.dropTable('locations');
   }
 };

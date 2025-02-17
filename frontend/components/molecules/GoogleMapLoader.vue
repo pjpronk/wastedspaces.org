@@ -14,8 +14,8 @@ const googleConfig: Ref<null | typeof google> = ref(null)
 
 onMounted(async () => {
   googleConfig.value = await new Loader({
-    libraries: ["places"],
-    apiKey: "AIzaSyDgKblZaexJ5McxxTFOxB3lp_8hEQ2jZ-A"
-  }).load()
+    libraries: ["places", "marker"],
+    apiKey: ""
+  }).load().then()
 })
 </script>
