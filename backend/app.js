@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express"
 import sequelize from "./services/db.js"
 import cors from "cors"
@@ -16,7 +17,7 @@ await sequelize
 /* Global api configurations */
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ALLOWED_ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"]
   })
 )

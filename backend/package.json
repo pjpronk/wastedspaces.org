@@ -24,6 +24,7 @@
   "homepage": "https://github.com/EmergenceDelft/server-new-media-em2#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "~4.16.1",
     "middleware": "^1.0.0",
     "pg": "^8.11.5",

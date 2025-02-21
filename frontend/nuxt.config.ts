@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:5050/api', // Accessible everywhere
+      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || 'Unauthorized'
     },
   },
   modules: ["@nuxt/eslint", "@nuxtjs/leaflet"],
