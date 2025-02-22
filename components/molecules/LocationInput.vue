@@ -2,15 +2,17 @@
   <div class="base-location-input-container">
     <GoogleMapLoader>
       <template #default="{ google }">
-        <BaseLocationInput @update="update" :value="value" :google="google" />
+        <BaseLocationInput :value="value" :google="google" @update="update" />
       </template>
     </GoogleMapLoader>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { LocationDetails } from "~/types/types"
+
 // Define props
-const props = defineProps({
+defineProps({
   value: {
     type: String,
     default: ""
@@ -21,7 +23,7 @@ const props = defineProps({
 const emit = defineEmits(["update"])
 
 // TODO add type
-const update = (locationDetails: any) => {
+const update = (locationDetails: LocationDetails) => {
   emit("update", locationDetails)
 }
 </script>

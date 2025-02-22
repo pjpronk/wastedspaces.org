@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <input
     id="geocode"
     :value="value"
@@ -9,6 +9,8 @@
 </template>
 
 <script setup lang="ts">
+import type { LocationDetails } from '~/types/types'
+
 const props = defineProps({
   value: {
     type: String,
@@ -38,29 +40,7 @@ function initializeAutocomplete() {
     input,
     autocompleteOptions
   )
-  autocomplete.value?.addListener("place_changed", () => {
-    const place = autocomplete.value?.getPlace()
-    if (place) {
-      const lat = place.geometry?.location.lat()
-      const lng = place.geometry?.location.lng()
-      if (lat && lng) {
-        const latLng = { latitude: lat, longitude: lng }
-        const address = place.formatted_address ? place.formatted_address : null
 
-        // TODO: ADD TYPE
-        const locationDetails: any = {
-          address: address,
-          latLng: latLng,
-          name: place.name,
-          country:
-            place.address_components && place.address_components[3].long_name,
-          locality:
-            place.address_components && place.address_components[1].long_name
-        }
-        emit("update", locationDetails)
-      }
-    }
-  })
 }
 </script>
 
@@ -68,4 +48,4 @@ function initializeAutocomplete() {
 .base-location-input {
   /* Add your styles here */
 }
-</style>
+</style> -->

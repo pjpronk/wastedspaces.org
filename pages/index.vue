@@ -1,38 +1,38 @@
 <template>
   <div class="index">
     <div class="map-overlay">
-      <BaseIcon class = "logo" icon="logo_white" />
+      <BaseIcon class="logo" icon="logo_white" />
       <BaseSearchInput />
       <LocationList :locations="locations" class="mt-1-0" />
     </div>
-    <LocationMap class = "map" :locations="locations"/>
+    <LocationMap class="map" :locations="locations" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { LocationDetails } from '~/types/types';
+import type { LocationDetails } from "~/types/types"
 
-const { $apiFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp()
 useHead({
   title: "Kraakkaart",
   meta: [{ name: "", content: "" }]
 })
-const locations = ref<LocationDetails[]>([]);
-const route = useRoute();
+const locations = ref<LocationDetails[]>([])
+const route = useRoute()
 
 const fetchLocations = async () => {
   try {
-    locations.value = await $apiFetch('locations', {
+    locations.value = await $apiFetch("locations", {
       query: route.query.s ? route.query.s.toString() : ""
-    });
+    })
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
-fetchLocations();
+fetchLocations()
 
-watch(() => route.query.s, fetchLocations);
+watch(() => route.query.s, fetchLocations)
 </script>
 
 <style lang="scss">
@@ -41,11 +41,11 @@ watch(() => route.query.s, fetchLocations);
   flex-direction: row;
 }
 
-.map-overlay { 
+.map-overlay {
   background-color: $primary-red;
 
   overflow: hidden;
-  margin : 1.5rem;
+  margin: 1.5rem;
   height: calc(100% - 3rem);
   width: 320px;
   padding: 2rem;

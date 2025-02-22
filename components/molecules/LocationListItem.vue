@@ -1,14 +1,14 @@
 <template>
   <div class="location-list-item">
-    <BaseIcon class = "icon" icon="industry" />
-    <div class = "flex-column">
+    <BaseIcon class="icon" icon="industry" />
+    <div class="flex-column">
       <BaseText>{{ location.address }}</BaseText>
       <BaseText>+- 6 maanden</BaseText>
     </div>
-    <div class = "flex-column">
+    <div class="flex-column">
       <BaseText> Amsterdam </BaseText>
       <BaseText> Kaapstad </BaseText>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -18,7 +18,6 @@ import type { LocationDetails } from "~/types/types"
 defineProps<{
   location: LocationDetails
 }>()
-
 </script>
 
 <style scoped lang="scss">

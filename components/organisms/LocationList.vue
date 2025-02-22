@@ -10,10 +10,9 @@
 
 <script setup lang="ts">
 import type { LocationDetails } from "~/types/types"
-const props = defineProps<{
+defineProps<{
   locations: LocationDetails[]
 }>()
-
 </script>
 
 <style scoped lang="scss">

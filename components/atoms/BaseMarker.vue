@@ -1,34 +1,33 @@
 <template>
-    <div v-if="map">
-        <div ref="infoWindowRef">
-            <slot></slot>
-        </div>
+  <div v-if="map">
+    <div ref="infoWindowRef">
+      <slot></slot>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  const props = defineProps<{
-    map: google.maps.Map;
-    position: google.maps.LatLngLiteral;
-    title?: string;
-  }>();
+  </div>
+</template>
 
-  const infoWindowRef = ref<HTMLElement | null>(null);
+<script setup lang="ts">
+const props = defineProps<{
+  map: google.maps.Map
+  position: google.maps.LatLngLiteral
+  title?: string
+}>()
 
-  const marker = new google.maps.Marker({
-      map: props.map,
-      position: props.position,
-      title: props.title || "",
-    });
+const infoWindowRef = ref<HTMLElement | null>(null)
 
-    const infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
+const marker = new google.maps.Marker({
+  map: props.map,
+  position: props.position,
+  title: props.title || ""
+})
 
-    marker.addListener("click", () => {
-        infoWindow.close();
-        if (infoWindowRef.value instanceof HTMLElement) {
-            infoWindow.setContent(infoWindowRef.value);
-        }
-        infoWindow.open(props.map, marker);
-    });
-  </script>
-  
+const infoWindow = new google.maps.InfoWindow({ disableAutoPan: true })
+
+marker.addListener("click", () => {
+  infoWindow.close()
+  if (infoWindowRef.value instanceof HTMLElement) {
+    infoWindow.setContent(infoWindowRef.value)
+  }
+  infoWindow.open(props.map, marker)
+})
+</script>

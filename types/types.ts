@@ -8,8 +8,6 @@ export interface LocationDetails {
   longitude: number
 }
 
-export interface MarkerDetails {}
-
 export enum LocationType {
   PRIVAAT,
   PUBLIEK,

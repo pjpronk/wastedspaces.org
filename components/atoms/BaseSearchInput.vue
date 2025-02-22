@@ -1,28 +1,31 @@
 <template>
   <input
     v-model="searchValue"
-    @input="updateSearch"
     class="base-search-input"
     type="text"
     placeholder="Search..."
+    @input="updateSearch"
   />
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
-const route = useRoute();
-const router = useRouter();
-const searchValue = ref(route.query.s || '');
+const route = useRoute()
+const router = useRouter()
+const searchValue = ref(route.query.s || "")
 
 const updateSearch = () => {
-  router.push({ query: { ...route.query, s: searchValue.value || undefined } });
-};
+  router.push({ query: { ...route.query, s: searchValue.value || undefined } })
+}
 
-watch(() => route.query.s, (newS) => {
-  searchValue.value = newS || '';
-});
+watch(
+  () => route.query.s,
+  (newS) => {
+    searchValue.value = newS || ""
+  }
+)
 </script>
 
 <style scoped>
