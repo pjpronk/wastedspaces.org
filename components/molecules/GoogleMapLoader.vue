@@ -15,12 +15,12 @@ const googleConfig: Ref<null | typeof google> = ref(null)
 onMounted(async () => {
   console.log(
     "GoogleMapLoader mounted",
-    config.public.GOOGLE_MAPS_API_KEY,
+    config.public.googleMapsApiKey,
     config
   )
   googleConfig.value = await new Loader({
     libraries: ["places", "marker"],
-    apiKey: config.public.GOOGLE_MAPS_API_KEY
+    apiKey: config.public.googleMapsApiKey
   })
     .load()
     .then()

@@ -5,19 +5,19 @@
   </template>
 </template>
 
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 const props = defineProps<{
-  google: typeof google
-  mapConfig: google.maps.MapOptions
+  google: any
+  mapConfig: any
 }>()
 
-const mapContainer: HTMLElement | null = null
-let map: google.maps.Map | null = null
+const mapContainer = ref(null)
+const map = ref(null)
 
 onMounted(async () => {
   try {
-    if (!mapContainer) return
-    map = new props.google.maps.Map(mapContainer, props.mapConfig)
+    map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
   } catch (error) {
     console.error("Error aloading map: ", error)
   }

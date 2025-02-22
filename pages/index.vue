@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import type { LocationDetails } from "~/types/types"
 
-const { $apiFetch } = useNuxtApp()
 useHead({
   title: "Kraakkaart",
   meta: [{ name: "", content: "" }]
@@ -22,9 +21,8 @@ const route = useRoute()
 
 const fetchLocations = async () => {
   try {
-    locations.value = await $apiFetch("locations", {
-      query: route.query.s ? route.query.s.toString() : ""
-    })
+    const query = route.query.s ? route.query.s.toString() : ""
+    locations.value = await readLocations(query)
   } catch (error) {
     console.error(error)
   }

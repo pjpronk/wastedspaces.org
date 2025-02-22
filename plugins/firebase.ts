@@ -1,6 +1,11 @@
 // plugins/firebase.ts
 import { defineNuxtPlugin } from "#app"
-import { initializeApp, type FirebaseOptions } from "firebase/app"
+import {
+  initializeApp,
+  getApps,
+  getApp,
+  type FirebaseOptions
+} from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 
 export default defineNuxtPlugin((_nuxtApp) => {
@@ -16,8 +21,9 @@ export default defineNuxtPlugin((_nuxtApp) => {
     measurementId: config.public.firebaseMeasurementId as string
   }
 
-  const app = initializeApp(firebaseConfig)
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
   const db = getFirestore(app)
+  console.log("Firebase initialized", db)
 
   return {
     provide: {
