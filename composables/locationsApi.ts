@@ -14,7 +14,7 @@ import type { LocationDetails } from "~/types/types"
 const { $db } = useNuxtApp()
 
 // Firestore collection reference
-const locationsCollection = collection($db, "locations")
+const locationsCollection = () => collection(useNuxtApp().$db, "locations")
 
 // Reactive state
 export const locations = ref<LocationDetails[]>([])
@@ -40,7 +40,7 @@ export async function createLocation(
     }
 
     const id = crypto.randomUUID() // Generate a unique ID
-    const locationRef = doc(locationsCollection, id)
+    const locationRef = doc(locationsCollection(), id)
     const newLocation: LocationDetails = { id, ...locationDetails }
 
     await setDoc(locationRef, newLocation)
@@ -64,14 +64,14 @@ export async function readLocation(
     loading.value = true
     error.value = null
 
-    const locationRef = doc(locationsCollection, locationId)
+    const locationRef = doc(locationsCollection(), locationId)
     const snapshot = await getDoc(locationRef)
 
     if (!snapshot.exists()) {
       throw new Error("Location not found")
     }
 
-    location.value = snapshot.data() as Location
+    location.value = snapshot.data() as LocationDetails
     return location.value
   } catch (err: any) {
     error.value = err.message
@@ -91,9 +91,13 @@ export async function readLocations(
 
     let locationQuery
     if (search) {
-      locationQuery = query(locationsCollection, where("address", ">=", search))
+      locationQuery = query(
+        locationsCollection(),
+        where("address", ">=", search),
+        where("address", "<=", search + "\uf8ff")
+      )
     } else {
-      locationQuery = locationsCollection
+      locationQuery = locationsCollection()
     }
 
     const snapshot = await getDocs(locationQuery)
