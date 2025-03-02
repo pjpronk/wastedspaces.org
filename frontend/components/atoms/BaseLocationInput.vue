@@ -3,7 +3,7 @@
     id="geocode"
     :value="value"
     type="text"
-    placeholder="Locatie"
+    placeholder="Location"
     class="base-location-input"
   />
 </template>
@@ -22,7 +22,6 @@ const props = defineProps({
 
 const emit = defineEmits(["update"])
 
-const mapConfig = { zoom: 13, disableDefaultUI: true, clickableIcons: false }
 const autocomplete = ref<any>(null)
 const autocompleteOptions = {
   types: ["geocode"]
@@ -45,8 +44,9 @@ function initializeAutocomplete() {
       const lng = place.geometry?.location.lng()
       if (lat && lng) {
         const latLng = { latitude: lat, longitude: lng }
-        const address = place.formatted_address ? place.formatted_address : null
+        const address = place.formatted_address ? place.formatted_address.split(',')[0].trim() : null
 
+        console.log(address)
         // TODO: ADD TYPE
         const locationDetails: any = {
           address: address,
@@ -64,8 +64,12 @@ function initializeAutocomplete() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .base-location-input {
-  /* Add your styles here */
+  border: none;
+  width: 100%;
+  font-size: 14px;
+  line-height: 100%;
+  padding: 0.75rem 1rem;
 }
 </style>

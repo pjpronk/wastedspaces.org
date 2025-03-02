@@ -4,14 +4,13 @@
 
 <style lang="scss" scoped>
 .button {
-  background-color: $black;
-  color: $white;
+  background-color: $white;
+  color: $primary-red;
   padding: 10px 16px;
-  border-radius: $border-radius;
   width: fit-content;
   box-sizing: border-box;
-  border: 2px solid $black;
   cursor: pointer;
+  border: 0px;
 }
 </style>
 s

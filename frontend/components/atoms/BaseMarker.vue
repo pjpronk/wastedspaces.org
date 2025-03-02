@@ -30,5 +30,9 @@
         }
         infoWindow.open(props.map, marker);
     });
+
+    onBeforeUnmount(() => {
+        marker.setMap(null);
+    });
   </script>
   

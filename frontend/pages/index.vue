@@ -2,6 +2,7 @@
   <div class="index">
     <div class="map-overlay">
       <BaseIcon class = "logo" icon="logo_white" />
+      <LocationCreate />
       <BaseSearchInput />
       <LocationList :locations="locations" class="mt-1-0" />
     </div>

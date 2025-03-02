@@ -1,5 +1,5 @@
 <template>
-  <div class="base-location-input-container">
+  <div class="location-input">
     <GoogleMapLoader>
       <template #default="{ google }">
         <BaseLocationInput @update="update" :value="value" :google="google" />
@@ -22,24 +22,13 @@ const emit = defineEmits(["update"])
 
 // TODO add type
 const update = (locationDetails: any) => {
+  console.log(locationDetails)
   emit("update", locationDetails)
 }
 </script>
 
 <style scoped lang="scss">
-.base-location-input {
-  border: none;
-  font-size: 18px;
-  line-height: 36px;
-  cursor: text;
+.location-input {
   width: 100%;
-  padding: 3px;
-}
-.base-location-input-container {
-  width: 100%;
-  input::placeholder {
-    font-size: 15px !important;
-    font-weight: 400 !important;
-  }
 }
 </style>
