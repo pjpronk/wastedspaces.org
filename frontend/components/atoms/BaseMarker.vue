@@ -15,11 +15,18 @@
 
   const infoWindowRef = ref<HTMLElement | null>(null);
 
+  const markerIcon = document.createElement("img");
+  markerIcon.src = "/icons/marker.svg";
+  markerIcon.style.width = "30px";
+  markerIcon.style.height = "30px";
+
   const marker = new google.maps.Marker({
       map: props.map,
-      position: props.position,
-      title: props.title || "",
+      position: {lat: props.position.lat, lng: props.position.lng},
+      icon: markerIcon.src,
     });
+
+    console.log(marker.position)
 
     const infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
 
@@ -31,8 +38,5 @@
         infoWindow.open(props.map, marker);
     });
 
-    onBeforeUnmount(() => {
-        marker.setMap(null);
-    });
   </script>
   

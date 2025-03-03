@@ -3,7 +3,7 @@
     <div class="map-overlay">
       <BaseIcon class = "logo" icon="logo_white" />
       <LocationCreate />
-      <BaseSearchInput />
+      <LocationInput key="2"/>
       <LocationList :locations="locations" class="mt-1-0" />
     </div>
     <LocationMap class = "map" :locations="locations"/>

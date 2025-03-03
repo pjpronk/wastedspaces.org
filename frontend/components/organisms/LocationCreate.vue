@@ -1,6 +1,6 @@
 <template>
   <div class="location-create">
-    <LocationInput />
+    <LocationInput key="1" />
     <BaseDatePicker placeholder="Vacated since" :max="Date.now()" />
     <div class = "row">
       <BaseSelect placeholder="Type" :options="typeOptions" />
