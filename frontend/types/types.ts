@@ -1,11 +1,14 @@
+import type { GeoPoint } from 'firebase/firestore';
+
 export interface LocationDetails {
   id: string
   address: string
   city: string
-  type: LocationType
-  vacantSince: Date
-  latitude: number
-  longitude: number
+  type: 'PRIVAAT' | 'PUBLIEK' | 'COMMERCIEEL' | 'ONBEKEND'
+  vacatedSince: Date
+  location: GeoPoint
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface MarkerDetails {}

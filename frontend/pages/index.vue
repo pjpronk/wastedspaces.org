@@ -1,39 +1,51 @@
 <template>
   <div class="index">
     <div class="map-overlay">
-      <BaseIcon class = "logo" icon="logo_white" />
+      <BaseIcon class="logo" icon="logo_white" />
       <LocationCreate />
       <LocationInput key="2"/>
       <LocationList :locations="locations" class="mt-1-0" />
     </div>
-    <LocationMap class = "map" :locations="locations"/>
+    <LocationMap 
+      class="map" 
+      :locations="locations"
+      @map-center-changed="handleMapCenterChanged"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { LocationDetails } from '~/types/types';
 
-const { $apiFetch } = useNuxtApp();
+const { $firestore } = useNuxtApp();
 useHead({
   title: "Kraakkaart",
   meta: [{ name: "", content: "" }]
 })
+
 const locations = ref<LocationDetails[]>([]);
-const route = useRoute();
+const currentCenter = ref({ lat: 51.9146308, lng: 4.4709485 }); // Default to Rotterdam
+const searchRadius = ref(10); // Default radius in kilometers
 
 const fetchLocations = async () => {
   try {
-    locations.value = await $apiFetch('locations', {
-      query: route.query.s ? route.query.s.toString() : ""
-    });
+    locations.value = await $firestore.getLocationsInRadius(
+      currentCenter.value.lat,
+      currentCenter.value.lng,
+      searchRadius.value
+    );
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching locations:', error);
   }
 };
 
-fetchLocations();
+const handleMapCenterChanged = (center: { lat: number; lng: number }) => {
+  currentCenter.value = center;
+  fetchLocations();
+};
 
-watch(() => route.query.s, fetchLocations);
+// Initial fetch
+fetchLocations();
 </script>
 
 <style lang="scss">
@@ -44,9 +56,8 @@ watch(() => route.query.s, fetchLocations);
 
 .map-overlay { 
   background-color: $primary-red;
-
   overflow: hidden;
-  margin : 1.5rem;
+  margin: 1.5rem;
   height: calc(100% - 3rem);
   width: 320px;
   padding: 2rem;
