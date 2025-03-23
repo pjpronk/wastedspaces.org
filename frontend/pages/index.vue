@@ -25,7 +25,7 @@ useHead({
 
 const locations = ref<LocationDetails[]>([]);
 const currentCenter = ref({ lat: 51.9146308, lng: 4.4709485 }); // Default to Rotterdam
-const searchRadius = ref(10); // Default radius in kilometers
+const searchRadius = ref(100); // Default radius in kilometers
 
 const fetchLocations = async () => {
   try {
@@ -34,6 +34,7 @@ const fetchLocations = async () => {
       currentCenter.value.lng,
       searchRadius.value
     );
+    console.log("Frontend fetched locations:", locations.value);
   } catch (error) {
     console.error('Error fetching locations:', error);
   }
