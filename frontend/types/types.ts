@@ -6,7 +6,7 @@ export interface LocationDetails {
   city: string
   type: 'PRIVAAT' | 'PUBLIEK' | 'COMMERCIEEL' | 'ONBEKEND'
   vacatedSince: Date
-  location: GeoPoint
+  latLng: GeoPoint
   createdAt: Date
   updatedAt: Date
 }

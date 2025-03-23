@@ -21,7 +21,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-01-15'),
     address: 'Oude Delft 1',
     city: 'Delft',
-    location: new GeoPoint(52.0115, 4.3571),
+    latLng: new GeoPoint(52.0115, 4.3571),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -30,7 +30,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-02-01'),
     address: 'Phoenixstraat 28',
     city: 'Delft',
-    location: new GeoPoint(52.0087, 4.3608),
+    latLng: new GeoPoint(52.0087, 4.3608),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -39,7 +39,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-03-01'),
     address: 'Brabantse Turfmarkt 1',
     city: 'Delft',
-    location: new GeoPoint(52.0121, 4.3589),
+    latLng: new GeoPoint(52.0121, 4.3589),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -50,7 +50,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-01-20'),
     address: 'Lange Poten 4',
     city: 'Den Haag',
-    location: new GeoPoint(52.0777, 4.3167),
+    latLng: new GeoPoint(52.0777, 4.3167),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -59,7 +59,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-02-15'),
     address: 'Noordeinde 68',
     city: 'Den Haag',
-    location: new GeoPoint(52.0822, 4.3107),
+    latLng: new GeoPoint(52.0822, 4.3107),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -68,7 +68,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-03-10'),
     address: 'Plein 23',
     city: 'Den Haag',
-    location: new GeoPoint(52.0797, 4.3177),
+    latLng: new GeoPoint(52.0797, 4.3177),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -79,7 +79,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-01-25'),
     address: 'Damstraat 12',
     city: 'Amsterdam',
-    location: new GeoPoint(52.3731, 4.8925),
+    latLng: new GeoPoint(52.3731, 4.8925),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -88,7 +88,7 @@ const sampleLocations = [
     vacatedSince: new Date('2024-02-20'),
     address: 'Herengracht 124',
     city: 'Amsterdam',
-    location: new GeoPoint(52.3747, 4.8882),
+    latLng: new GeoPoint(52.3747, 4.8882),
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -97,7 +97,36 @@ const sampleLocations = [
     vacatedSince: new Date('2024-03-15'),
     address: 'Rokin 42',
     city: 'Amsterdam',
-    location: new GeoPoint(52.3702, 4.8912),
+    latLng: new GeoPoint(52.3702, 4.8912),
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+
+  // Rotterdam locations
+  {
+    type: 'PRIVAAT',
+    vacatedSince: new Date('2024-02-01'),
+    address: 'Vlietlaan 45',
+    city: 'Rotterdam',
+    latLng: new GeoPoint(51.9244, 4.4777),
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    type: 'COMMERCIEEL',
+    vacatedSince: new Date('2024-02-15'),
+    address: 'Witte de Withstraat 63',
+    city: 'Rotterdam',
+    latLng: new GeoPoint(51.9165, 4.4773),
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    type: 'PUBLIEK',
+    vacatedSince: new Date('2024-03-01'),
+    address: 'Coolsingel 105',
+    city: 'Rotterdam',
+    latLng: new GeoPoint(51.9215, 4.4800),
     createdAt: new Date(),
     updatedAt: new Date()
   }

@@ -3,8 +3,8 @@
     <div class="map-overlay">
       <div class="sidebar">
         <BaseIcon class="logo" icon="logo_white" />
-        <LocationInput class="mt-1-0" />
-        <LocationList :locations="locations" class="mt-1-0" />
+        <LocationInput class="mt-1-0" @location-selected="handleLocationSelected" />
+        <LocationList :locations="locations" class="mt-1-0" @location-selected="handleLocationSelected" />
       </div>
       <div class="info-buttons">
         <div>
@@ -18,12 +18,12 @@
       class="map"
       :locations="locations"
       :center="currentCenter"
-      @map-center-changed="handleMapCenterChanged"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+import { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
 
 const { $firestore } = useNuxtApp()
@@ -33,14 +33,14 @@ useHead({
 })
 
 const locations = ref<LocationDetails[]>([])
-const currentCenter = ref({ lat: 51.9146308, lng: 4.4709485 }) // Default to Rotterdam
+const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485 )) // Default to Rotterdam
 const searchRadius = ref(100) // Default radius in kilometers
 
 const fetchLocations = async () => {
   try {
     locations.value = await $firestore.getLocationsInRadius(
-      currentCenter.value.lat,
-      currentCenter.value.lng,
+      currentCenter.value.latitude,
+      currentCenter.value.longitude,
       searchRadius.value
     )
     console.log("Frontend fetched locations:", locations.value)
@@ -49,9 +49,10 @@ const fetchLocations = async () => {
   }
 }
 
-const handleMapCenterChanged = (center: { lat: number; lng: number }) => {
-  currentCenter.value = center
-  fetchLocations()
+const handleLocationSelected = (latLng: GeoPoint) => {
+  console.log("handleLocationSelected", latLng)
+  currentCenter.value = latLng
+
 }
 
 // Initial fetch

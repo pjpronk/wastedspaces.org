@@ -5,8 +5,7 @@
         <BaseMap 
           :google="google" 
           :mapConfig="mapConfig"
-          :center="center"
-          @center-changed="handleCenterChanged"
+          :center="{ lat: center.latitude, lng: center.longitude }"
         >
           <template v-slot="{ map }">
             <BaseMarker
@@ -14,8 +13,8 @@
               :map="map"
               :google="google"
               :position="{ 
-                lat: location.location.latitude, 
-                lng: location.location.longitude 
+                lat: location.latLng.latitude, 
+                lng: location.latLng.longitude 
               }"
               :title="location.address"
               :key="location.id"
@@ -30,29 +29,22 @@
 </template>
 
 <script setup lang="ts">
+import type { GeoPoint } from "@firebase/firestore";
 import type { LocationDetails } from "~/types/types"
 
 const props = defineProps<{
   locations: LocationDetails[]
-  center: { lat: number; lng: number }
-}>()
-
-const emit = defineEmits<{
-  (e: 'map-center-changed', center: { lat: number; lng: number }): void
+  center: GeoPoint
 }>()
 
 const mapRef = ref(null)
 const config = useRuntimeConfig();
 
 const mapConfig = {
-  center: props.center,
+  center: {lat: props.center.latitude, lng: props.center.longitude},
   mapId: config.public.GOOGLE_MAPS_MAP_ID,
   zoom: 12,
   disableDefaultUI: true,
-}
-
-const handleCenterChanged = (center: { lat: number; lng: number }) => {
-  emit('map-center-changed', center);
 }
 
 onMounted(() => {

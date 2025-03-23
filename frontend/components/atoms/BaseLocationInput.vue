@@ -9,6 +9,8 @@
 </template>
 
 <script setup lang="ts">
+import { GeoPoint } from 'firebase/firestore'
+
 const props = defineProps({
   value: {
     type: String,
@@ -20,16 +22,20 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["update"])
-
 const autocomplete = ref<any>(null)
 const autocompleteOptions = {
-  types: ["geocode"]
+  types: ["geocode"],
+  fields: ["formatted_address", "geometry", "name", "address_components"]
 }
 
 onMounted(() => {
   initializeAutocomplete()
 })
+
+const emit = defineEmits<{
+  (e: 'locationSelected', location: GeoPoint): void
+}>();
+
 
 function initializeAutocomplete() {
   const input = document.getElementById("geocode") as HTMLInputElement
@@ -43,21 +49,8 @@ function initializeAutocomplete() {
       const lat = place.geometry?.location.lat()
       const lng = place.geometry?.location.lng()
       if (lat && lng) {
-        const latLng = { latitude: lat, longitude: lng }
-        const address = place.formatted_address ? place.formatted_address.split(',')[0].trim() : null
-
-        console.log(address)
-        // TODO: ADD TYPE
-        const locationDetails: any = {
-          address: address,
-          latLng: latLng,
-          name: place.name,
-          country:
-            place.address_components && place.address_components[3].long_name,
-          locality:
-            place.address_components && place.address_components[1].long_name
-        }
-        emit("update", locationDetails)
+        const latLng = new GeoPoint(lat, lng)
+        emit("locationSelected", latLng)
       }
     }
   })

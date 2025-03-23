@@ -23,7 +23,7 @@ interface LocationDocument {
   vacatedSince: Date;
   address: string;
   city: string;
-  location: GeoPoint;
+  latLng: GeoPoint;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -80,7 +80,7 @@ export default defineNuxtPlugin(() => {
           return locations.filter(loc => {
             const distance = calculateDistance(
               centerLat, centerLng,
-              loc.location.latitude, loc.location.longitude
+              loc.latLng.latitude, loc.latLng.longitude
             );
             return distance <= radiusKm;
           });

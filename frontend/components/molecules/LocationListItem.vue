@@ -1,7 +1,7 @@
 <template>
-  <div class="location-list-item">
-    <BaseIcon class = "icon" icon="industry" />
-    <div class = "flex-column">
+  <div class="location-list-item" @click="handleClick">
+    <BaseIcon class="icon" icon="industry" />
+    <div class="flex-column">
       <BaseText>{{ location.address }}</BaseText>
       <BaseText>+- 6 maanden</BaseText>
     </div>
@@ -9,21 +9,35 @@
 </template>
 
 <script setup lang="ts">
+import type { GeoPoint } from "@firebase/firestore";
 import type { LocationDetails } from "~/types/types"
 
-defineProps<{
+const props = defineProps<{
   location: LocationDetails
-}>()
+}>();
 
+const emit = defineEmits<{
+  (e: 'locationSelected', latLng: GeoPoint): void
+}>();
+
+const handleClick = () => {
+  emit('locationSelected', props.location.latLng);
+};
 </script>
 
 <style scoped lang="scss">
 .location-list-item {
+  border: 2px solid $white;
   padding: 0px 12px;
   gap: 12px;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid $white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba($white, 0.1);
+  }
 }
 
 .flex-column {

@@ -2,13 +2,15 @@
   <div class="location-input">
     <GoogleMapLoader>
       <template #default="{ google }">
-        <BaseLocationInput @update="update" :value="value" :google="google" />
+        <BaseLocationInput @locationSelected="handleLocationSelected" :value="value" :google="google" />
       </template>
     </GoogleMapLoader>
   </div>
 </template>
 
 <script setup lang="ts">
+import { GeoPoint } from 'firebase/firestore'
+
 const props = defineProps({
   value: {
     type: String,
@@ -16,10 +18,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["update"])
+const emit = defineEmits<{
+  (e: 'locationSelected', latLng: GeoPoint): void
+}>()
 
-const update = (locationDetails: any) => {
-  emit("update", locationDetails)
+const handleLocationSelected = (latLng: GeoPoint) => {
+  emit("locationSelected", latLng)
 }
 </script>
 
