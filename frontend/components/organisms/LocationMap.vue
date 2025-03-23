@@ -5,6 +5,7 @@
         <BaseMap 
           :google="google" 
           :mapConfig="mapConfig"
+          :center="center"
           @center-changed="handleCenterChanged"
         >
           <template v-slot="{ map }">
@@ -31,18 +32,20 @@
 <script setup lang="ts">
 import type { LocationDetails } from "~/types/types"
 
-defineProps<{
+const props = defineProps<{
   locations: LocationDetails[]
+  center: { lat: number; lng: number }
 }>()
 
 const emit = defineEmits<{
   (e: 'map-center-changed', center: { lat: number; lng: number }): void
 }>()
 
+const mapRef = ref(null)
 const config = useRuntimeConfig();
 
 const mapConfig = {
-  center: { lat: 51.9146308, lng: 4.4709485 },
+  center: props.center,
   mapId: config.public.GOOGLE_MAPS_MAP_ID,
   zoom: 12,
   disableDefaultUI: true,
@@ -51,4 +54,8 @@ const mapConfig = {
 const handleCenterChanged = (center: { lat: number; lng: number }) => {
   emit('map-center-changed', center);
 }
+
+onMounted(() => {
+  console.log(mapRef.value)
+})
 </script>

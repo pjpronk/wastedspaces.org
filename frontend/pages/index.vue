@@ -17,6 +17,7 @@
     <LocationMap
       class="map"
       :locations="locations"
+      :center="currentCenter"
       @map-center-changed="handleMapCenterChanged"
     />
   </div>

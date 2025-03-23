@@ -9,6 +9,7 @@
 const props = defineProps<{
   google: any
   mapConfig: any
+  center: { lat: number; lng: number }
 }>()
 
 const mapContainer = ref(null)
@@ -19,6 +20,12 @@ onMounted(async () => {
     map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
   } catch (error) {
     console.error("Error aloading map: ", error)
+  }
+})
+
+watch(props.center, (newCenter) => {
+  if (map.value) {
+    map.value.panTo(newCenter)
   }
 })
 </script>
