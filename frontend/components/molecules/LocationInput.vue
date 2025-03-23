@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-// Define props
 const props = defineProps({
   value: {
     type: String,
@@ -17,12 +16,9 @@ const props = defineProps({
   }
 })
 
-// Define emits
 const emit = defineEmits(["update"])
 
-// TODO add type
 const update = (locationDetails: any) => {
-  console.log(locationDetails)
   emit("update", locationDetails)
 }
 </script>

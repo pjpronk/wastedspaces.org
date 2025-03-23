@@ -20,7 +20,7 @@ const props = defineProps<{
 .location-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   overflow-y: scroll;
+  border: 2px solid $white;
 }
 </style>

@@ -19,12 +19,11 @@ defineProps<{
 
 <style scoped lang="scss">
 .location-list-item {
-  border: 2px solid $white;
   padding: 0px 12px;
   gap: 12px;
-
   display: flex;
   align-items: center;
+  border-bottom: 2px solid $white;
 }
 
 .flex-column {

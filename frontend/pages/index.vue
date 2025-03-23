@@ -3,6 +3,7 @@
     <div class="map-overlay">
       <div class="sidebar">
         <BaseIcon class="logo" icon="logo_white" />
+        <LocationInput class="mt-1-0" />
         <LocationList :locations="locations" class="mt-1-0" />
       </div>
       <div class="info-buttons">
