@@ -1,13 +1,20 @@
 <template>
   <div class="index">
     <div class="map-overlay">
-      <BaseIcon class="logo" icon="logo_white" />
-      <LocationCreate />
-      <LocationInput key="2"/>
-      <LocationList :locations="locations" class="mt-1-0" />
+      <div class="sidebar">
+        <BaseIcon class="logo" icon="logo_white" />
+        <LocationList :locations="locations" class="mt-1-0" />
+      </div>
+      <div class="info-buttons">
+        <div>
+          <BaseButton class="primary-inverted" icon="documents" />
+          <BaseButton class="primary-inverted mt-0-5" icon="info" />
+        </div>
+        <BaseButton class="primary-inverted" icon="add" />
+      </div>
     </div>
-    <LocationMap 
-      class="map" 
+    <LocationMap
+      class="map"
       :locations="locations"
       @map-center-changed="handleMapCenterChanged"
     />
@@ -15,17 +22,17 @@
 </template>
 
 <script setup lang="ts">
-import type { LocationDetails } from '~/types/types';
+import type { LocationDetails } from "~/types/types"
 
-const { $firestore } = useNuxtApp();
+const { $firestore } = useNuxtApp()
 useHead({
   title: "Kraakkaart",
   meta: [{ name: "", content: "" }]
 })
 
-const locations = ref<LocationDetails[]>([]);
-const currentCenter = ref({ lat: 51.9146308, lng: 4.4709485 }); // Default to Rotterdam
-const searchRadius = ref(100); // Default radius in kilometers
+const locations = ref<LocationDetails[]>([])
+const currentCenter = ref({ lat: 51.9146308, lng: 4.4709485 }) // Default to Rotterdam
+const searchRadius = ref(100) // Default radius in kilometers
 
 const fetchLocations = async () => {
   try {
@@ -33,20 +40,20 @@ const fetchLocations = async () => {
       currentCenter.value.lat,
       currentCenter.value.lng,
       searchRadius.value
-    );
-    console.log("Frontend fetched locations:", locations.value);
+    )
+    console.log("Frontend fetched locations:", locations.value)
   } catch (error) {
-    console.error('Error fetching locations:', error);
+    console.error("Error fetching locations:", error)
   }
-};
+}
 
 const handleMapCenterChanged = (center: { lat: number; lng: number }) => {
-  currentCenter.value = center;
-  fetchLocations();
-};
+  currentCenter.value = center
+  fetchLocations()
+}
 
 // Initial fetch
-fetchLocations();
+fetchLocations()
 </script>
 
 <style lang="scss">
@@ -54,18 +61,35 @@ fetchLocations();
   display: flex;
   flex-direction: row;
 }
+.info-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: auto;
+  height: 100%;
+  justify-content: space-between;
+}
 
-.map-overlay { 
-  background-color: $primary-red;
-  overflow: hidden;
-  margin: 1.5rem;
-  height: calc(100% - 3rem);
+.sidebar {
+  display: flex;
+  flex-direction: column;
   width: 320px;
+  height: 100%;
+  background-color: $primary-red;
+  pointer-events: auto;
   padding: 2rem;
-  position: fixed;
-  top: 0px;
-  left: 0px;
+}
+
+.map-overlay {
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
   z-index: 9;
+  pointer-events: none;
+  position: absolute;
+  justify-content: space-between;
 }
 
 .map {

@@ -5,10 +5,6 @@
       <BaseText>{{ location.address }}</BaseText>
       <BaseText>+- 6 maanden</BaseText>
     </div>
-    <div class = "flex-column">
-      <BaseText> Amsterdam </BaseText>
-      <BaseText> Kaapstad </BaseText>
-    </div>  
   </div>
 </template>
 
