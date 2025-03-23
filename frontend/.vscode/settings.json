@@ -1,0 +1,11 @@
+{
+  "prettier.configPath": ".prettierrc",
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "scss.lint.unknownAtRules": "ignore",
+  "eslint.format.enable": true,
+  "prettier.useEditorConfig": false,
+  "eslint.experimental.useFlatConfig": true
+}
