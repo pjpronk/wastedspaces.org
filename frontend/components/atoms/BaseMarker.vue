@@ -26,8 +26,6 @@
       icon: markerIcon.src,
     });
 
-    console.log(marker.position)
-
     const infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
 
     marker.addListener("click", () => {

@@ -25,4 +25,11 @@ const icon = props.icon && (await icons?.[props.icon]?.())
 .base-icon {
   display: flex;
 }
+
+.primary {
+  :deep(path) {
+      stroke: $primary-red;
+      fill: $primary-red;
+  }
+}
 </style>

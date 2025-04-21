@@ -16,18 +16,7 @@ import {
   limit
 } from 'firebase/firestore';
 import type { DocumentData } from 'firebase/firestore';
-
-interface LocationDocument {
-  id: string;
-  type: 'PRIVAAT' | 'PUBLIEK' | 'COMMERCIEEL' | 'ONBEKEND';
-  vacatedSince: Date;
-  address: string;
-  city: string;
-  latLng: GeoPoint;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
+import type { LocationType, LocationDetails } from '~/types/types';
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   
@@ -75,7 +64,7 @@ export default defineNuxtPlugin(() => {
           const locations = querySnapshot.docs.map(doc => ({ 
             id: doc.id, 
             ...doc.data() 
-          })) as LocationDocument[];
+          })) as LocationDetails[];
           
           return locations.filter(loc => {
             const distance = calculateDistance(

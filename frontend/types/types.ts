@@ -4,7 +4,7 @@ export interface LocationDetails {
   id: string
   address: string
   city: string
-  type: 'PRIVAAT' | 'PUBLIEK' | 'COMMERCIEEL' | 'ONBEKEND'
+  type: LocationType
   vacatedSince: Date
   latLng: GeoPoint
   createdAt: Date
@@ -18,4 +18,18 @@ export enum LocationType {
   PUBLIEK,
   COMERCIEEL,
   ONBEKEND
+}
+
+
+export const typeToIcon = (type: string) => {
+  switch (type) {
+    case "COMERCIEEL":
+      return 'office'
+    case "PRIVAAT":
+      return 'house'
+    case "PUBLIEK":
+      return 'farm'
+    default:
+      return 'other'
+  }
 }

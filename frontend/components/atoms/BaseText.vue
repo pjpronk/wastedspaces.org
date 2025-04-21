@@ -9,7 +9,7 @@ p {
   font-size: 1rem;
 }
 
-.light {
-  
+.text-black {
+  color: $black;
 }
 </style>

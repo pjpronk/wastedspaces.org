@@ -31,5 +31,6 @@ const handleLocationSelected = (latLng: GeoPoint) => {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  gap: 8px;
 }
 </style>
