@@ -1,4 +1,4 @@
-import type { GeoPoint } from 'firebase/firestore';
+import type { GeoPoint, Timestamp } from 'firebase/firestore';
 
 export interface LocationDetails {
   id: string
@@ -7,8 +7,8 @@ export interface LocationDetails {
   type: LocationType
   vacatedSince: Date
   latLng: GeoPoint
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Timestamp
+  updatedAt: Timestamp
 }
 
 export interface MarkerDetails {}

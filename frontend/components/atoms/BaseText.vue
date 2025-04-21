@@ -6,7 +6,6 @@
 
 p {
   color: $white;
-  font-size: 1rem;
 }
 
 .text-black {

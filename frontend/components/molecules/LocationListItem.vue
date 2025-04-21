@@ -3,7 +3,7 @@
     <BaseIcon class="icon primary" :icon="typeToIcon(location.type.toString())" />
     <div class="flex-column">
       <BaseText class="text-black text-sm">{{ location.address }}</BaseText>
-      <!-- <BaseText class="text-black">+- 6 maanden</BaseText> -->
+      <BaseText class="text-black text-sm">{{ $relativeTime(location.createdAt.toDate()) }}</BaseText>
     </div>
   </div>
 </template>
@@ -12,6 +12,8 @@
 import type { GeoPoint } from "@firebase/firestore"
 import { typeToIcon } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
+
+const { $relativeTime } = useNuxtApp()
 
 const props = defineProps<{
   location: LocationDetails
@@ -46,7 +48,7 @@ const handleClick = () => {
 }
 
 .icon {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
 }
 </style>

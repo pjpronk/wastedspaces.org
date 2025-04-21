@@ -32,5 +32,8 @@ export default defineNuxtConfig({
         }
       }
     }
-  }
+  },
+  plugins: [
+    '~/plugins/relative-time'
+  ]
 })
