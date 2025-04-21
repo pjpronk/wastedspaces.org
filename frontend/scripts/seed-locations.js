@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, GeoPoint } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, GeoPoint, getDocs, deleteDoc } from 'firebase/firestore';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -137,6 +137,18 @@ async function seedLocations() {
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    console.log('Starting to clear existing locations...');
+    
+    // Get all documents in the locations collection
+    const locationsRef = collection(db, 'locations');
+    const snapshot = await getDocs(locationsRef);
+    
+    // Delete each document
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+    
+    console.log(`Cleared ${snapshot.size} existing locations`);
 
     console.log(`Starting to seed ${sampleLocations.length} locations...`);
 
