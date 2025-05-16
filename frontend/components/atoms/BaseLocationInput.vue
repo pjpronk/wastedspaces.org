@@ -1,14 +1,19 @@
 <template>
-  <input
-    id="geocode"
-    :value="value"
-    type="text"
-    placeholder="Locatie"
-    class="base-location-input"
-  />
+  <div class="base-location-input">
+    <BaseIcon class="icon-sxs secondary" icon="search" />
+    <input
+      class="input"
+      id="geocode"
+      :value="value"
+      type="text"
+      placeholder="Zoek op locatie"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
+import { GeoPoint } from 'firebase/firestore'
+
 const props = defineProps({
   value: {
     type: String,
@@ -20,17 +25,20 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["update"])
-
-const mapConfig = { zoom: 13, disableDefaultUI: true, clickableIcons: false }
 const autocomplete = ref<any>(null)
 const autocompleteOptions = {
-  types: ["geocode"]
+  types: ["geocode"],
+  fields: ["formatted_address", "geometry", "name", "address_components"]
 }
 
 onMounted(() => {
   initializeAutocomplete()
 })
+
+const emit = defineEmits<{
+  (e: 'locationSelected', location: GeoPoint): void
+}>();
+
 
 function initializeAutocomplete() {
   const input = document.getElementById("geocode") as HTMLInputElement
@@ -44,28 +52,29 @@ function initializeAutocomplete() {
       const lat = place.geometry?.location.lat()
       const lng = place.geometry?.location.lng()
       if (lat && lng) {
-        const latLng = { latitude: lat, longitude: lng }
-        const address = place.formatted_address ? place.formatted_address : null
-
-        // TODO: ADD TYPE
-        const locationDetails: any = {
-          address: address,
-          latLng: latLng,
-          name: place.name,
-          country:
-            place.address_components && place.address_components[3].long_name,
-          locality:
-            place.address_components && place.address_components[1].long_name
-        }
-        emit("update", locationDetails)
+        const latLng = new GeoPoint(lat, lng)
+        emit("locationSelected", latLng)
       }
     }
   })
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .base-location-input {
-  /* Add your styles here */
+  border: none;
+  width: 100%;
+  display: flex;
+  background-color: $white;
+  padding: 12px;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  font-size: 14px;
+  line-height: 100%;
+  border: none;
+  width: 100%;
 }
 </style>

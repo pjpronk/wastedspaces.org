@@ -1,15 +1,34 @@
+import type { GeoPoint, Timestamp } from 'firebase/firestore';
+
 export interface LocationDetails {
-  address: string | null
+  id: string
+  address: string
   city: string
   type: LocationType
-  vacantSince: Date
-  latitude: number
-  longitude: number
+  vacatedSince: Date
+  latLng: GeoPoint
+  createdAt: Timestamp
+  updatedAt: Timestamp
 }
+
 
 export enum LocationType {
   PRIVAAT,
   PUBLIEK,
   COMERCIEEL,
   ONBEKEND
+}
+
+
+export const typeToIcon = (type: string) => {
+  switch (type) {
+    case "COMERCIEEL":
+      return 'office'
+    case "PRIVAAT":
+      return 'house'
+    case "PUBLIEK":
+      return 'farm'
+    default:
+      return 'other'
+  }
 }

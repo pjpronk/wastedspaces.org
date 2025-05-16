@@ -20,6 +20,7 @@ html {
     font-size: 12px;
   }
   height: 100vh;
+  overflow: hidden;
 }
 
 .layout {

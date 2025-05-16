@@ -12,10 +12,12 @@ import { Loader } from "@googlemaps/js-api-loader"
 const config = useRuntimeConfig()
 const googleConfig: Ref<null | typeof google> = ref(null)
 
+
 onMounted(async () => {
+  console.log("GoogleMapLoader mounted", config.public.GOOGLE_MAPS_API_KEY, config)
   googleConfig.value = await new Loader({
-    libraries: ["places"],
-    apiKey: "AIzaSyDgKblZaexJ5McxxTFOxB3lp_8hEQ2jZ-A"
-  }).load()
+    libraries: ["places", "marker"],
+    apiKey: config.public.GOOGLE_MAPS_API_KEY,
+  }).load().then()
 })
 </script>

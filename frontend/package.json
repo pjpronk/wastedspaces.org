@@ -6,13 +6,17 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "publish": "nuxt generate && gh-pages -d dist",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "seed": "node scripts/seed-locations.js"
   },
   "dependencies": {
+    "@firebase/firestore": "^4.7.10",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@nuxtjs/leaflet": "^1.2.2",
     "@types/google.maps": "^3.55.12",
+    "firebase": "^11.5.0",
     "nuxt": "^3.11.2",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
@@ -20,10 +24,14 @@
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72",
   "devDependencies": {
     "@nuxt/eslint": "^0.3.12",
+    "@types/node-fetch": "^2.6.12",
+    "dotenv": "^16.4.7",
     "eslint": "^9.2.0",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0",
     "sass": "^1.77.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }
