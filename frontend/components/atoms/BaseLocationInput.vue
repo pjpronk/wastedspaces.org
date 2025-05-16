@@ -1,11 +1,14 @@
 <template>
-  <input
-    id="geocode"
-    :value="value"
-    type="text"
-    placeholder="Location"
-    class="base-location-input"
-  />
+  <div class="base-location-input">
+    <BaseIcon class="icon-sxs secondary" icon="search" />
+    <input
+      class="input"
+      id="geocode"
+      :value="value"
+      type="text"
+      placeholder="Zoek op locatie"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -61,8 +64,17 @@ function initializeAutocomplete() {
 .base-location-input {
   border: none;
   width: 100%;
+  display: flex;
+  background-color: $white;
+  padding: 12px;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
   font-size: 14px;
   line-height: 100%;
-  padding: 0.75rem 1rem;
+  border: none;
+  width: 100%;
 }
 </style>

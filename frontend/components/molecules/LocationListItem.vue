@@ -1,9 +1,21 @@
 <template>
   <div class="location-list-item" @click="handleClick">
-    <BaseIcon class="icon primary" :icon="typeToIcon(location.type.toString())" />
-    <div class="flex-column">
-      <BaseText class="text-black text-sm">{{ location.address }}</BaseText>
-      <BaseText class="text-black text-sm">{{ $relativeTime(location.createdAt.toDate()) }}</BaseText>
+    <div class="location-header">
+      <BaseIcon
+        class="icon-l secondary"
+        :icon="typeToIcon(location.type.toString())"
+      />
+      <div class="flex-column">
+        <BaseText class="text-primary bold">{{ location.address }}</BaseText>
+        <BaseText class="text-grey text-s">{{ location.city }}</BaseText>
+      </div>
+    </div>
+    <div class="location-tags flex-row">
+      <BaseText class="text-black text-s flex-row icon-text">
+        <BaseIcon icon="calendar" class="secondary icon-xs" />
+        {{ $relativeTime(location.createdAt.toDate()) }}
+      </BaseText>
+      <BaseTag>{{ location.type }}</BaseTag>
     </div>
   </div>
 </template>
@@ -32,23 +44,30 @@ const handleClick = () => {
 .location-list-item {
   background-color: $white;
   color: $black;
-
-  padding: 10px 12px;
-  gap: 12px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  padding: 4px;
 }
 
-.flex-column {
+.location-header {
+  border-bottom: 1px solid $grey;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  width: 100%;
+  padding: 4px;
 }
 
-.icon {
-  width: 25px;
-  height: 25px;
+
+.location-tags {
+  padding: 8px 16px;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.icon-text {
+  gap: 4px;
 }
 </style>

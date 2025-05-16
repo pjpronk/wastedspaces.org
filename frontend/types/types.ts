@@ -11,7 +11,6 @@ export interface LocationDetails {
   updatedAt: Timestamp
 }
 
-export interface MarkerDetails {}
 
 export enum LocationType {
   PRIVAAT,

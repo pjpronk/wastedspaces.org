@@ -6,6 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "publish": "nuxt generate && gh-pages -d dist",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "seed": "node scripts/seed-locations.js"
