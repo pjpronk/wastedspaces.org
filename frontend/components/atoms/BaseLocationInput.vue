@@ -1,21 +1,22 @@
 <template>
-  <div class="base-location-input">
-    <BaseIcon class="icon-sxs secondary" icon="search" />
-    <input
-      class="input"
-      :id="id"
-      :value="value"
-      type="text"
-      placeholder="Zoek op locatie"
-    />
-  </div>
+    <div class="base-location-input">
+      <BaseIcon class="icon-sxs secondary" icon="search" />
+      <input
+        class="input"
+        :id="id"
+        :value="modelValue"
+        type="text"
+        placeholder="Zoek op locatie"
+        @input="(e: Event) => $emit('update:modelValue', (e.target as HTMLInputElement).value)"
+      />
+    </div>
 </template>
 
 <script setup lang="ts">
 import { GeoPoint } from 'firebase/firestore'
 
 const props = defineProps({
-  value: {
+  modelValue: {
     type: String,
     default: ""
   },
@@ -29,6 +30,11 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+  (e: 'locationSelected', location: GeoPoint): void
+}>();
+
 const autocomplete = ref<any>(null)
 const autocompleteOptions = {
   types: ["geocode"],
@@ -38,10 +44,6 @@ const autocompleteOptions = {
 onMounted(() => {
   initializeAutocomplete()
 })
-
-const emit = defineEmits<{
-  (e: 'locationSelected', location: GeoPoint): void
-}>();
 
 function initializeAutocomplete() {
   const input = document.getElementById(props.id) as HTMLInputElement
@@ -57,6 +59,7 @@ function initializeAutocomplete() {
       if (lat && lng) {
         const latLng = new GeoPoint(lat, lng)
         emit("locationSelected", latLng)
+        emit("update:modelValue", place.formatted_address || "")
       }
     }
   })
@@ -72,6 +75,7 @@ function initializeAutocomplete() {
   padding: 12px;
   gap: 8px;
   align-items: center;
+  border: 1px solid $grey;
 }
 
 .input {

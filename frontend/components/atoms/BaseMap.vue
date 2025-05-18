@@ -34,8 +34,13 @@ watch(() => props.center, (newCenter) => {
 <style lang="scss" scoped>
 .map {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 320px);
   position: absolute;
+  right: 0;
+
+  @include for-tablet-landscape-down {
+    width: 100%;
+  }
 }
 
 #map {

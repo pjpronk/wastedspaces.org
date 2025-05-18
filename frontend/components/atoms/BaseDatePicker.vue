@@ -1,17 +1,20 @@
 <template>
-  <input
-    class="base-date-picker"
-    v-bind="$attrs"
-    type="date"
-    :value="modelValue"
-    :name="name"
-    :id="id"
-    :required="required"
-    :disabled="disabled"
-    :min="min"
-    :max="max"
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <div class="base-date-picker-wrapper" :class="$attrs.class">
+    <BaseLabel v-if="label" :label="label" :for="id" />
+    <input
+      class="base-date-picker"
+      v-bind="$attrs"
+      type="date"
+      :value="modelValue"
+      :name="name"
+      :id="id"
+      :required="required"
+      :disabled="disabled"
+      :min="min"
+      :max="max"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -24,6 +27,10 @@ defineProps({
   disabled: Boolean,
   min: Number,
   max: Number,
+  label: {
+    type: String,
+    default: ''
+  }
 });
 
 defineEmits(["update:modelValue"]);
@@ -32,11 +39,11 @@ defineEmits(["update:modelValue"]);
 <style scoped lang="scss">
 .base-date-picker {
   font-family: Tahoma;
-  border: none;
   width: 100%;
   font-size: 14px;
   line-height: 100%;
   padding: 0.75rem 1rem;
+  border: 1px solid $grey;
 }
 </style>
 

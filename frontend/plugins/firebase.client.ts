@@ -55,6 +55,21 @@ export default defineNuxtPlugin(() => {
             ...doc.data() 
           })) as LocationDetails[];
         },
+
+        // Add a location
+        addLocation: async (location: LocationDetails) => {
+          const collectionRef = firestoreCollection(db, 'locations');
+          const docRef = await addDoc(collectionRef, {
+            type: location.type,
+            vacatedSince: location.vacatedSince,
+            address: location.address,
+            city: location.city,
+            latLng: location.latLng,
+            createdAt: location.createdAt,
+            updatedAt: location.updatedAt
+          });
+          return docRef.id;
+        },
         
         // Add a document
         addDoc: async (collectionName: string, data: DocumentData) => {

@@ -19,12 +19,15 @@
           <BaseButton class="primary-inverted" icon="documents" />
           <BaseButton class="primary-inverted mt-0-5" icon="info" />
         </div>
-        <BaseButton class="primary-inverted" icon="add" />
+        <BaseButton class="primary-inverted" icon="add" @click="showLocationCreate = true" />
       </div>
       <div class = "bottom-bar">
         <LocationSlider :locations="currentLocations" @location-selected="handleLocationSelected" />
       </div>
     </div>
+    <BaseOverlay v-if="showLocationCreate">
+        <LocationCreate @closeLocationCreate="showLocationCreate = false" />
+      </BaseOverlay>
     <LocationMap
       class="map"
       :locations="currentLocations"
@@ -47,7 +50,7 @@ useHead({
 
 let allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
-
+const showLocationCreate = ref(false)
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485 )) // Default to Rotterdam
 const currentFilter = ref<LocationType | null>(route.query.filter?.toString().toUpperCase() as LocationType || null)
 const searchRadius = ref(50) // Default radius in kilometers
@@ -213,5 +216,6 @@ fetchLocations()
 .logo {
   width: 80%;
   margin-right: auto;
+  fill: $white;
 }
 </style>

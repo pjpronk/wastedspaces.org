@@ -56,6 +56,10 @@ const icon = props.icon && (await icons?.[props.icon]?.())
   width: 20px;
   height: 20px;
 }
+.icon-sm {
+  width: 25px;
+  height: 25px;
+}
 .icon-m {
   width: 30px;
   height: 30px;
