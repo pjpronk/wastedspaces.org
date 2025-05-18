@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
+
   runtimeConfig: {
     public: {
       BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:5050/api', // Accessible everywhere

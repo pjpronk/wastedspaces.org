@@ -14,9 +14,11 @@
   }>();
 
   const infoWindowRef = ref<HTMLElement | null>(null);
+  const config = useRuntimeConfig();
+  const basePath = config.app.baseURL || '/';
 
   const markerIcon = document.createElement("img");
-  markerIcon.src = "/icons/marker.svg";
+  markerIcon.src = `${basePath}icons/marker.svg`.replace('//', '/');
   markerIcon.style.width = "30px";
   markerIcon.style.height = "30px";
 

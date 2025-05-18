@@ -13,10 +13,10 @@ export interface LocationDetails {
 
 
 export enum LocationType {
-  PRIVAAT,
-  PUBLIEK,
-  COMERCIEEL,
-  ONBEKEND
+  PRIVAAT = 'Privaat',
+  PUBLIEK = 'Publiek',
+  COMMERCIEEL = 'Commercieel',
+  ONBEKEND = 'Onbekend'
 }
 
 

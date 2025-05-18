@@ -15,7 +15,7 @@
         <BaseIcon icon="calendar" class="secondary icon-xs" />
         {{ $relativeTime(location.createdAt.toDate()) }}
       </BaseText>
-      <BaseTag>{{ location.type }}</BaseTag>
+      <BaseTag>{{ toSentenceCase(location.type) }}</BaseTag>
     </div>
   </div>
 </template>
@@ -24,6 +24,10 @@
 import type { GeoPoint } from "@firebase/firestore"
 import { typeToIcon } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
+
+const toSentenceCase = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
 
 const { $relativeTime } = useNuxtApp()
 

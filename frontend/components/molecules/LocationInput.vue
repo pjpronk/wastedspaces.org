@@ -2,7 +2,7 @@
   <div class="location-input">
     <GoogleMapLoader>
       <template #default="{ google }">
-        <BaseLocationInput @locationSelected="handleLocationSelected" :value="value" :google="google" />
+        <BaseLocationInput @locationSelected="handleLocationSelected" :value="value" :google="google" :id="id" />
       </template>
     </GoogleMapLoader>
   </div>
@@ -15,6 +15,10 @@ const props = defineProps({
   value: {
     type: String,
     default: ""
+  },
+  id: {
+    type: String,
+    default: "location-input"
   }
 })
 

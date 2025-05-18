@@ -3,7 +3,7 @@
     <BaseIcon class="icon-sxs secondary" icon="search" />
     <input
       class="input"
-      id="geocode"
+      :id="id"
       :value="value"
       type="text"
       placeholder="Zoek op locatie"
@@ -22,6 +22,10 @@ const props = defineProps({
   google: {
     type: Object,
     required: true
+  },
+  id: {
+    type: String,
+    default: "geocode"
   }
 })
 
@@ -39,9 +43,8 @@ const emit = defineEmits<{
   (e: 'locationSelected', location: GeoPoint): void
 }>();
 
-
 function initializeAutocomplete() {
-  const input = document.getElementById("geocode") as HTMLInputElement
+  const input = document.getElementById(props.id) as HTMLInputElement
   autocomplete.value = new props.google.maps.places.Autocomplete(
     input,
     autocompleteOptions

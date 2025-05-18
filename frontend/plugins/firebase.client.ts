@@ -8,12 +8,7 @@ import {
   addDoc, 
   updateDoc, 
   deleteDoc,
-  CollectionReference,
   GeoPoint,
-  query,
-  where,
-  orderBy,
-  limit
 } from 'firebase/firestore';
 import type { DocumentData } from 'firebase/firestore';
 import type { LocationType, LocationDetails } from '~/types/types';
@@ -29,15 +24,14 @@ export default defineNuxtPlugin(() => {
     appId: config.public.FIREBASE_APP_ID
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   return {
     provide: {
       db,
-      // Helper functions for common Firestore operations
       firestore: {
+
         // Get a document
         getDoc: async (collectionName: string, docId: string) => {
           const docRef = doc(db, collectionName, docId);
@@ -53,26 +47,13 @@ export default defineNuxtPlugin(() => {
         },
         
         // Get locations within a radius (in kilometers)
-        getLocationsInRadius: async (centerLat: number, centerLng: number, radiusKm: number) => {
+        getLocations: async () => {
           const collectionRef = firestoreCollection(db, 'locations');
-          const center = new GeoPoint(centerLat, centerLng);
-          
-          // Note: This is a simplified version. For production, you should use a more sophisticated
-          // geohashing solution or a third-party service like Algolia Places or Google Places API
-          // for accurate radius-based queries
           const querySnapshot = await getDocs(collectionRef);
-          const locations = querySnapshot.docs.map(doc => ({ 
+          return querySnapshot.docs.map(doc => ({ 
             id: doc.id, 
             ...doc.data() 
           })) as LocationDetails[];
-          
-          return locations.filter(loc => {
-            const distance = calculateDistance(
-              centerLat, centerLng,
-              loc.latLng.latitude, loc.latLng.longitude
-            );
-            return distance <= radiusKm;
-          });
         },
         
         // Add a document
@@ -98,7 +79,6 @@ export default defineNuxtPlugin(() => {
   };
 });
 
-// Helper function to calculate distance between two points using the Haversine formula
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Earth's radius in kilometers
   const dLat = toRad(lat2 - lat1);
