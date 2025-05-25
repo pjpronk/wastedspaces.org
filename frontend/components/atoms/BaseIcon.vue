@@ -10,12 +10,12 @@ const props = defineProps<{
 
 // Auto-load icons
 const icons = Object.fromEntries(
-  Object.entries(import.meta.glob('~/assets/icons/*.svg', { as: 'raw' })).map(
+  Object.entries(import.meta.glob("~/assets/icons/*.svg", { as: "raw" })).map(
     ([key, value]) => {
-      const filename = key.split('/').pop()!.split('.').shift()
+      const filename = key.split("/").pop()!.split(".").shift()
       return [filename, value]
-    },
-  ),
+    }
+  )
 )
 
 // Lazily load the icon
@@ -30,16 +30,16 @@ const icon = props.icon && (await icons?.[props.icon]?.())
 .primary {
   background-color: $primary-red;
   :deep(path) {
-      stroke: $white;
-      fill: $white;
+    stroke: $white;
+    fill: $white;
   }
 }
 
 .secondary {
   background-color: $white;
   :deep(path) {
-      stroke: $primary-red;
-      fill: $primary-red;
+    stroke: $primary-red;
+    fill: $primary-red;
   }
 }
 

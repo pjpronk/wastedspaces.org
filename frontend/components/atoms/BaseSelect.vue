@@ -12,13 +12,22 @@
       :autocomplete="autocomplete"
       :value="modelValue"
       @change="
-        $emit('update:modelValue', multiple ? [...$event.target.selectedOptions].map(o => o.value) : $event.target.value)
+        $emit(
+          'update:modelValue',
+          multiple
+            ? [...$event.target.selectedOptions].map((o) => o.value)
+            : $event.target.value
+        )
       "
     >
       <option v-if="placeholder" value="" disabled selected hidden>
         {{ placeholder }}
       </option>
-      <option v-for="(option, index) in options" :key="index" :value="option.value">
+      <option
+        v-for="(option, index) in options"
+        :key="index"
+        :value="option.value"
+      >
         {{ option.label }}
       </option>
     </select>
@@ -26,7 +35,6 @@
 </template>
 
 <script setup>
-
 defineProps({
   modelValue: {
     type: [String, Number, Array],
@@ -61,11 +69,11 @@ defineProps({
   },
   label: {
     type: String,
-    default: ''
+    default: ""
   }
-});
+})
 
-defineEmits(["update:modelValue"]); // Emits update event for v-model
+defineEmits(["update:modelValue"]) // Emits update event for v-model
 </script>
 
 <style lang="scss" scoped>

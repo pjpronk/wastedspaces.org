@@ -63,7 +63,6 @@ const handleClick = () => {
   padding: 4px;
 }
 
-
 .location-tags {
   padding: 8px 16px;
   justify-content: space-between;

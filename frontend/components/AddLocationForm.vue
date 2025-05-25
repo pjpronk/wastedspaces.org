@@ -1,7 +1,7 @@
 <template>
   <div class="add-location-form">
     <h2>Add New Location</h2>
-    
+
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="address">Address:</label>
@@ -13,7 +13,7 @@
           placeholder="Enter address"
         />
       </div>
-      
+
       <div class="form-group">
         <label for="city">City:</label>
         <input
@@ -24,7 +24,7 @@
           placeholder="Enter city"
         />
       </div>
-      
+
       <div class="form-group">
         <label for="type">Type:</label>
         <select id="type" v-model="form.type" required>
@@ -34,17 +34,21 @@
           </option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label for="ownership">Ownership:</label>
         <select id="ownership" v-model="form.ownership" required>
           <option value="">Select ownership</option>
-          <option v-for="ownership in ownershipTypes" :key="ownership" :value="ownership">
+          <option
+            v-for="ownership in ownershipTypes"
+            :key="ownership"
+            :value="ownership"
+          >
             {{ ownership }}
           </option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label for="vacatedSince">Vacated Since:</label>
         <input
@@ -54,7 +58,7 @@
           required
         />
       </div>
-      
+
       <div class="form-group">
         <label for="latitude">Latitude:</label>
         <input
@@ -66,7 +70,7 @@
           placeholder="Enter latitude"
         />
       </div>
-      
+
       <div class="form-group">
         <label for="longitude">Longitude:</label>
         <input
@@ -78,48 +82,48 @@
           placeholder="Enter longitude"
         />
       </div>
-      
+
       <div v-if="error" class="error">
         {{ error }}
         <button type="button" @click="clearError">×</button>
       </div>
-      
+
       <div v-if="successMessage" class="success">
         {{ successMessage }}
       </div>
-      
+
       <button type="submit" :disabled="isLoading">
-        {{ isLoading ? 'Adding Location...' : 'Add Location' }}
+        {{ isLoading ? "Adding Location..." : "Add Location" }}
       </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { LocationType, LocationOwnership } from '~/types/types'
+import { LocationType, LocationOwnership } from "~/types/types"
 
 const { addLocation, isLoading, error, clearError } = useLocationApi()
 
 const form = reactive({
-  address: '',
-  city: '',
-  type: '' as LocationType | '',
-  ownership: '' as LocationOwnership | '',
-  vacatedSince: '',
+  address: "",
+  city: "",
+  type: "" as LocationType | "",
+  ownership: "" as LocationOwnership | "",
+  vacatedSince: "",
   latitude: 0,
   longitude: 0
 })
 
-const successMessage = ref('')
+const successMessage = ref("")
 
 const locationTypes = Object.values(LocationType)
 const ownershipTypes = Object.values(LocationOwnership)
 
 const handleSubmit = async () => {
   if (!form.type || !form.ownership) return
-  
-  successMessage.value = ''
-  
+
+  successMessage.value = ""
+
   const result = await addLocation({
     address: form.address,
     city: form.city,
@@ -131,16 +135,16 @@ const handleSubmit = async () => {
       longitude: form.longitude
     }
   })
-  
+
   if (result) {
     successMessage.value = `Location added successfully! ID: ${result.id}`
     // Reset form
     Object.assign(form, {
-      address: '',
-      city: '',
-      type: '',
-      ownership: '',
-      vacatedSince: '',
+      address: "",
+      city: "",
+      type: "",
+      ownership: "",
+      vacatedSince: "",
       latitude: 0,
       longitude: 0
     })
@@ -165,7 +169,8 @@ label {
   font-weight: bold;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
@@ -220,4 +225,4 @@ button:hover:not(:disabled) {
   border-radius: 4px;
   margin-bottom: 15px;
 }
-</style> 
+</style>

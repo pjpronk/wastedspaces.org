@@ -1,7 +1,7 @@
 <template>
   <nav class="nav">
     <div class="nav-left">
-      <BaseIcon class = "logo" icon="WS_logo_text" />
+      <BaseIcon class="logo" icon="WS_logo_text" />
     </div>
     <div class="nav-right">
       <BaseTitle1> Login </BaseTitle1>

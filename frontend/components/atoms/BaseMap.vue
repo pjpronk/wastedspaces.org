@@ -23,12 +23,16 @@ onMounted(async () => {
   }
 })
 
-watch(() => props.center, (newCenter) => {
-  console.log("newCenter", newCenter)
-  if (map.value) {
-    map.value.panTo(newCenter)
-  }
-}, { deep: true })
+watch(
+  () => props.center,
+  (newCenter) => {
+    console.log("newCenter", newCenter)
+    if (map.value) {
+      map.value.panTo(newCenter)
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="scss" scoped>

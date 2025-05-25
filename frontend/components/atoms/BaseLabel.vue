@@ -8,11 +8,11 @@
 defineProps({
   label: {
     type: String,
-    default: ''
+    default: ""
   },
   forProp: {
     type: String,
-    default: ''
+    default: ""
   }
 })
 </script>
@@ -25,4 +25,4 @@ defineProps({
   margin-top: 1rem;
   display: block;
 }
-</style> 
+</style>

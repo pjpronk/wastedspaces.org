@@ -1,19 +1,22 @@
 <template>
-    <div class="base-location-input" :class="{ 'error': hasError }">
-      <BaseIcon class="icon-sxs secondary" icon="search" />
-      <input
-        :id="id"
-        class="input"
-        :value="modelValue"
-        type="text"
-        placeholder="Zoek op locatie"
-        @input="(e: Event) => $emit('update:modelValue', (e.target as HTMLInputElement).value)"
-      />
-    </div>
+  <div class="base-location-input" :class="{ error: hasError }">
+    <BaseIcon class="icon-sxs secondary" icon="search" />
+    <input
+      :id="id"
+      class="input"
+      :value="modelValue"
+      type="text"
+      placeholder="Zoek op locatie"
+      @input="
+        (e: Event) =>
+          $emit('update:modelValue', (e.target as HTMLInputElement).value)
+      "
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { GeoPoint } from 'firebase/firestore'
+import { GeoPoint } from "firebase/firestore"
 
 const props = defineProps({
   modelValue: {
@@ -39,10 +42,20 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: { address: string; city: string; latLng: GeoPoint } | string): void
-  (e: 'update:address' | 'update:city' | 'locationSelected' | 'validationError', value: string): void
-  (e: 'update:latLng', value: GeoPoint): void
-}>();
+  (
+    e: "update:modelValue",
+    value: { address: string; city: string; latLng: GeoPoint } | string
+  ): void
+  (
+    e:
+      | "update:address"
+      | "update:city"
+      | "locationSelected"
+      | "validationError",
+    value: string
+  ): void
+  (e: "update:latLng", value: GeoPoint): void
+}>()
 
 const autocomplete = ref<google.maps.places.Autocomplete | null>(null)
 const autocompleteOptions = computed(() => ({
@@ -65,46 +78,60 @@ function initializeAutocomplete() {
     if (place) {
       if (props.restrictToSpecificAddresses) {
         const hasStreetNumber = place.address_components?.some(
-          (component: google.maps.places.PlaceResult["address_components"][number]) => component.types.includes('street_number')
+          (
+            component: google.maps.places.PlaceResult["address_components"][number]
+          ) => component.types.includes("street_number")
         )
-        
+
         if (!hasStreetNumber) {
           emit("update:modelValue", "")
-          emit("validationError", "Selecteer een specifiek adres met huisnummer")
+          emit(
+            "validationError",
+            "Selecteer een specifiek adres met huisnummer"
+          )
           return
         }
       }
-      
+
       const lat = place.geometry?.location.lat()
       const lng = place.geometry?.location.lng()
       if (lat && lng) {
         const latLng = new GeoPoint(lat, lng)
-        
+
         // Extract address components
         let streetName = ""
         let streetNumber = ""
         let city = ""
-        
-        place.address_components?.forEach((component: google.maps.places.PlaceResult["address_components"][number]) => {
-          if (component.types.includes('route')) {
-            streetName = component.long_name
+
+        place.address_components?.forEach(
+          (
+            component: google.maps.places.PlaceResult["address_components"][number]
+          ) => {
+            if (component.types.includes("route")) {
+              streetName = component.long_name
+            }
+            if (component.types.includes("street_number")) {
+              streetNumber = component.long_name
+            }
+            if (
+              component.types.includes("locality") ||
+              component.types.includes("administrative_area_level_2")
+            ) {
+              city = component.long_name
+            }
           }
-          if (component.types.includes('street_number')) {
-            streetNumber = component.long_name
-          }
-          if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
-            city = component.long_name
-          }
-        })
-        
-        const address = streetNumber ? `${streetName} ${streetNumber}` : streetName
-        
+        )
+
+        const address = streetNumber
+          ? `${streetName} ${streetNumber}`
+          : streetName
+
         const locationData = {
           address,
           city,
           latLng
         }
-        
+
         emit("locationSelected", latLng)
         emit("update:address", locationData.address)
         emit("update:city", locationData.city)

@@ -8,7 +8,7 @@
 <script setup lang="ts">
 defineProps<{
   icon?: string
-}>();
+}>()
 </script>
 
 <style lang="scss" scoped>
@@ -44,7 +44,7 @@ defineProps<{
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   :deep(svg) {
     width: 100%;
     height: 100%;

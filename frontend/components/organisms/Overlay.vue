@@ -1,26 +1,30 @@
 <template>
   <div class="overlay-wrapper">
     <div class="overlay">
-        <div class="overlay-header">
-          <BaseTitle2 class="text-xl">{{title}}</BaseTitle2>
-          <BaseButton icon="close" class="icon-sm primary-inverted" @click="close"/>
-        </div>
-        <div class="overlay-content">
-          <slot></slot>
-        </div>
+      <div class="overlay-header">
+        <BaseTitle2 class="text-xl">{{ title }}</BaseTitle2>
+        <BaseButton
+          icon="close"
+          class="icon-sm primary-inverted"
+          @click="close"
+        />
       </div>
+      <div class="overlay-content">
+        <slot></slot>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  title: string;
-}>();
+  title: string
+}>()
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"])
 
 const close = () => {
-  emit('close');
+  emit("close")
 }
 </script>
 
@@ -34,13 +38,13 @@ const close = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  
+
   background-color: rgba($black, 0.6);
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100; 
+  z-index: 100;
   pointer-events: auto;
 }
 
@@ -49,7 +53,7 @@ const close = () => {
   min-width: 600px;
   display: flex;
   flex-direction: column;
-  
+
   @include for-tablet-landscape-down {
     position: fixed;
     top: 0;

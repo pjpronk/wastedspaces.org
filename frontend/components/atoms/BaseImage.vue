@@ -1,9 +1,9 @@
 <template>
-  <img class="base-image" :src="image"/>
+  <img class="base-image" :src="image" />
 </template>
 
 <script setup lang="ts">
-defineProps<{ 
-  image: string,
+defineProps<{
+  image: string
 }>()
 </script>

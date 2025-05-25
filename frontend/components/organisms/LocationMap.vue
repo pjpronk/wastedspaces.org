@@ -2,8 +2,8 @@
   <div class="full-width">
     <GoogleMapLoader>
       <template #default="{ google }">
-        <BaseMap 
-          :google="google" 
+        <BaseMap
+          :google="google"
           :map-config="mapConfig"
           :center="{ lat: center.latitude, lng: center.longitude }"
         >
@@ -13,13 +13,13 @@
               :key="location.id"
               :map="map"
               :google="google"
-              :position="{ 
-                lat: location.latLng.latitude, 
-                lng: location.latLng.longitude 
+              :position="{
+                lat: location.latLng.latitude,
+                lng: location.latLng.longitude
               }"
               :title="location.address"
             >
-              <LocationInfoWindow :location="location"/>
+              <LocationInfoWindow :location="location" />
             </BaseMarker>
           </template>
         </BaseMap>
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GeoPoint } from "@firebase/firestore";
+import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
 
 const props = defineProps<{
@@ -38,13 +38,13 @@ const props = defineProps<{
 }>()
 
 const mapRef = ref(null)
-const config = useRuntimeConfig();
+const config = useRuntimeConfig()
 
 const mapConfig = {
-  center: {lat: props.center.latitude, lng: props.center.longitude},
+  center: { lat: props.center.latitude, lng: props.center.longitude },
   mapId: config.public.GOOGLE_MAPS_MAP_ID,
   zoom: 12,
-  disableDefaultUI: true,
+  disableDefaultUI: true
 }
 
 onMounted(() => {

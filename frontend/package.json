@@ -10,8 +10,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "seed": "node scripts/seed-locations.js",
-    "format": "prettier --write \"**/*.{js,ts,json}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,json}\"",
+    "format": "prettier --write \"**/*.{js,ts,json,vue}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,json,vue}\"",
     "lint": "eslint \"**/*.{js,ts,json,vue}\"",
     "lint:fix": "eslint \"**/*.{js,ts,json,vue}\" --fix"
   },

@@ -1,17 +1,22 @@
 <template>
-  <ValidatedInput :id="id" ref="validatedInputRef" :label="label" :validation-rules="validationRules">
+  <ValidatedInput
+    :id="id"
+    ref="validatedInputRef"
+    :label="label"
+    :validation-rules="validationRules"
+  >
     <template #default="{ hasError, onValidationError }">
       <GoogleMapLoader>
         <template #default="{ google }">
-          <BaseLocationInput 
+          <BaseLocationInput
             :id="id"
             :model-value="modelValue"
             :google="google"
             :restrict-to-specific-addresses="restrictToSpecificAddresses"
             :has-error="hasError"
-            @update:model-value="$emit('update:modelValue', $event)" 
+            @update:model-value="$emit('update:modelValue', $event)"
             @update:address="$emit('update:address', $event)"
-            @update:city="$emit('update:city', $event)" 
+            @update:city="$emit('update:city', $event)"
             @update:lat-lng="$emit('update:latLng', $event)"
             @location-selected="handleLocationSelected"
             @validation-error="onValidationError"
@@ -23,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GeoPoint } from 'firebase/firestore'
+import type { GeoPoint } from "firebase/firestore"
 defineProps({
   modelValue: {
     type: String,
@@ -48,8 +53,16 @@ defineProps({
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue' | 'update:address' | 'update:city' | 'locationSelected' | 'validationError', value: string): void
-  (e: 'update:latLng', value: GeoPoint): void
+  (
+    e:
+      | "update:modelValue"
+      | "update:address"
+      | "update:city"
+      | "locationSelected"
+      | "validationError",
+    value: string
+  ): void
+  (e: "update:latLng", value: GeoPoint): void
 }>()
 
 const validatedInputRef = ref()
@@ -74,4 +87,3 @@ defineExpose({
   font-weight: 500;
 }
 </style>
-

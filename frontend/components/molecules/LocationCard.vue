@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GeoPoint } from "@firebase/firestore";
+import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
 const props = defineProps<{
   location: LocationDetails
@@ -42,7 +42,6 @@ const streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x
   height: 120px;
   object-fit: cover;
 }
-
 
 .flex-row {
   display: flex;

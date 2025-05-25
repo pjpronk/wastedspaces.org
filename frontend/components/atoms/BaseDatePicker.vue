@@ -57,7 +57,7 @@ defineProps({
   }
 })
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"])
 </script>
 
 <style scoped lang="scss">
@@ -70,5 +70,3 @@ defineEmits(["update:modelValue"]);
   border: 1px solid $grey;
 }
 </style>
-
-

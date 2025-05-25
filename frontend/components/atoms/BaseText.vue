@@ -3,7 +3,6 @@
 </template>
 
 <style scoped lang="scss">
-
 p {
   color: $white;
   line-height: 100%;

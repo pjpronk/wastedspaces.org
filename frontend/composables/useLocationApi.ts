@@ -8,16 +8,13 @@ export const useLocationApi = () => {
   const error = ref<string | null>(null)
 
   const addLocation = async (
-    locationData: Omit<
-      LocationDetails,
-      "id" | "verified" | "createdAt" | "updatedAt"
-    >
+    location: LocationDetails
   ): Promise<AddLocationResponse | null> => {
     isLoading.value = true
     error.value = null
 
     try {
-      const response = await $api.location.addLocation(locationData)
+      const response = await $api.location.addLocation(location)
       return response
     } catch (err) {
       error.value =

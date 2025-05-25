@@ -1,8 +1,8 @@
 <template>
   <div class="validated-input">
     <BaseLabel v-if="label" :label="label" :for="id" />
-    <div class="input-wrapper" :class="{ 'error': !!errorMessage }">
-      <slot 
+    <div class="input-wrapper" :class="{ error: !!errorMessage }">
+      <slot
         :has-error="!!errorMessage"
         :on-validation-error="handleValidationError"
         :clear-error="clearError"
@@ -30,14 +30,14 @@ const props = defineProps({
   }
 })
 
-const errorMessage = ref('')
+const errorMessage = ref("")
 
 const handleValidationError = (message: string) => {
   errorMessage.value = message
 }
 
 const clearError = () => {
-  errorMessage.value = ''
+  errorMessage.value = ""
 }
 
 const validate = (value: string) => {
@@ -81,4 +81,4 @@ defineExpose({
   margin-top: 4px;
   font-weight: 500;
 }
-</style> 
+</style>
