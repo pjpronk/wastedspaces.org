@@ -1,5 +1,5 @@
 <template>
-  <label v-if="label" :for="for" class="base-label">
+  <label v-if="label" :for="forProp" class="base-label">
     {{ label }}
   </label>
 </template>
@@ -10,7 +10,7 @@ defineProps({
     type: String,
     default: ''
   },
-  for: {
+  forProp: {
     type: String,
     default: ''
   }

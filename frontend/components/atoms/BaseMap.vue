@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  google: any
-  mapConfig: any
+  google: google.maps.Map
+  mapConfig: google.maps.MapOptions
   center: { lat: number; lng: number }
 }>()
 

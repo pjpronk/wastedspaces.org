@@ -6,8 +6,8 @@
         <BaseIcon class="logo icon-lxl" icon="logo_standalone_red" />
         <BaseIcon class="logo" icon="logo_text_long" />
         </div>
-        <LocationInput class="mt-1-0" id="sidebar-input" @location-selected="handleLocationInput" />
-        <FilterTabs class="mt-1-0" modelValue="currentFilter" @filter-selected="handleFilterSelected" />
+        <LocationInput id="sidebar-input" class="mt-1-0" @location-selected="handleLocationInput" />
+        <FilterTabs class="mt-1-0" model-value="currentFilter" @filter-selected="handleFilterSelected" />
         <LocationList :locations="currentLocations" class="mt-1-0" @location-selected="handleLocationSelected" />
       </div>
       <div class = "top-bar">
@@ -25,9 +25,9 @@
         <LocationSlider :locations="currentLocations" @location-selected="handleLocationSelected" />
       </div>
     </div>
-    <BaseOverlay v-if="showLocationCreate">
-        <LocationCreate @closeLocationCreate="showLocationCreate = false" />
-      </BaseOverlay>
+    <Overlay v-if="showLocationCreate" title="MELD LEEGSTAND" @close="showLocationCreate = false">
+        <LocationCreate @close="showLocationCreate = false" />
+    </Overlay>
     <LocationMap
       class="map"
       :locations="currentLocations"
@@ -48,7 +48,7 @@ useHead({
   meta: [{ name: "", content: "" }]
 })
 
-let allLocations = ref<LocationDetails[]>([])
+const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
 const showLocationCreate = ref(false)
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485 )) // Default to Rotterdam

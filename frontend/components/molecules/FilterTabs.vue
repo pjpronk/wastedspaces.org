@@ -17,7 +17,7 @@
   import BaseTag from '../atoms/BaseTag.vue'
   import { LocationType } from '~/types/types'
   
-  const props = defineProps<{
+  defineProps<{
     modelValue: string
   }>()
   

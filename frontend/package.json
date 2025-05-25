@@ -9,7 +9,11 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "seed": "node scripts/seed-locations.js"
+    "seed": "node scripts/seed-locations.js",
+    "format": "prettier --write \"**/*.{js,ts,json}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,json}\"",
+    "lint": "eslint \"**/*.{js,ts,json,vue}\"",
+    "lint:fix": "eslint \"**/*.{js,ts,json,vue}\" --fix"
   },
   "dependencies": {
     "@firebase/firestore": "^4.7.10",

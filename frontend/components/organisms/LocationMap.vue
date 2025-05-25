@@ -1,15 +1,16 @@
 <template>
   <div class="full-width">
     <GoogleMapLoader>
-      <template v-slot="{ google }">
+      <template #default="{ google }">
         <BaseMap 
           :google="google" 
-          :mapConfig="mapConfig"
+          :map-config="mapConfig"
           :center="{ lat: center.latitude, lng: center.longitude }"
         >
-          <template v-slot="{ map }">
+          <template #default="{ map }">
             <BaseMarker
               v-for="location in locations"
+              :key="location.id"
               :map="map"
               :google="google"
               :position="{ 
@@ -17,7 +18,6 @@
                 lng: location.latLng.longitude 
               }"
               :title="location.address"
-              :key="location.id"
             >
               <LocationInfoWindow :location="location"/>
             </BaseMarker>

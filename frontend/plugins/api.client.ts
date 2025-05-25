@@ -1,0 +1,69 @@
+import type { LocationDetails } from "~/types/types"
+
+export default defineNuxtPlugin(() => {
+  const config = useRuntimeConfig()
+
+  // Base API client
+  const apiClient = {
+    async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+      const url = `${config.public.BACKEND_URL}${endpoint}`
+
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers
+        },
+        ...options
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(
+          errorData.error || `HTTP ${response.status}: ${response.statusText}`
+        )
+      }
+
+      return response.json()
+    }
+  }
+
+  // Location API methods
+  const locationApi = {
+    async addLocation(
+      locationData: LocationDetails
+    ): Promise<AddLocationResponse> {
+      // Convert LocationDetails to the format expected by the API
+      const requestData = {
+        address: locationData.address,
+        city: locationData.city,
+        type: locationData.type,
+        ownership: locationData.ownership,
+        vacatedSince: locationData.vacatedSince.toISOString(),
+        latLng: {
+          latitude: locationData.latLng.latitude,
+          longitude: locationData.latLng.longitude
+        }
+      }
+
+      return apiClient.request<AddLocationResponse>("/addLocation", {
+        method: "POST",
+        body: JSON.stringify(requestData)
+      })
+    }
+  }
+
+  return {
+    provide: {
+      api: {
+        ...apiClient,
+        location: locationApi
+      }
+    }
+  }
+})
+
+// Response type for the API
+export interface AddLocationResponse {
+  result: string
+  id: string
+}

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="icon" v-html="icon" class ="base-icon" />
+  <!-- eslint-disable vue/no-v-html -->
+  <div v-if="icon" class="base-icon" v-html="icon" />
 </template>
 
 <script setup lang="ts">

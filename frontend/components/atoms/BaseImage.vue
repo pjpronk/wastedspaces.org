@@ -3,9 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-const props = defineProps<{ 
+defineProps<{ 
   image: string,
 }>()
 </script>

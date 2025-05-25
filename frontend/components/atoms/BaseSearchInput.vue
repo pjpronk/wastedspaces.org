@@ -2,12 +2,12 @@
   <div class="base-search-input-wrapper">
     <BaseLabel v-if="label" :label="label" :for="id" />
     <input
+      :id="id"
       v-model="searchValue"
-      @input="updateSearch"
       class="base-search-input"
       type="text"
-      :id="id"
       placeholder="Search..."
+      @input="updateSearch"
     />
   </div>
 </template>

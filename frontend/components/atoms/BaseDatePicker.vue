@@ -2,12 +2,12 @@
   <div class="base-date-picker-wrapper" :class="$attrs.class">
     <BaseLabel v-if="label" :label="label" :for="id" />
     <input
-      class="base-date-picker"
       v-bind="$attrs"
+      :id="id"
+      class="base-date-picker"
       type="date"
       :value="modelValue"
       :name="name"
-      :id="id"
       :required="required"
       :disabled="disabled"
       :min="min"
@@ -19,19 +19,43 @@
 
 <script setup>
 defineProps({
-  modelValue: String, // Expecting a date string like "YYYY-MM-DD"
-  name: String,
-  id: String,
-  class: String,
-  required: Boolean,
-  disabled: Boolean,
-  min: Number,
-  max: Number,
+  modelValue: {
+    type: String,
+    default: ""
+  },
+  name: {
+    type: String,
+    default: ""
+  },
+  id: {
+    type: String,
+    default: ""
+  },
+  class: {
+    type: String,
+    default: ""
+  },
+  required: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  min: {
+    type: String,
+    default: "1900-01-01"
+  },
+  max: {
+    type: String,
+    default: ""
+  },
   label: {
     type: String,
-    default: ''
+    default: ""
   }
-});
+})
 
 defineEmits(["update:modelValue"]);
 </script>
@@ -42,7 +66,7 @@ defineEmits(["update:modelValue"]);
   width: 100%;
   font-size: 14px;
   line-height: 100%;
-  padding: 0.75rem 1rem;
+  padding: 8px 12px;
   border: 1px solid $grey;
 }
 </style>

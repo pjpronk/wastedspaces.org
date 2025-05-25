@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore";
-import { typeToIcon, type LocationDetails } from "~/types/types"
+import type { LocationDetails } from "~/types/types"
 const props = defineProps<{
   location: LocationDetails
 }>()

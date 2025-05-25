@@ -4,7 +4,7 @@
         v-for="location in locations"
         :key="location.latLng.latitude + ',' + location.latLng.longitude"
         :location="location"
-        @locationSelected="handleLocationSelected"
+        @location-selected="handleLocationSelected"
       />
     </div>
   </template>
@@ -13,7 +13,7 @@
   import type { GeoPoint } from "@firebase/firestore";
   import type { LocationDetails } from "~/types/types"
   
-  const props = defineProps<{
+defineProps<{
     locations: LocationDetails[]
   }>();
   
