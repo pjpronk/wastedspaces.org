@@ -37,7 +37,6 @@ const props = defineProps<{
   center: GeoPoint
 }>()
 
-const mapRef = ref(null)
 const config = useRuntimeConfig()
 
 const mapConfig = {
@@ -46,8 +45,4 @@ const mapConfig = {
   zoom: 12,
   disableDefaultUI: true
 }
-
-onMounted(() => {
-  console.log(mapRef.value)
-})
 </script>

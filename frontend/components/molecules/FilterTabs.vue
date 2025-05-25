@@ -31,7 +31,6 @@ const typeOptions = computed(() =>
 )
 
 function handleSelect(value: string) {
-  console.log("handleSelect", value)
   emit("update:modelValue", value)
   emit("filterSelected", value)
 }

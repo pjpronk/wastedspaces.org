@@ -88,10 +88,7 @@ const searchRadius = ref(50) // Default radius in kilometers
 const fetchLocations = async () => {
   try {
     allLocations.value = await $firestore.getLocations()
-    console.log("currentFilter", currentFilter.value)
     currentLocations.value = filterLocationsByRadius(allLocations.value)
-    console.log("currentLocations", currentLocations.value)
-    console.log("currentFilter", typeof currentFilter.value)
     currentLocations.value = filterLocationsByType(
       currentLocations.value,
       currentFilter.value
@@ -157,7 +154,6 @@ const filterLocationsByType = (
 }
 
 const handleLocationSelected = (latLng: GeoPoint) => {
-  console.log("handleLocationSelected", latLng)
   currentCenter.value = latLng
 }
 

@@ -160,15 +160,6 @@ const submitLocation = async () => {
     return // Don't submit if validation fails
   }
 
-  console.log({
-    address: address.value,
-    city: city.value,
-    latLng: latLng.value,
-    date: date.value,
-    type: type.value,
-    ownership: ownership.value
-  })
-
   const location: LocationDetails = {
     address: address.value,
     city: city.value,
