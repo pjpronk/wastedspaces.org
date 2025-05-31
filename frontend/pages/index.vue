@@ -3,28 +3,57 @@
     <div class="map-overlay">
       <div class="sidebar">
         <div class="flex-row">
-        <BaseIcon class="logo icon-lxl" icon="logo_standalone_red" />
-        <BaseIcon class="logo" icon="logo_text_long" />
+          <BaseIcon class="logo icon-lxl" icon="logo_standalone_red" />
+          <BaseIcon class="logo" icon="logo_text_long" />
         </div>
-        <LocationInput class="mt-1-0" id="sidebar-input" @location-selected="handleLocationInput" />
-        <FilterTabs class="mt-1-0" modelValue="currentFilter" @filter-selected="handleFilterSelected" />
-        <LocationList :locations="currentLocations" class="mt-1-0" @location-selected="handleLocationSelected" />
+        <LocationInput
+          id="sidebar-input"
+          class="mt-1-0"
+          @location-selected="handleLocationInput"
+        />
+        <FilterTabs
+          class="mt-1-0"
+          model-value="currentFilter"
+          @filter-selected="handleFilterSelected"
+        />
+        <LocationList
+          :locations="currentLocations"
+          class="mt-1-0"
+          @location-selected="handleLocationSelected"
+        />
       </div>
-      <div class = "top-bar">
+      <div class="top-bar">
         <!-- <BaseIcon class="logo" icon="logo_white" /> -->
-        <LocationInput id="topbar-input" @location-selected="handleLocationInput" />
+        <LocationInput
+          id="topbar-input"
+          @location-selected="handleLocationInput"
+        />
       </div>
       <div class="info-buttons">
         <div>
           <BaseButton class="primary-inverted" icon="documents" />
           <BaseButton class="primary-inverted mt-0-5" icon="info" />
         </div>
-        <BaseButton class="primary-inverted" icon="add" />
+        <BaseButton
+          class="primary-inverted"
+          icon="add"
+          @click="showLocationCreate = true"
+        />
       </div>
-      <div class = "bottom-bar">
-        <LocationSlider :locations="currentLocations" @location-selected="handleLocationSelected" />
+      <div class="bottom-bar">
+        <LocationSlider
+          :locations="currentLocations"
+          @location-selected="handleLocationSelected"
+        />
       </div>
     </div>
+    <Overlay
+      v-if="showLocationCreate"
+      title="MELD LEEGSTAND"
+      @close="showLocationCreate = false"
+    >
+      <LocationCreate @close="showLocationCreate = false" />
+    </Overlay>
     <LocationMap
       class="map"
       :locations="currentLocations"
@@ -39,71 +68,92 @@ import type { LocationDetails, LocationType } from "~/types/types"
 
 const router = useRouter()
 const route = useRoute()
-const { $firestore } = useNuxtApp() as unknown as { $firestore: { getLocations: () => Promise<LocationDetails[]> } }
+const { $firestore } = useNuxtApp() as unknown as {
+  $firestore: { getLocations: () => Promise<LocationDetails[]> }
+}
 useHead({
   title: "Wasted Spaces",
   meta: [{ name: "", content: "" }]
 })
 
-let allLocations = ref<LocationDetails[]>([])
+const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
-
-const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485 )) // Default to Rotterdam
-const currentFilter = ref<LocationType | null>(route.query.filter?.toString().toUpperCase() as LocationType || null)
+const showLocationCreate = ref(false)
+const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
+const currentFilter = ref<LocationType | null>(
+  (route.query.filter?.toString().toUpperCase() as LocationType) || null
+)
 const searchRadius = ref(50) // Default radius in kilometers
 
 const fetchLocations = async () => {
   try {
     allLocations.value = await $firestore.getLocations()
-    console.log("currentFilter", currentFilter.value)
     currentLocations.value = filterLocationsByRadius(allLocations.value)
-    console.log("currentLocations", currentLocations.value)
-    console.log("currentFilter", typeof currentFilter.value)
-    currentLocations.value = filterLocationsByType(currentLocations.value, currentFilter.value)
+    currentLocations.value = filterLocationsByType(
+      currentLocations.value,
+      currentFilter.value
+    )
   } catch (error) {
     console.error("Error fetching locations:", error)
   }
 }
 
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371; // Earth's radius in kilometers
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 6371 // Earth's radius in kilometers
+  const dLat = toRad(lat2 - lat1)
+  const dLon = toRad(lon2 - lon1)
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c
 }
 
 function toRad(degrees: number): number {
-  return degrees * (Math.PI / 180);
+  return degrees * (Math.PI / 180)
 }
 
 const filterLocationsByRadius = (locations: LocationDetails[]) => {
-    // Calculate distances and filter locations within radius
-    return locations
-      .map((loc: LocationDetails) => ({
-        ...loc,
-        distance: calculateDistance(
-          currentCenter.value.latitude,
-          currentCenter.value.longitude,
-          loc.latLng.latitude,
-          loc.latLng.longitude
-        )
-      }))
-      .filter((loc: LocationDetails & { distance: number }) => loc.distance <= searchRadius.value)
-      .sort((a: LocationDetails & { distance: number }, b: LocationDetails & { distance: number }) => a.distance - b.distance)
+  // Calculate distances and filter locations within radius
+  return locations
+    .map((loc: LocationDetails) => ({
+      ...loc,
+      distance: calculateDistance(
+        currentCenter.value.latitude,
+        currentCenter.value.longitude,
+        loc.latLng.latitude,
+        loc.latLng.longitude
+      )
+    }))
+    .filter(
+      (loc: LocationDetails & { distance: number }) =>
+        loc.distance <= searchRadius.value
+    )
+    .sort(
+      (
+        a: LocationDetails & { distance: number },
+        b: LocationDetails & { distance: number }
+      ) => a.distance - b.distance
+    )
 }
 
-const filterLocationsByType = (locations: LocationDetails[], type: LocationType | null) => {
+const filterLocationsByType = (
+  locations: LocationDetails[],
+  type: LocationType | null
+) => {
   if (!type) return locations
-  return locations.filter(location => location.type === type)
+  return locations.filter((location) => location.type === type)
 }
 
 const handleLocationSelected = (latLng: GeoPoint) => {
-  console.log("handleLocationSelected", latLng)
   currentCenter.value = latLng
 }
 
@@ -122,9 +172,7 @@ const handleFilterSelected = (filter: LocationType | null) => {
   })
   currentLocations.value = filterLocationsByRadius(allLocations.value)
   currentLocations.value = filterLocationsByType(currentLocations.value, filter)
-
 }
-
 
 // Initial fetch
 fetchLocations()
@@ -143,14 +191,13 @@ fetchLocations()
   height: 100%;
   justify-content: space-between;
   padding: 1rem;
-  
+
   @include for-tablet-landscape-down {
     flex-direction: column;
     align-items: flex-end;
     padding: 2rem;
-
   }
-  
+
   button {
     pointer-events: auto;
   }
@@ -213,5 +260,6 @@ fetchLocations()
 .logo {
   width: 80%;
   margin-right: auto;
+  fill: $white;
 }
 </style>

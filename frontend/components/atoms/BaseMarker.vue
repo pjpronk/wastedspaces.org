@@ -1,42 +1,40 @@
 <template>
-    <div v-if="map">
-        <div ref="infoWindowRef">
-            <slot></slot>
-        </div>
+  <div v-if="map">
+    <div ref="infoWindowRef">
+      <slot></slot>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  const props = defineProps<{
-    map: google.maps.Map;
-    position: google.maps.LatLngLiteral;
-    title?: string;
-  }>();
+  </div>
+</template>
 
-  const infoWindowRef = ref<HTMLElement | null>(null);
-  const config = useRuntimeConfig();
-  const basePath = config.app.baseURL || '/';
+<script setup lang="ts">
+const props = defineProps<{
+  map: google.maps.Map
+  position: google.maps.LatLngLiteral
+  title?: string
+}>()
 
-  const markerIcon = document.createElement("img");
-  markerIcon.src = `${basePath}icons/marker.svg`.replace('//', '/');
-  markerIcon.style.width = "30px";
-  markerIcon.style.height = "30px";
+const infoWindowRef = ref<HTMLElement | null>(null)
+const config = useRuntimeConfig()
+const basePath = config.app.baseURL || "/"
 
-  const marker = new google.maps.Marker({
-      map: props.map,
-      position: {lat: props.position.lat, lng: props.position.lng},
-      icon: markerIcon.src,
-    });
+const markerIcon = document.createElement("img")
+markerIcon.src = `${basePath}icons/marker.svg`.replace("//", "/")
+markerIcon.style.width = "30px"
+markerIcon.style.height = "30px"
 
-    const infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
+const marker = new google.maps.Marker({
+  map: props.map,
+  position: { lat: props.position.lat, lng: props.position.lng },
+  icon: markerIcon.src
+})
 
-    marker.addListener("click", () => {
-        infoWindow.close();
-        if (infoWindowRef.value instanceof HTMLElement) {
-            infoWindow.setContent(infoWindowRef.value);
-        }
-        infoWindow.open(props.map, marker);
-    });
+const infoWindow = new google.maps.InfoWindow({ disableAutoPan: true })
 
-  </script>
-  
+marker.addListener("click", () => {
+  infoWindow.close()
+  if (infoWindowRef.value instanceof HTMLElement) {
+    infoWindow.setContent(infoWindowRef.value)
+  }
+  infoWindow.open(props.map, marker)
+})
+</script>

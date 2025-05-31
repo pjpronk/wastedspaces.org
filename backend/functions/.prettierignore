@@ -1,0 +1,17 @@
+# Build outputs
+lib/
+node_modules/
+
+# Logs
+*.log
+
+# Firebase
+firebase-debug.log
+.firebase/
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# Generated files
+generated/ 

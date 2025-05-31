@@ -1,5 +1,24 @@
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('../fonts/helvetica-neue-black-condensed.woff2') format('woff2'),
+       url('../fonts/helvetica-neue-black-condensed.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: condensed;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: local('Helvetica Neue Black Condensed');
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: condensed;
+  font-display: swap;
+} 
+
 body {
-  font-family: "Tahoma";
+  font-family: "Helvetica Neue";
   font-weight: 400;
   font-size: 14px;
 }
@@ -9,12 +28,19 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  font-family: "Garamond";
+h6,
+label,
+button {
+  font-family: "Helvetica Neue";
   margin: 0;
   font-style: normal;
-  font-weight: 400;
-  color: $white;
+  font-weight: 700;
+  line-height: 120%;
+  width: fit-content;
+}
+
+label {
+  font-size: 1rem;
 }
 
 .text-xs {
@@ -37,4 +63,8 @@ h6 {
 }
 .text-xl {
   font-size: 1.5rem;
+}
+
+.italic {
+  font-style: italic;
 }

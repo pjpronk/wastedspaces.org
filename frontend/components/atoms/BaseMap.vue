@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  google: any
-  mapConfig: any
+  google: google.maps.Map
+  mapConfig: google.maps.MapOptions
   center: { lat: number; lng: number }
 }>()
 
@@ -23,19 +23,27 @@ onMounted(async () => {
   }
 })
 
-watch(() => props.center, (newCenter) => {
-  console.log("newCenter", newCenter)
-  if (map.value) {
-    map.value.panTo(newCenter)
-  }
-}, { deep: true })
+watch(
+  () => props.center,
+  (newCenter) => {
+    if (map.value) {
+      map.value.panTo(newCenter)
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="scss" scoped>
 .map {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 320px);
   position: absolute;
+  right: 0;
+
+  @include for-tablet-landscape-down {
+    width: 100%;
+  }
 }
 
 #map {
