@@ -26,6 +26,23 @@
         </template>
       </ValidatedInput>
 
+      <ValidatedInput
+        id="email-input"
+        ref="emailInput"
+        label="E-mailadres (voor verificatie)"
+        :validation-rules="emailValidationRules"
+      >
+        <template #default="{ hasError, onValidationError }">
+          <BaseInput
+            id="email-input"
+            v-model="email"
+            type="email"
+            placeholder="email@voorbeeld.nl"
+            @update:model-value="validateEmail"
+          />
+        </template>
+      </ValidatedInput>
+
       <div class="row">
         <ValidatedInput
           id="type-input"
@@ -91,6 +108,7 @@ const addressInput = ref()
 const dateInput = ref()
 const typeInput = ref()
 const ownershipInput = ref()
+const emailInput = ref()
 
 // Form data
 const address = ref("")
@@ -99,6 +117,7 @@ const latLng = ref(new GeoPoint(0, 0))
 const date = ref("")
 const type = ref("")
 const ownership = ref("")
+const email = ref("")
 
 // Validation rules
 const addressValidationRules = [validationRules.required("Adres")]
@@ -111,6 +130,8 @@ const dateValidationRules = [
 const typeValidationRules = [validationRules.selectRequired("Type")]
 
 const ownershipValidationRules = [validationRules.selectRequired("Ownership")]
+
+const emailValidationRules = [validationRules.required("E-mailadres"), validationRules.email("E-mailadres")]
 
 // Options
 const ownershipOptions = ref([
@@ -149,14 +170,19 @@ const validateOwnership = () => {
   ownershipInput.value?.validate(ownership.value)
 }
 
+const validateEmail = () => {
+  emailInput.value?.validate(email.value)
+}
+
 const submitLocation = async () => {
   // Validate all fields before submission
   const isAddressValid = addressInput.value?.validate(address.value)
   const isDateValid = dateInput.value?.validate(date.value)
   const isTypeValid = typeInput.value?.validate(type.value)
   const isOwnershipValid = ownershipInput.value?.validate(ownership.value)
+  const isEmailValid = emailInput.value?.validate(email.value)
 
-  if (!isAddressValid || !isDateValid || !isTypeValid || !isOwnershipValid) {
+  if (!isAddressValid || !isDateValid || !isTypeValid || !isOwnershipValid || !isEmailValid) {
     return // Don't submit if validation fails
   }
 
@@ -169,8 +195,8 @@ const submitLocation = async () => {
     latLng: latLng.value
   }
 
-  const result = await addLocation(location)
-
+  const result = await addLocation(location, email.value)
+  console.log("result", result)
   if (result) {
     emit("close")
   } else if (error.value) {

@@ -7,7 +7,7 @@ declare module "#app" {
     $api: {
       request<T>(endpoint: string, options?: RequestInit): Promise<T>
       location: {
-        addLocation(location: LocationDetails): Promise<AddLocationResponse>
+        addLocation(location: LocationDetails, verificationEmail: string): Promise<AddLocationResponse>
       }
     }
   }

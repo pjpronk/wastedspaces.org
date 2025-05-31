@@ -12,6 +12,9 @@
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
+
+const config = useRuntimeConfig()
+
 const props = defineProps<{
   location: LocationDetails
 }>()
@@ -24,7 +27,7 @@ const handleClick = () => {
   emit("locationSelected", props.location.latLng)
 }
 
-const streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x400&key=AIzaSyDx3x7OILDe1wWmng_pllwoxrH2mlqekCI&location=${props.location.latLng.latitude},${props.location.latLng.longitude}`
+const streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x400&key=${config.public.GOOGLE_MAPS_API_KEY}&location=${props.location.latLng.latitude},${props.location.latLng.longitude}`
 </script>
 
 <style scoped lang="scss">

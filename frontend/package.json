@@ -5,8 +5,8 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "deploy": "nuxt generate && gh-pages -d .output/public",
-    "generate": "nuxt generate",
+    "deploy": "gh-pages -d .output/public",
+    "generate": "nuxt generate && echo 'wastedspaces.org' > .output/public/CNAME",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "seed": "node scripts/seed-locations.js",

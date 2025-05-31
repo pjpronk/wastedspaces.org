@@ -1,4 +1,3 @@
-import type { AddLocationResponse } from "~/plugins/api.client"
 import type { LocationDetails } from "~/types/types"
 
 export const useLocationApi = () => {
@@ -8,13 +7,14 @@ export const useLocationApi = () => {
   const error = ref<string | null>(null)
 
   const addLocation = async (
-    location: LocationDetails
-  ): Promise<AddLocationResponse | null> => {
+    location: LocationDetails,
+    verificationEmail: string
+  ): Promise<Response | null> => {
     isLoading.value = true
     error.value = null
 
     try {
-      const response = await $api.location.addLocation(location)
+      const response = await $api.location.addLocation(location, verificationEmail)
       return response
     } catch (err) {
       error.value =

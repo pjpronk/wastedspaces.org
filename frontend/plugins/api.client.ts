@@ -30,8 +30,9 @@ export default defineNuxtPlugin(() => {
   // Location API methods
   const locationApi = {
     async addLocation(
-      locationData: LocationDetails
-    ): Promise<AddLocationResponse> {
+      locationData: LocationDetails,
+      verificationEmail: string
+    ): Promise<Response> {
       // Convert LocationDetails to the format expected by the API
       const requestData = {
         address: locationData.address,
@@ -42,10 +43,11 @@ export default defineNuxtPlugin(() => {
         latLng: {
           latitude: locationData.latLng.latitude,
           longitude: locationData.latLng.longitude
-        }
+        },
+        verificationEmail: verificationEmail
       }
 
-      return apiClient.request<AddLocationResponse>("/addLocation", {
+      return apiClient.request<Response>("addLocation", {
         method: "POST",
         body: JSON.stringify(requestData)
       })
@@ -61,9 +63,3 @@ export default defineNuxtPlugin(() => {
     }
   }
 })
-
-// Response type for the API
-export interface AddLocationResponse {
-  result: string
-  id: string
-}

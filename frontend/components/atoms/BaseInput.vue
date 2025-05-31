@@ -5,19 +5,9 @@
     class="base-input"
     :type="type"
     :placeholder="placeholder"
-    :disabled="disabled"
-    :required="required"
-    :readonly="readonly"
     :name="name"
-    :autocomplete="autocomplete"
-    :autofocus="autofocus"
-    :maxlength="maxlength"
-    :minlength="minlength"
-    :pattern="pattern"
-    :step="step"
-    :title="title"
     :value="modelValue"
-    @input="$emit('update:modelValue')"
+    @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
 
@@ -43,10 +33,6 @@ defineProps({
     default: ""
   },
   id: {
-    type: String,
-    default: ""
-  },
-  autocomplete: {
     type: String,
     default: ""
   },
@@ -86,7 +72,6 @@ defineEmits(["update:modelValue"]) // Emits input event for v-model
   line-height: 100%;
   padding: 8px 12px;
   outline: none;
-  border: none;
-  border: 0px;
+  border: 1px solid $grey;
 }
 </style>
