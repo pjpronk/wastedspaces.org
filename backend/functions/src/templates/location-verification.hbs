@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    {{> styles}}
+</head>
+<body>
+        <h2>{{title}}</h2>
+
+        <p>
+        Bedankt voor je bijdrage! Deze eenmalige e-mail is bedoeld om de kwaliteit van de data te waarborgen. <br>
+        Jouw e-mailadres wordt op geen enkele wijze gekoppeld aan activiteiten op de website en zal niet worden opgeslagen.
+        </p>
+        
+        <h3>Locatie Details:</h3>
+        <ul>
+            <li><strong>Adres:</strong> {{location.address}}</li>
+            <li><strong>Stad:</strong> {{location.city}}</li>
+            <li><strong>Type:</strong> {{location.type}}</li>
+            <li><strong>Eigendom:</strong> {{location.ownership}}</li>
+            <li><strong>Leeg Sinds:</strong> {{formatDate location.vacatedSince}}</li>
+            <li><strong>Coördinaten:</strong> {{location.latitude}}, {{location.longitude}}</li>
+            <li><strong>Geverifieerd:</strong> {{#if location.verified}}Ja{{else}}Nee{{/if}}</li>
+            <li><strong>Ingediend Op:</strong> {{formatDate location.createdAt}}</li>
+        </ul>
+
+      <p>
+        <a href="{{verificationUrl}}" 
+           style="color: #CC0000; text-decoration: underline;">
+          Klik hier om deze locatie te verifiëren
+        </a>
+      </p>
+      <p>Door op de link te klikken bevestig je dat je de locatiegegevens eerlijk en naar waarheid hebt ingevuld.</p>
+</body>
+</html> 

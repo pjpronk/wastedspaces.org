@@ -29,6 +29,7 @@ const sampleLocations = [
     address: "Kortenaerstraat 12",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9137197, 4.4780767),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -39,6 +40,7 @@ const sampleLocations = [
     address: "Puntstraat 36",
     city: "Rotterdam",
     latLng: new GeoPoint(51.90845, 4.4405534),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -49,6 +51,7 @@ const sampleLocations = [
     address: "Dirk Danestraat 58",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9138646, 4.4346061),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -60,6 +63,7 @@ const sampleLocations = [
     address: "Van Beuningenstraat 20c",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9290768, 4.4579758),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -70,6 +74,7 @@ const sampleLocations = [
     address: "Meidoornstraat 71C",
     city: "Rotterdam",
     latLng: new GeoPoint(51.935437, 4.4828273),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -80,6 +85,7 @@ const sampleLocations = [
     address: "Stieltjesplein 4",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9123808, 4.4996891),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -91,6 +97,7 @@ const sampleLocations = [
     address: "Nassaukade 36",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9125413, 4.4997493),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -101,6 +108,7 @@ const sampleLocations = [
     address: "Nassaukade 35",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9124653, 4.4994629),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -111,6 +119,7 @@ const sampleLocations = [
     address: "R. H. Fledderusstraat 12",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9065537, 4.5029977),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -122,6 +131,7 @@ const sampleLocations = [
     address: "Oostmaasstraat 28",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9235792, 4.5094266),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -132,6 +142,7 @@ const sampleLocations = [
     address: "Ebalstraat 14C",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9320586, 4.5041237),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -142,6 +153,7 @@ const sampleLocations = [
     address: "Ebalstraat 14B",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9320768, 4.5041525),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -152,6 +164,7 @@ const sampleLocations = [
     address: "Ebalstraat 14A",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9320945, 4.504123),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -162,6 +175,7 @@ const sampleLocations = [
     address: "Ebalstraat 13B",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9321217, 4.5041515),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -172,6 +186,7 @@ const sampleLocations = [
     address: "Ebalstraat 13A",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9321399, 4.5041803),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -182,6 +197,7 @@ const sampleLocations = [
     address: "Ebalstraat 13C",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9321579, 4.5041799),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -192,6 +208,7 @@ const sampleLocations = [
     address: "Vondelweg 89",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9268459, 4.4883881),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -202,6 +219,7 @@ const sampleLocations = [
     address: "Noordsingel 197",
     city: "Rotterdam",
     latLng: new GeoPoint(51.933004, 4.473076),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -212,6 +230,7 @@ const sampleLocations = [
     address: "Noordsingel 199",
     city: "Rotterdam",
     latLng: new GeoPoint(51.933027, 4.473013),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -222,6 +241,7 @@ const sampleLocations = [
     address: "Bergweg 278A",
     city: "Rotterdam",
     latLng: new GeoPoint(51.9332273, 4.4731522),
+    verified: true,
     createdAt: new Date(),
     updatedAt: new Date()
   }

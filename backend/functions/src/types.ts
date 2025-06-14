@@ -1,5 +1,6 @@
 import type { GeoPoint, Timestamp } from "firebase-admin/firestore";
 
+// Location types
 export interface LocationDetails {
   id: string;
   address: string;
@@ -41,3 +42,19 @@ export const typeToIcon = (type: string) => {
       return "other";
   }
 };
+
+// Vote types
+export enum VoteType {
+  UPVOTE = "upvote",
+  DOWNVOTE = "downvote",
+}
+
+export interface VoteDetails {
+  id?: string;
+  locationId: string;
+  voteType: VoteType;
+  emailHash: string;
+  verified: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}

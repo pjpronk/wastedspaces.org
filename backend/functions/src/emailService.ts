@@ -1,13 +1,19 @@
 import { logger } from "firebase-functions";
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
-import { LocationDetails } from "./types";
 
 interface EmailCredentials {
   accessToken: string;
   refreshToken: string;
   clientId: string;
   clientSecret: string;
+}
+
+interface EmailMessage {
+  to: string;
+  subject: string;
+  body: string;
+  isHtml?: boolean;
 }
 
 class EmailService {
@@ -17,7 +23,8 @@ class EmailService {
     this.oauth2Client = new google.auth.OAuth2(
       credentials.clientId,
       credentials.clientSecret,
-      "https://developers.google.com/oauthplayground"
+      process.env.OAUTH_REDIRECT_URI ||
+        "http://localhost:5001/wastedspaces-prod/us-central1/oauthCallback"
     );
 
     this.oauth2Client.setCredentials({
@@ -37,63 +44,26 @@ class EmailService {
     }
   }
 
-  private createEmailContent(
-    location: Omit<LocationDetails, "id">,
-    locationId: string,
-    verificationToken: string,
-  ): string {
-    return `
-      <h2>Nieuwe Locatie Toegevoegd aan Wasted Spaces</h2>
-      <p>Een nieuwe locatie is ingediend bij de Wasted Spaces database:</p>
-      
-      <h3>Locatie Details:</h3>
-      <ul>
-        <li><strong>Adres:</strong> ${location.address}</li>
-        <li><strong>Stad:</strong> ${location.city}</li>
-        <li><strong>Type:</strong> ${location.type}</li>
-        <li><strong>Eigendom:</strong> ${location.ownership}</li>
-        <li><strong>Leeg Sinds:</strong> ${location.vacatedSince.toDateString()}</li>
-        <li><strong>Coördinaten:</strong> ${location.latLng.latitude}, ${location.latLng.longitude}</li>
-        <li><strong>Geverifieerd:</strong> ${location.verified ? "Ja" : "Nee"}</li>
-        <li><strong>Ingediend Op:</strong> ${location.createdAt.toDate().toLocaleString()}</li>
-      </ul>
+  private createEmailMessage(message: EmailMessage): string {
+    const contentType = message.isHtml
+      ? "Content-Type: text/html; charset=utf-8"
+      : "Content-Type: text/plain; charset=utf-8";
 
-      <p>
-        <a href="${process.env.FUNCTIONS_BASE_URL}/verifyLocation?verificationToken=${verificationToken}&locationId=${locationId}" 
-           style="color: #CC0000; text-decoration: underline;">
-          Klik hier om deze locatie te verifiëren
-        </a>
-      </p>
-      
-      <p>Beoordeel deze inzending voor verificatie.</p>
-    `;
-  }
-
-  private createEmailMessage(
-    to: string,
-    subject: string,
-    htmlBody: string
-  ): string {
-    const message = [
-      `To: ${to}`,
-      `Subject: ${subject}`,
-      "Content-Type: text/html; charset=utf-8",
+    const emailMessage = [
+      `To: ${message.to}`,
+      `Subject: ${message.subject}`,
+      contentType,
       "",
-      htmlBody,
+      message.body,
     ].join("\n");
 
-    return Buffer.from(message)
+    return Buffer.from(emailMessage)
       .toString("base64")
       .replace(/\+/g, "-")
       .replace(/\//g, "_");
   }
 
-  async sendLocationNotification(
-    location: Omit<LocationDetails, "id">,
-    locationId: string,
-    verificationToken: string,
-    submitterEmail: string
-  ): Promise<void> {
+  async sendEmail(message: EmailMessage): Promise<void> {
     try {
       // Refresh credentials if needed
       await this.refreshCredentials();
@@ -102,21 +72,8 @@ class EmailService {
       const gmail = google.gmail({ version: "v1", auth: this.oauth2Client });
       logger.info("Gmail service built successfully.");
 
-      // Email configuration
-      const toEmail = submitterEmail;
-      const subject = `Thank you for submitting: ${location.address}`;
-      const htmlBody = this.createEmailContent(
-        location,
-        locationId,
-        verificationToken,
-      );
-
       // Create and encode email message
-      const encodedMessage = this.createEmailMessage(
-        toEmail,
-        subject,
-        htmlBody
-      );
+      const encodedMessage = this.createEmailMessage(message);
 
       // Send email
       const response = await gmail.users.messages.send({
@@ -127,13 +84,11 @@ class EmailService {
       });
 
       logger.info(
-        `Email sent successfully to submitter: ${submitterEmail}. Message ID: ${response.data.id}`
+        `Email sent successfully to: ${message.to}. Message ID: ${response.data.id}`
       );
-      logger.info(`Location notification sent for location ID: ${locationId}`);
     } catch (error) {
-      logger.error("Error sending email notification:", error);
-      // Don't throw the error to prevent location creation from failing
-      // if email sending fails
+      logger.error("Error sending email:", error);
+      throw error;
     }
   }
 }
@@ -146,8 +101,6 @@ export function createEmailService(): EmailService | null {
       clientId: process.env.OAUTH_CLIENT_ID || "",
       clientSecret: process.env.OAUTH_CLIENT_SECRET || "",
     };
-
-    logger.info(credentials);
 
     // Check if all required credentials are present
     if (
@@ -168,3 +121,5 @@ export function createEmailService(): EmailService | null {
     return null;
   }
 }
+
+export { EmailService, EmailMessage };

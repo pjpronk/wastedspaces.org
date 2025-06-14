@@ -93,6 +93,7 @@ const fetchLocations = async () => {
       currentLocations.value,
       currentFilter.value
     )
+    currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
   } catch (error) {
     console.error("Error fetching locations:", error)
   }
@@ -145,6 +146,10 @@ const filterLocationsByRadius = (locations: LocationDetails[]) => {
     )
 }
 
+const filterLocationByVerificationStatus = (locations: LocationDetails[]) => {
+  return locations.filter((loc) => loc.verified)
+}
+
 const filterLocationsByType = (
   locations: LocationDetails[],
   type: LocationType | null
@@ -160,6 +165,7 @@ const handleLocationSelected = (latLng: GeoPoint) => {
 const handleLocationInput = (latLng: GeoPoint) => {
   currentCenter.value = latLng
   currentLocations.value = filterLocationsByRadius(allLocations.value)
+  currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
 }
 
 const handleFilterSelected = (filter: LocationType | null) => {
@@ -172,6 +178,7 @@ const handleFilterSelected = (filter: LocationType | null) => {
   })
   currentLocations.value = filterLocationsByRadius(allLocations.value)
   currentLocations.value = filterLocationsByType(currentLocations.value, filter)
+  currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
 }
 
 // Initial fetch
