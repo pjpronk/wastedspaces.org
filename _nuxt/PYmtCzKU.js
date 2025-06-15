@@ -1,0 +1,5 @@
+const e=`<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.87 70.87">
+
+  <path class="cls-1" d="M34.9,18.1l-17.18,16.29v20.15h35.43v-20.15l-18.25-16.29ZM32.47,49.77l-7.21-8.55,3.82-3.22,3.54,4.2,9.18-10,3.68,3.38-13.02,14.19Z"/>
+</svg>`;export{e as default};
