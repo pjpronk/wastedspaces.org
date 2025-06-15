@@ -5,7 +5,7 @@ import { logger } from "firebase-functions";
 
 interface BaseTemplateData {
   title?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 class TemplateService {
@@ -38,8 +38,9 @@ class TemplateService {
   }
 
   private loadTemplate(name: string): HandlebarsTemplateDelegate {
-    if (this.templates.has(name)) {
-      return this.templates.get(name)!;
+    const cachedTemplate = this.templates.get(name);
+    if (cachedTemplate) {
+      return cachedTemplate;
     }
 
     try {

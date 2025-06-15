@@ -55,7 +55,10 @@ function handleCors(req: Request, res: Response): boolean {
 }
 
 // Helper function to render HTML templates
-function renderTemplate(templateName: string, data: any): string {
+function renderTemplate(
+  templateName: string,
+  data: Record<string, unknown>
+): string {
   return templateService.render(templateName, data);
 }
 
