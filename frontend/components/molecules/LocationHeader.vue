@@ -5,9 +5,13 @@
       :icon="location.type.toString().toLowerCase()"
     />
     <div class="flex-column ml-0-50">
-      <BaseText class="text-sm text-primary bold">{{ location.address }}</BaseText>
+      <BaseText class="text-sm text-primary bold">{{
+        location.address
+      }}</BaseText>
       <BaseText class="text-grey text-s">{{ location.city }}</BaseText>
-      <BaseText class="text-grey text-s">{{ $relativeTime(location.createdAt.toDate())}}</BaseText>
+      <BaseText class="text-grey text-s">{{
+        $relativeTime(location.createdAt.toDate())
+      }}</BaseText>
     </div>
   </div>
 </template>
@@ -29,4 +33,4 @@ defineProps<{
   width: 100%;
   padding: 8px;
 }
-</style> 
+</style>

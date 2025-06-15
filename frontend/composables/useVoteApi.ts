@@ -41,4 +41,4 @@ export const useVoteApi = () => {
     error: readonly(error),
     clearError
   }
-} 
+}

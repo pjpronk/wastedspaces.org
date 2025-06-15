@@ -7,7 +7,7 @@ export interface OverlayState {
 export const useOverlay = () => {
   const overlayState = ref<OverlayState>({
     isOpen: false,
-    title: '',
+    title: "",
     component: null
   })
 
@@ -22,7 +22,7 @@ export const useOverlay = () => {
   const closeOverlay = () => {
     overlayState.value = {
       isOpen: false,
-      title: '',
+      title: "",
       component: null
     }
   }
@@ -32,4 +32,4 @@ export const useOverlay = () => {
     openOverlay,
     closeOverlay
   }
-} 
+}

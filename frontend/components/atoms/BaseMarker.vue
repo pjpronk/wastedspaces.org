@@ -1,10 +1,20 @@
 <template>
   <div v-if="map" ref="markerContent" class="marker-container">
     <BaseIcon :icon="statusIcon" class="icon icon-m white" />
-    <LocationInfoWindow v-if="isActive" class="info-window" :location="location" @close="handleCloseInfoWindow"  />
+    <LocationInfoWindow
+      v-if="isActive"
+      class="info-window"
+      :location="location"
+      @close="handleCloseInfoWindow"
+    />
     <svg class="triangle-pointer" width="30" height="15" viewBox="0 0 30 15">
-      <path d="M 0,0 L 0,12 L 12,0 Z" fill="currentColor"/>
-      <path d="M 0,0 L 0,12 L 12,0" fill="currentColor" stroke="#ffffff" stroke-width="1"/>
+      <path d="M 0,0 L 0,12 L 12,0 Z" fill="currentColor" />
+      <path
+        d="M 0,0 L 0,12 L 12,0"
+        fill="currentColor"
+        stroke="#ffffff"
+        stroke-width="1"
+      />
     </svg>
   </div>
 </template>
@@ -26,27 +36,24 @@ let marker: google.maps.marker.AdvancedMarkerElement
 
 const statusIcon = computed(() => {
   const { upvotes = 0, downvotes = 0 } = props.location
-  
+
   if (downvotes >= 5 && upvotes >= 5) {
-    return 'status-ongeverifieerd'
-  }
-  else if (upvotes >= 5) {
-    return 'status-geverifieerd'
-  }
-  else if (downvotes >= 5) {
-    return 'status-afgekeurd'
-  }
-  else {
-    return 'status-ongeverifieerd'
+    return "status-ongeverifieerd"
+  } else if (upvotes >= 5) {
+    return "status-geverifieerd"
+  } else if (downvotes >= 5) {
+    return "status-afgekeurd"
+  } else {
+    return "status-ongeverifieerd"
   }
 })
 
 const handleCloseInfoWindow = () => {
   if (marker.content && marker.content instanceof HTMLElement) {
-    marker.content.classList.remove("active");
-    isActive.value = false;
-    marker.style.zIndex = "initial";
-    marker.style.pointerEvents = "auto";
+    marker.content.classList.remove("active")
+    isActive.value = false
+    marker.style.zIndex = "initial"
+    marker.style.pointerEvents = "auto"
   }
 }
 
@@ -54,16 +61,16 @@ onMounted(() => {
   marker = new google.maps.marker.AdvancedMarkerElement({
     map: toRaw(props.map),
     position: { lat: props.position.lat, lng: props.position.lng },
-    content: markerContent.value,
+    content: markerContent.value
   })
   marker.addListener("gmp-click", () => {
     if (marker.content && marker.content instanceof HTMLElement) {
       if (!marker.content.classList.contains("active")) {
-        marker.content.classList.add("active");
-        marker.style.zIndex = "9999";
-        isActive.value = true;
-        marker.content.style.left = "calc(50% - 12px)";
-        marker.style.pointerEvents = "none";
+        marker.content.classList.add("active")
+        marker.style.zIndex = "9999"
+        isActive.value = true
+        marker.content.style.left = "calc(50% - 12px)"
+        marker.style.pointerEvents = "none"
       }
     }
   })
@@ -76,8 +83,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang = "scss" scoped>
-
+<style lang="scss" scoped>
 .marker-container {
   display: flex;
   align-items: center;
@@ -93,7 +99,7 @@ onUnmounted(() => {
 }
 
 .icon {
-  z-index: 2; 
+  z-index: 2;
   fill: $white;
   stroke: $white;
 }
@@ -112,12 +118,12 @@ onUnmounted(() => {
 }
 
 .active {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.4);
   height: auto;
   width: auto;
   min-width: 200px;
-  filter:unset;
+  filter: unset;
   padding: 0px;
   left: calc(50% - 12px);
 
@@ -129,11 +135,11 @@ onUnmounted(() => {
   .icon {
     display: none;
   }
-  
+
   .info-window {
     display: flex;
   }
-  
+
   .marker {
     display: none;
   }

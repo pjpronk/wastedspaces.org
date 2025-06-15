@@ -6,17 +6,17 @@
         alt="Location Street View"
         class="location-image"
       />
-      <div class = "tags-container">
-        <BaseTag :tag="location.type"/>
-        <BaseTag :tag="location.ownership"/>
+      <div class="tags-container">
+        <BaseTag :tag="location.type" />
+        <BaseTag :tag="location.ownership" />
       </div>
     </div>
     <LocationHeader :location="location" />
     <div class="buttons mt-0-75">
-      <BaseButton class ="primary" @click="handleUpvote">
+      <BaseButton class="primary" @click="handleUpvote">
         <BaseVote :count="location.upvotes || 0" type="upvotes" />
       </BaseButton>
-      <BaseButton class ="primary" @click="handleDownvote">
+      <BaseButton class="primary" @click="handleDownvote">
         <BaseVote :count="location.downvotes || 0" type="downvotes" />
       </BaseButton>
       <BaseButton class="primary-inverted" @click.stop="$emit('close')">
@@ -24,11 +24,12 @@
       </BaseButton>
     </div>
     <Teleport to="body">
-      <Overlay v-if="openVoteDialog" title = "Stem nu" @close="openVoteDialog=false"> 
-        <VoteCreate 
-          :location-id="location.id"
-          :vote-type="VoteType.UPVOTE"
-        />
+      <Overlay
+        v-if="openVoteDialog"
+        title="Stem nu"
+        @close="openVoteDialog = false"
+      >
+        <VoteCreate :location-id="location.id" :vote-type="VoteType.UPVOTE" />
       </Overlay>
     </Teleport>
   </div>
@@ -51,17 +52,17 @@ defineEmits<{
 }>()
 
 const streetViewUrl = computed(() => {
-  const baseUrl = 'https://maps.googleapis.com/maps/api/streetview'
-  const size = '600x400'
+  const baseUrl = "https://maps.googleapis.com/maps/api/streetview"
+  const size = "600x400"
   const apiKey = config.public.GOOGLE_MAPS_API_KEY
   const location = `${props.location.latLng.latitude},${props.location.latLng.longitude}`
-  
+
   const params = new URLSearchParams({
     size,
     key: apiKey,
     location
   })
-  
+
   return `${baseUrl}?${params.toString()}`
 })
 

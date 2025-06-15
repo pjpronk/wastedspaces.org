@@ -57,9 +57,9 @@ export default defineNuxtPlugin(() => {
   // Vote API methods
   const voteApi = {
     async addVote(voteData: {
-      locationId: string;
-      voteType: VoteType;
-      verificationEmail: string;
+      locationId: string
+      voteType: VoteType
+      verificationEmail: string
     }): Promise<Response> {
       return apiClient.request<Response>("addVote", {
         method: "POST",

@@ -25,7 +25,6 @@
         </BaseMap>
       </template>
     </GoogleMapLoader>
-
   </div>
 </template>
 
@@ -47,7 +46,6 @@ const mapConfig = {
   zoom: 12,
   disableDefaultUI: true
 }
-
 </script>
 
 <style scoped lang="scss">

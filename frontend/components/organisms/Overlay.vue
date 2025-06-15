@@ -3,11 +3,7 @@
     <div class="overlay">
       <div class="overlay-header">
         <BaseTitle2 class="text-xl">{{ title }}</BaseTitle2>
-        <BaseButton
-          icon="close"
-          class="icon-sm transparent"
-          @click="close"
-        />
+        <BaseButton icon="close" class="icon-sm transparent" @click="close" />
       </div>
       <div class="overlay-content">
         <slot></slot>

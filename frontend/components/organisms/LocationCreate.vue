@@ -131,7 +131,10 @@ const typeValidationRules = [validationRules.selectRequired("Type")]
 
 const ownershipValidationRules = [validationRules.selectRequired("Ownership")]
 
-const emailValidationRules = [validationRules.required("E-mailadres"), validationRules.email("E-mailadres")]
+const emailValidationRules = [
+  validationRules.required("E-mailadres"),
+  validationRules.email("E-mailadres")
+]
 
 // Options
 const ownershipOptions = ref([
@@ -182,7 +185,13 @@ const submitLocation = async () => {
   const isOwnershipValid = ownershipInput.value?.validate(ownership.value)
   const isEmailValid = emailInput.value?.validate(email.value)
 
-  if (!isAddressValid || !isDateValid || !isTypeValid || !isOwnershipValid || !isEmailValid) {
+  if (
+    !isAddressValid ||
+    !isDateValid ||
+    !isTypeValid ||
+    !isOwnershipValid ||
+    !isEmailValid
+  ) {
     return // Don't submit if validation fails
   }
 

@@ -52,9 +52,9 @@
       :title="overlayState.title"
       @close="closeOverlay"
     >
-      <LocationCreate 
+      <LocationCreate
         v-if="overlayState.component === 'LocationCreate'"
-        @close="closeOverlay" 
+        @close="closeOverlay"
       />
     </Overlay>
     <LocationMap
@@ -99,7 +99,9 @@ const fetchLocations = async () => {
       currentLocations.value,
       currentFilter.value
     )
-    currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
+    currentLocations.value = filterLocationByVerificationStatus(
+      currentLocations.value
+    )
   } catch (error) {
     console.error("Error fetching locations:", error)
   }
@@ -171,7 +173,9 @@ const handleLocationSelected = (latLng: GeoPoint) => {
 const handleLocationInput = (latLng: GeoPoint) => {
   currentCenter.value = latLng
   currentLocations.value = filterLocationsByRadius(allLocations.value)
-  currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
+  currentLocations.value = filterLocationByVerificationStatus(
+    currentLocations.value
+  )
 }
 
 const handleFilterSelected = (filter: LocationType | null) => {
@@ -184,12 +188,14 @@ const handleFilterSelected = (filter: LocationType | null) => {
   })
   currentLocations.value = filterLocationsByRadius(allLocations.value)
   currentLocations.value = filterLocationsByType(currentLocations.value, filter)
-  currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
+  currentLocations.value = filterLocationByVerificationStatus(
+    currentLocations.value
+  )
 }
 
 // Specific overlay opening functions
 const openLocationCreate = () => {
-  openOverlay('Meld leegstand', 'LocationCreate')
+  openOverlay("Meld leegstand", "LocationCreate")
 }
 
 // Initial fetch

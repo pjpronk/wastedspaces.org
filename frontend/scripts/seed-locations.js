@@ -10,8 +10,7 @@ import {
 import dotenv from "dotenv"
 
 // Load environment variables
-dotenv.config();
-
+dotenv.config()
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

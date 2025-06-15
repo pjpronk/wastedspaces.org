@@ -14,7 +14,10 @@ export const useLocationApi = () => {
     error.value = null
 
     try {
-      const response = await $api.location.addLocation(location, verificationEmail)
+      const response = await $api.location.addLocation(
+        location,
+        verificationEmail
+      )
       return response
     } catch (err) {
       error.value =

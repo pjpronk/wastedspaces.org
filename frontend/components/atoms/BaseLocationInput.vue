@@ -46,13 +46,7 @@ const emit = defineEmits<{
     e: "update:modelValue",
     value: { address: string; city: string; latLng: GeoPoint } | string
   ): void
-  (
-    e:
-      | "update:address"
-      | "update:city"
-      | "validationError",
-    value: string
-  ): void
+  (e: "update:address" | "update:city" | "validationError", value: string): void
   (e: "update:latLng" | "locationSelected", value: GeoPoint): void
 }>()
 

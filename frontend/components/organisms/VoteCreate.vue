@@ -57,7 +57,10 @@ const emailInput = ref()
 const email = ref("")
 
 // Validation rules
-const emailValidationRules = [validationRules.required("E-mailadres"), validationRules.email("E-mailadres")]
+const emailValidationRules = [
+  validationRules.required("E-mailadres"),
+  validationRules.email("E-mailadres")
+]
 
 // Computed button text based on vote type
 const buttonText = computed(() => {

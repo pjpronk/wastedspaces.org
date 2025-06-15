@@ -32,7 +32,7 @@ defineProps<{
   background-color: $white;
   color: $primary-red;
   border: 1px solid $primary-red;
-  
+
   &:hover {
     color: $white;
     background-color: $primary-red;

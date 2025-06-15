@@ -3,7 +3,7 @@
     <LocationHeader :location="location" />
     <div class="location-tags flex-row">
       <BaseTag :tag="location.type.toString()" />
-      <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes"/>
+      <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes" />
     </div>
   </div>
 </template>

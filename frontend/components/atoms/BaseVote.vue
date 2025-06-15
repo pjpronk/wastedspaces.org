@@ -1,10 +1,10 @@
 <template>
-  <span :class="['vote', type]">{{ count.toString().padStart(3, '0') }}</span>
+  <span :class="['vote', type]">{{ count.toString().padStart(3, "0") }}</span>
 </template>
 
 <script>
 export default {
-  name: 'BaseVote',
+  name: "BaseVote",
   props: {
     count: {
       type: Number,
@@ -13,7 +13,7 @@ export default {
     type: {
       type: String,
       required: true,
-      validator: (value) => ['upvotes', 'downvotes'].includes(value)
+      validator: (value) => ["upvotes", "downvotes"].includes(value)
     }
   }
 }
@@ -22,7 +22,7 @@ export default {
 <style lang="scss" scoped>
 .vote {
   color: currentColor;
-  
+
   &:before {
     font-size: 15px;
     font-family: Arial;
@@ -43,4 +43,4 @@ export default {
     content: "▼";
   }
 }
-</style> 
+</style>

@@ -4,9 +4,9 @@
       v-for="option in typeOptions"
       :key="option.value"
       :class="['filter-tag', { active: modelValue === option.value }]"
-      :tag ="option.label.toString()"
+      :tag="option.label.toString()"
       @click="handleSelect(option.value)"
-    /> 
+    />
   </div>
 </template>
 

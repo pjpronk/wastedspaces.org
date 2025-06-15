@@ -53,7 +53,14 @@ defineProps({
 })
 
 const emit = defineEmits<{
-  (e: "update:modelValue" | "update:address" | "update:city" | "validationError", value: string): void
+  (
+    e:
+      | "update:modelValue"
+      | "update:address"
+      | "update:city"
+      | "validationError",
+    value: string
+  ): void
   (e: "locationSelected" | "update:latLng", value: GeoPoint): void
 }>()
 

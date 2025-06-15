@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'VoteCount',
+  name: "VoteCount",
   props: {
     upvotes: {
       type: Number,

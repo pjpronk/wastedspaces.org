@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     families: {
       Inter: [400, 500, 600, 700]
     },
-    display: 'swap'
+    display: "swap"
   },
   components: [
     "~/components/",
