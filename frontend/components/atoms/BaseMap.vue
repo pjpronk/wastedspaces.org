@@ -7,19 +7,21 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  google: any
+  google: typeof google
   mapConfig: google.maps.MapOptions
   center: { lat: number; lng: number }
 }>()
 
 const mapContainer = ref(null)
-const map = ref<any>(null)
+const map = ref<google.maps.Map | null>(null)
 
 onMounted(async () => {
   try {
-    map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
+    if (mapContainer.value) {
+      map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
+    }
   } catch (error) {
-    console.error("Error aloading map: ", error)
+    console.error("Error loading map: ", error)
   }
 })
 
