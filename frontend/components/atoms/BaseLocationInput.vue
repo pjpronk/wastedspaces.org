@@ -50,11 +50,10 @@ const emit = defineEmits<{
     e:
       | "update:address"
       | "update:city"
-      | "locationSelected"
       | "validationError",
     value: string
   ): void
-  (e: "update:latLng", value: GeoPoint): void
+  (e: "update:latLng" | "locationSelected", value: GeoPoint): void
 }>()
 
 const autocomplete = ref<google.maps.places.Autocomplete | null>(null)

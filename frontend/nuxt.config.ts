@@ -18,7 +18,13 @@ export default defineNuxtConfig({
       FIREBASE_APP_ID: process.env.FIREBASE_APP_ID || ""
     }
   },
-  modules: ["@nuxt/eslint", "@nuxtjs/leaflet"],
+  modules: ["@nuxt/eslint", "@nuxtjs/leaflet", "@nuxtjs/google-fonts"],
+  googleFonts: {
+    families: {
+      Inter: [400, 500, 600, 700]
+    },
+    display: 'swap'
+  },
   components: [
     "~/components/",
     "~/components/atoms/",

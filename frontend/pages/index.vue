@@ -30,14 +30,14 @@
         />
       </div>
       <div class="info-buttons">
-        <div>
+        <div class="info-buttons-aside">
           <BaseButton class="primary-inverted" icon="documents" />
-          <BaseButton class="primary-inverted mt-0-5" icon="info" />
+          <BaseButton class="primary-inverted" icon="info" />
         </div>
         <BaseButton
           class="primary-inverted"
           icon="add"
-          @click="showLocationCreate = true"
+          @click="openLocationCreate"
         />
       </div>
       <div class="bottom-bar">
@@ -48,11 +48,14 @@
       </div>
     </div>
     <Overlay
-      v-if="showLocationCreate"
-      title="MELD LEEGSTAND"
-      @close="showLocationCreate = false"
+      v-if="overlayState.isOpen"
+      :title="overlayState.title"
+      @close="closeOverlay"
     >
-      <LocationCreate @close="showLocationCreate = false" />
+      <LocationCreate 
+        v-if="overlayState.component === 'LocationCreate'"
+        @close="closeOverlay" 
+      />
     </Overlay>
     <LocationMap
       class="map"
@@ -78,16 +81,19 @@ useHead({
 
 const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
-const showLocationCreate = ref(false)
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
 const currentFilter = ref<LocationType | null>(
   (route.query.filter?.toString().toUpperCase() as LocationType) || null
 )
 const searchRadius = ref(50) // Default radius in kilometers
 
+// Use the overlay composable
+const { overlayState, openOverlay, closeOverlay } = useOverlay()
+
 const fetchLocations = async () => {
   try {
     allLocations.value = await $firestore.getLocations()
+    console.log(allLocations.value)
     currentLocations.value = filterLocationsByRadius(allLocations.value)
     currentLocations.value = filterLocationsByType(
       currentLocations.value,
@@ -181,6 +187,11 @@ const handleFilterSelected = (filter: LocationType | null) => {
   currentLocations.value = filterLocationByVerificationStatus(currentLocations.value)
 }
 
+// Specific overlay opening functions
+const openLocationCreate = () => {
+  openOverlay('Meld leegstand', 'LocationCreate')
+}
+
 // Initial fetch
 fetchLocations()
 </script>
@@ -193,21 +204,21 @@ fetchLocations()
 .info-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   pointer-events: none;
   height: 100%;
   justify-content: space-between;
   padding: 1rem;
-
-  @include for-tablet-landscape-down {
-    flex-direction: column;
-    align-items: flex-end;
-    padding: 2rem;
-  }
+  align-items: flex-end;
 
   button {
     pointer-events: auto;
   }
+}
+
+.info-buttons-aside {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
 }
 
 .top-bar {

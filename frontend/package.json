@@ -18,6 +18,7 @@
   "dependencies": {
     "@firebase/firestore": "^4.7.10",
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/leaflet": "^1.2.2",
     "@types/google.maps": "^3.55.12",
     "firebase": "^11.5.0",

@@ -135,6 +135,8 @@ exports.addLocation = onRequest(async (req: Request, res: Response) => {
       vacatedSince: new Date(locationData.vacatedSince),
       latLng: geoPoint,
       verified: false,
+      upvotes: 1,
+      downvotes: 0,
       createdAt: now,
       updatedAt: now,
     };
@@ -502,7 +504,7 @@ exports.verifyVote = onRequest(async (req: Request, res: Response) => {
       return;
     }
 
-    // Update both collections
+    // Update all collections atomically
     const batch = db.batch();
 
     // Mark vote as verified in public collection
@@ -518,6 +520,30 @@ exports.verifyVote = onRequest(async (req: Request, res: Response) => {
       verified: true,
       verifiedAt: Timestamp.now(),
     });
+
+    // Update location document with vote count
+    const locationRef = db
+      .collection("locations")
+      .doc(verificationData.locationId);
+    const locationDoc = await locationRef.get();
+
+    if (locationDoc.exists) {
+      const locationData = locationDoc.data();
+      const currentUpvotes = locationData?.upvotes || 0;
+      const currentDownvotes = locationData?.downvotes || 0;
+
+      if (verificationData.voteType === VoteType.UPVOTE) {
+        batch.update(locationRef, {
+          upvotes: currentUpvotes + 1,
+          updatedAt: Timestamp.now(),
+        });
+      } else {
+        batch.update(locationRef, {
+          downvotes: currentDownvotes + 1,
+          updatedAt: Timestamp.now(),
+        });
+      }
+    }
 
     await batch.commit();
 

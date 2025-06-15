@@ -22,10 +22,6 @@
   text-transform: uppercase;
 }
 
-.bold {
-  font-weight: 700;
-}
-
 .justify-text {
   text-align: justify;
 }

@@ -5,7 +5,7 @@
         <BaseTitle2 class="text-xl">{{ title }}</BaseTitle2>
         <BaseButton
           icon="close"
-          class="icon-sm primary-inverted"
+          class="icon-sm transparent"
           @click="close"
         />
       </div>

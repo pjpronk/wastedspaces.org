@@ -1,8 +1,9 @@
 <template>
-  <div class="full-width">
+  <div class="full-width map-container">
     <GoogleMapLoader>
       <template #default="{ google }">
         <BaseMap
+          ref="mapRef"
           :google="google"
           :map-config="mapConfig"
           :center="{ lat: center.latitude, lng: center.longitude }"
@@ -12,19 +13,19 @@
               v-for="location in locations"
               :key="location.id"
               :map="map"
+              :location="location"
               :google="google"
               :position="{
                 lat: location.latLng.latitude,
                 lng: location.latLng.longitude
               }"
               :title="location.address"
-            >
-              <LocationInfoWindow :location="location" />
-            </BaseMarker>
+            />
           </template>
         </BaseMap>
       </template>
     </GoogleMapLoader>
+
   </div>
 </template>
 
@@ -38,6 +39,7 @@ const props = defineProps<{
 }>()
 
 const config = useRuntimeConfig()
+const mapRef = ref()
 
 const mapConfig = {
   center: { lat: props.center.latitude, lng: props.center.longitude },
@@ -45,4 +47,11 @@ const mapConfig = {
   zoom: 12,
   disableDefaultUI: true
 }
+
 </script>
+
+<style scoped lang="scss">
+.map-container {
+  position: relative;
+}
+</style>

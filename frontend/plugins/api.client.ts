@@ -1,4 +1,4 @@
-import type { LocationDetails } from "~/types/types"
+import type { LocationDetails, VoteType } from "~/types/types"
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
@@ -54,11 +54,26 @@ export default defineNuxtPlugin(() => {
     }
   }
 
+  // Vote API methods
+  const voteApi = {
+    async addVote(voteData: {
+      locationId: string;
+      voteType: VoteType;
+      verificationEmail: string;
+    }): Promise<Response> {
+      return apiClient.request<Response>("addVote", {
+        method: "POST",
+        body: JSON.stringify(voteData)
+      })
+    }
+  }
+
   return {
     provide: {
       api: {
         ...apiClient,
-        location: locationApi
+        location: locationApi,
+        vote: voteApi
       }
     }
   }

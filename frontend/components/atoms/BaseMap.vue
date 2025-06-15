@@ -7,13 +7,13 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  google: google.maps.Map
+  google: any
   mapConfig: google.maps.MapOptions
   center: { lat: number; lng: number }
 }>()
 
 const mapContainer = ref(null)
-const map = ref(null)
+const map = ref<any>(null)
 
 onMounted(async () => {
   try {

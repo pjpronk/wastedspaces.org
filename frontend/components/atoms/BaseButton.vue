@@ -13,25 +13,48 @@ defineProps<{
 
 <style lang="scss" scoped>
 .button {
-  background-color: $white;
-  color: $primary-red;
   box-sizing: border-box;
   width: fit-content;
   cursor: pointer;
-  border: 0px;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0.75rem 3rem;
+  padding: 0.75rem 2rem;
   font-weight: bold;
   text-align: center;
   display: inline-block;
   line-height: 100%;
-  font-size: 14px;
+  font-size: 12px;
+  border: 0px;
 }
+
+.primary {
+  background-color: $white;
+  color: $primary-red;
+  border: 1px solid $primary-red;
+  
+  &:hover {
+    color: $white;
+    background-color: $primary-red;
+  }
+}
+
 .primary-inverted {
   background-color: $primary-red;
   color: $white;
+  border: 1px solid $primary-red;
+
+  &:hover {
+    background-color: $primary-red-hover;
+    border: 1px solid $primary-red-hover;
+  }
+}
+
+.transparent {
+  background-color: transparent;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .icon {

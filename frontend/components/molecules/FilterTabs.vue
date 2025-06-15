@@ -4,11 +4,9 @@
       v-for="option in typeOptions"
       :key="option.value"
       :class="['filter-tag', { active: modelValue === option.value }]"
-      class="skewed"
+      :tag ="option.label.toString()"
       @click="handleSelect(option.value)"
-    >
-      {{ option.label }}
-    </BaseTag>
+    /> 
   </div>
 </template>
 
@@ -24,9 +22,9 @@ defineProps<{
 const emit = defineEmits(["update:modelValue", "filterSelected"])
 
 const typeOptions = computed(() =>
-  Object.entries(LocationType).map(([key, label]) => ({
+  Object.keys(LocationType).map((key) => ({
     value: key,
-    label
+    label: key
   }))
 )
 
@@ -45,20 +43,11 @@ function handleSelect(value: string) {
 .filter-tag {
   cursor: pointer;
   background: $white;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
+  min-width: 80px;
 }
 .filter-tag.active {
   background: $primary-red;
   color: $white;
-}
-
-.skewed {
-  transform: skew(
-    -2deg
-  ); /* Adjust the angle (10deg) to control how much the element is slanted */
-  /* Optional: if you want to keep the content straight while the container is skewed */
-  & > * {
-    transform: skew(2deg); /* Counter-skew the content to keep it straight */
-  }
 }
 </style>

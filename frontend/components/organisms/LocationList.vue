@@ -2,7 +2,7 @@
   <div class="location-list">
     <LocationListItem
       v-for="location in locations"
-      :key="location.latLng.latitude + ',' + location.latLng.longitude"
+      :key="location.id"
       :location="location"
       @location-selected="handleLocationSelected"
     />

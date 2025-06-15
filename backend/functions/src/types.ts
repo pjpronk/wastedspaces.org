@@ -10,6 +10,8 @@ export interface LocationDetails {
   vacatedSince: Date;
   latLng: GeoPoint;
   verified: boolean;
+  upvotes: number;
+  downvotes: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -43,7 +45,6 @@ export const typeToIcon = (type: string) => {
   }
 };
 
-// Vote types
 export enum VoteType {
   UPVOTE = "upvote",
   DOWNVOTE = "downvote",

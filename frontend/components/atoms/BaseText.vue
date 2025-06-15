@@ -8,10 +8,6 @@ p {
   line-height: 100%;
 }
 
-.bold {
-  font-weight: bold;
-}
-
 .text-primary {
   color: $primary-red;
 }

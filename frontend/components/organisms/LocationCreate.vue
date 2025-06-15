@@ -76,7 +76,7 @@
       </div>
 
       <BaseButton
-        class="submit primary-inverted mt-1-5"
+        class="submit primary-inverted mt-1-50"
         :disabled="isLoading"
         @click="submitLocation"
       >

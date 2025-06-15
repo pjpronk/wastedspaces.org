@@ -11,33 +11,29 @@ export interface LocationDetails {
   verified: boolean
   createdAt: Timestamp
   updatedAt: Timestamp
+  upvotes: number
+  downvotes: number
 }
 
 export enum LocationOwnership {
-  PRIVATE = "Particulier",
-  ORGANIZATION = "Organisatie",
-  GOVERNMENT = "Overheid",
-  UNKNOWN = "Onbekend"
+  Particulier = "Particulier",
+  Organisatie = "Organisatie",
+  Overheid = "Overheid",
+  Onbekend = "Onbekend"
 }
 
 export enum LocationType {
-  RESIDENTIAL = "Woning",
-  COMMERCIAL = "Commercieel",
-  INDUSTRIAL = "Industrieel",
-  OFFICE = "Kantoor",
-  PLOT = "Terrein",
-  OTHER = "Anders"
+  Woning = "Woning",
+  Commercieel = "Commercieel",
+  Industrieel = "Industrieel",
+  Kantoor = "Kantoor",
+  Terrein = "Terrein",
+  Anders = "Anders"
 }
 
-export const typeToIcon = (type: string) => {
-  switch (type) {
-    case "COMERCIEEL":
-      return "office"
-    case "PRIVAAT":
-      return "house"
-    case "PUBLIEK":
-      return "farm"
-    default:
-      return "other"
-  }
+export enum VoteType {
+  UPVOTE = "upvote",
+  DOWNVOTE = "downvote"
 }
+
+
