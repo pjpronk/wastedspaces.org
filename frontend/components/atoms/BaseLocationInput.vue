@@ -71,9 +71,8 @@ function initializeAutocomplete() {
     if (place) {
       if (props.restrictToSpecificAddresses) {
         const hasStreetNumber = place.address_components?.some(
-          (
-            component: google.maps.places.PlaceResult["address_components"][number]
-          ) => component.types.includes("street_number")
+          (component: google.maps.GeocoderAddressComponent) =>
+            component.types.includes("street_number")
         )
 
         if (!hasStreetNumber) {
@@ -86,8 +85,8 @@ function initializeAutocomplete() {
         }
       }
 
-      const lat = place.geometry?.location.lat()
-      const lng = place.geometry?.location.lng()
+      const lat = place.geometry?.location?.lat()
+      const lng = place.geometry?.location?.lng()
       if (lat && lng) {
         const latLng = new GeoPoint(lat, lng)
 
@@ -97,9 +96,7 @@ function initializeAutocomplete() {
         let city = ""
 
         place.address_components?.forEach(
-          (
-            component: google.maps.places.PlaceResult["address_components"][number]
-          ) => {
+          (component: google.maps.GeocoderAddressComponent) => {
             if (component.types.includes("route")) {
               streetName = component.long_name
             }

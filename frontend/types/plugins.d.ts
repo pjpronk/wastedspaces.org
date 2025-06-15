@@ -1,5 +1,5 @@
 import type { AddLocationResponse } from "~/plugins/api.client"
-import type { LocationDetails } from "~/types/types"
+import type { LocationDetails, VoteType } from "~/types/types"
 
 declare module "#app" {
   interface NuxtApp {
@@ -11,6 +11,13 @@ declare module "#app" {
           location: LocationDetails,
           verificationEmail: string
         ): Promise<AddLocationResponse>
+      }
+      vote: {
+        addVote(voteData: {
+          locationId: string
+          voteType: VoteType
+          verificationEmail: string
+        }): Promise<Response>
       }
     }
   }

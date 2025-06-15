@@ -14,10 +14,9 @@
             :google="google"
             :restrict-to-specific-addresses="restrictToSpecificAddresses"
             :has-error="hasError"
-            @update:model-value="$emit('update:modelValue', $event)"
+            @update:lat-lng="$emit('update:latLng', $event)"
             @update:address="$emit('update:address', $event)"
             @update:city="$emit('update:city', $event)"
-            @update:lat-lng="$emit('update:latLng', $event)"
             @location-selected="handleLocationSelected"
             @validation-error="onValidationError"
           />

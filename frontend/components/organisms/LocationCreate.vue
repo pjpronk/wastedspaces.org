@@ -95,7 +95,7 @@
 import { LocationType, LocationOwnership } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
 import BaseDatePicker from "../atoms/BaseDatePicker.vue"
-import { GeoPoint } from "firebase/firestore"
+import { GeoPoint, Timestamp } from "firebase/firestore"
 import { ref } from "vue"
 import { validationRules } from "~/utils/validation"
 import { useLocationApi } from "~/composables/useLocationApi"
@@ -136,25 +136,20 @@ const emailValidationRules = [
   validationRules.email("E-mailadres")
 ]
 
-// Options
-const ownershipOptions = ref([
-  { value: LocationOwnership.PRIVATE, label: LocationOwnership.PRIVATE },
-  {
-    value: LocationOwnership.ORGANIZATION,
-    label: LocationOwnership.ORGANIZATION
-  },
-  { value: LocationOwnership.GOVERNMENT, label: LocationOwnership.GOVERNMENT },
-  { value: LocationOwnership.UNKNOWN, label: LocationOwnership.UNKNOWN }
-])
+// Options - dynamically generated from enums
+const ownershipOptions = ref(
+  Object.values(LocationOwnership).map((value) => ({
+    value,
+    label: value
+  }))
+)
 
-const typeOptions = ref([
-  { value: LocationType.RESIDENTIAL, label: LocationType.RESIDENTIAL },
-  { value: LocationType.COMMERCIAL, label: LocationType.COMMERCIAL },
-  { value: LocationType.INDUSTRIAL, label: LocationType.INDUSTRIAL },
-  { value: LocationType.OFFICE, label: LocationType.OFFICE },
-  { value: LocationType.PLOT, label: LocationType.PLOT },
-  { value: LocationType.OTHER, label: LocationType.OTHER }
-])
+const typeOptions = ref(
+  Object.values(LocationType).map((value) => ({
+    value,
+    label: value
+  }))
+)
 
 // Validation methods
 const validateAddress = () => {
@@ -196,12 +191,18 @@ const submitLocation = async () => {
   }
 
   const location: LocationDetails = {
+    id: "",
     address: address.value,
     city: city.value,
     type: type.value as LocationType,
     ownership: ownership.value as LocationOwnership,
     vacatedSince: new Date(date.value),
-    latLng: latLng.value
+    latLng: latLng.value,
+    verified: false,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+    upvotes: 0,
+    downvotes: 0
   }
 
   const result = await addLocation(location, email.value)
