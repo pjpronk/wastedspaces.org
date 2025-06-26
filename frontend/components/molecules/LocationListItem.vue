@@ -2,7 +2,10 @@
   <div class="location-list-item" @click="handleClick">
     <LocationHeader :location="location" />
     <div class="location-tags flex-row">
-      <BaseTag :tag="location.type.toString()" />
+      <div class="flex-row gap-8">
+        <BaseTag :tag="location.type.toString()" />
+        <BaseTag :tag="location.ownership.toString()" />
+      </div>
       <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes" />
     </div>
   </div>
@@ -44,7 +47,7 @@ const handleClick = () => {
   align-items: center;
 }
 
-.icon-text {
-  gap: 4px;
+.gap-8 {
+  gap: 8px;
 }
 </style>

@@ -12,9 +12,8 @@
           @location-selected="handleLocationInput"
         />
         <FilterTabs
+          v-model="currentFilters"
           class="mt-1-0"
-          model-value="currentFilter"
-          @filter-selected="handleFilterSelected"
         />
         <LocationList
           :locations="currentLocations"
@@ -67,13 +66,36 @@
 
 <script setup lang="ts">
 import { GeoPoint } from "@firebase/firestore"
-import type { LocationDetails, LocationType } from "~/types/types"
+import type { LocationDetails, LocationFilterState, LocationFilterType } from "~/types/types"
+import { useRoute } from "vue-router"
 
-const router = useRouter()
-const route = useRoute()
-const { $firestore } = useNuxtApp() as unknown as {
+const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
   $firestore: { getLocations: () => Promise<LocationDetails[]> }
+  $locationFilters: {
+    filterByRadius: (
+      locations: LocationDetails[],
+      center: GeoPoint,
+      radius: number
+    ) => LocationDetails[]
+    filterByType: (
+      locations: LocationDetails[],
+      selectedTypes: LocationFilterState['type']
+    ) => LocationDetails[]
+    filterByVerificationStatus: (
+      locations: LocationDetails[],
+      selectedStatuses: LocationFilterState['status']
+    ) => LocationDetails[]
+    filterByOwnership: (
+      locations: LocationDetails[],
+      selectedOwnership: LocationFilterState['ownership']
+    ) => LocationDetails[]
+    filterByDuration: (
+      locations: LocationDetails[],
+      selectedDurations: LocationFilterState['duration']
+    ) => LocationDetails[]
+  }
 }
+
 useHead({
   title: "Wasted Spaces",
   meta: [{ name: "", content: "" }]
@@ -82,88 +104,86 @@ useHead({
 const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
-const currentFilter = ref<LocationType | null>(
-  (route.query.filter?.toString().toUpperCase() as LocationType) || null
-)
+const route = useRoute()
+
+function parseFiltersFromQuery(query: Record<string, unknown>): LocationFilterState {
+  const filterTypes: LocationFilterType[] = ["type", "ownership", "status", "duration"]
+  const filters: LocationFilterState = {
+    type: {},
+    ownership: {},
+    status: {},
+    duration: {}
+  }
+  for (const type of filterTypes) {
+    const value = query[type]
+    if (typeof value === "string" && value.length > 0) {
+      value.split(",").forEach((v: string) => {
+        filters[type][v] = true
+      })
+    }
+  }
+  return filters
+}
+
+// Initialize filters from URL only once on page load
+const currentFilters = ref<LocationFilterState>(parseFiltersFromQuery(route.query))
+
+// Watch for filter changes and update locations
+watch(currentFilters, (newFilters) => {
+  currentLocations.value = applyAllFilters(
+    allLocations.value,
+    currentCenter.value,
+    searchRadius.value,
+    newFilters
+  )
+}, { deep: true })
+
 const searchRadius = ref(50) // Default radius in kilometers
 
 // Use the overlay composable
 const { overlayState, openOverlay, closeOverlay } = useOverlay()
 
+const applyAllFilters = (
+  locations: LocationDetails[],
+  center: GeoPoint,
+  radius: number,
+  filters: LocationFilterState
+): LocationDetails[] => {
+  // First filter by radius
+  let filtered = $locationFilters.filterByRadius(
+    locations,
+    center,
+    radius
+  )
+
+  // Then filter by type
+  filtered = $locationFilters.filterByType(filtered, filters.type)
+  console.log(filtered, filters.type)
+
+  // Then filter by ownership
+  filtered = $locationFilters.filterByOwnership(filtered, filters.ownership)
+
+  // Then filter by duration
+  filtered = $locationFilters.filterByDuration(filtered, filters.duration)
+
+  // Finally filter by verification status
+  filtered = $locationFilters.filterByVerificationStatus(filtered, filters.status)
+
+  return filtered
+}
+
 const fetchLocations = async () => {
   try {
     allLocations.value = await $firestore.getLocations()
-    console.log(allLocations.value)
-    currentLocations.value = filterLocationsByRadius(allLocations.value)
-    currentLocations.value = filterLocationsByType(
-      currentLocations.value,
-      currentFilter.value
-    )
-    currentLocations.value = filterLocationByVerificationStatus(
-      currentLocations.value
+    currentLocations.value = applyAllFilters(
+      allLocations.value,
+      currentCenter.value,
+      searchRadius.value,
+      currentFilters.value
     )
   } catch (error) {
     console.error("Error fetching locations:", error)
   }
-}
-
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371 // Earth's radius in kilometers
-  const dLat = toRad(lat2 - lat1)
-  const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c
-}
-
-function toRad(degrees: number): number {
-  return degrees * (Math.PI / 180)
-}
-
-const filterLocationsByRadius = (locations: LocationDetails[]) => {
-  // Calculate distances and filter locations within radius
-  return locations
-    .map((loc: LocationDetails) => ({
-      ...loc,
-      distance: calculateDistance(
-        currentCenter.value.latitude,
-        currentCenter.value.longitude,
-        loc.latLng.latitude,
-        loc.latLng.longitude
-      )
-    }))
-    .filter(
-      (loc: LocationDetails & { distance: number }) =>
-        loc.distance <= searchRadius.value
-    )
-    .sort(
-      (
-        a: LocationDetails & { distance: number },
-        b: LocationDetails & { distance: number }
-      ) => a.distance - b.distance
-    )
-}
-
-const filterLocationByVerificationStatus = (locations: LocationDetails[]) => {
-  return locations.filter((loc) => loc.verified)
-}
-
-const filterLocationsByType = (
-  locations: LocationDetails[],
-  type: LocationType | null
-) => {
-  if (!type) return locations
-  return locations.filter((location) => location.type === type)
 }
 
 const handleLocationSelected = (latLng: GeoPoint) => {
@@ -172,24 +192,11 @@ const handleLocationSelected = (latLng: GeoPoint) => {
 
 const handleLocationInput = (latLng: GeoPoint) => {
   currentCenter.value = latLng
-  currentLocations.value = filterLocationsByRadius(allLocations.value)
-  currentLocations.value = filterLocationByVerificationStatus(
-    currentLocations.value
-  )
-}
-
-const handleFilterSelected = (filter: LocationType | null) => {
-  currentFilter.value = filter
-  router.push({
-    query: {
-      ...route.query,
-      filter: filter?.toString().toLowerCase() || undefined
-    }
-  })
-  currentLocations.value = filterLocationsByRadius(allLocations.value)
-  currentLocations.value = filterLocationsByType(currentLocations.value, filter)
-  currentLocations.value = filterLocationByVerificationStatus(
-    currentLocations.value
+  currentLocations.value = applyAllFilters(
+    allLocations.value,
+    currentCenter.value,
+    searchRadius.value,
+    currentFilters.value
   )
 }
 
@@ -248,7 +255,6 @@ fetchLocations()
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 320px;
   height: 100%;
   background-color: $primary-red;
   pointer-events: auto;

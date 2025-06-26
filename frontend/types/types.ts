@@ -6,7 +6,8 @@ export interface LocationDetails {
   city: string
   type: LocationType
   ownership: LocationOwnership
-  vacatedSince: Date
+  status: LocationStatus
+  vacatedSince: Timestamp
   latLng: GeoPoint
   verified: boolean
   createdAt: Timestamp
@@ -15,23 +16,59 @@ export interface LocationDetails {
   downvotes: number
 }
 
-export enum LocationOwnership {
-  Particulier = "Particulier",
-  Organisatie = "Organisatie",
-  Overheid = "Overheid",
-  Onbekend = "Onbekend"
+export enum LocationType {
+  WONING = 'Woning',
+  WINKEL = 'Winkel',
+  INDUSTRIEEL = 'Industrieel',
+  KANTOOR = 'Kantoor',
+  TERREIN = 'Terrein',
+  ANDERS = 'Anders'
 }
 
-export enum LocationType {
-  Woning = "Woning",
-  Commercieel = "Commercieel",
-  Industrieel = "Industrieel",
-  Kantoor = "Kantoor",
-  Terrein = "Terrein",
-  Anders = "Anders"
+export enum LocationOwnership {
+  PARTICULIER = 'Particulier',
+  ORGANISATIE = 'Organisatie',
+  OVERHEID = 'Overheid',
+  ONBEKEND = 'Onbekend'
+}
+
+export enum LocationStatus {
+  BEVESTIGD = 'Bevestigd',
+  ONGEVERIFIEERD = 'Ongeverifieerd',
+  BETWIST = 'Betwist'
+}
+
+export enum LocationDuration {
+  KORTDURIG = 'Kortdurig (<6m)',
+  MIDDELLANG = 'Middellang (6m-2j)',
+  LANGDURIG = 'Langdurig (>2j)'
+}
+
+export type LocationFilterType = 'type' | 'ownership' | 'status' | 'duration'
+
+export interface FilterOption {
+  label: string
+  value: string
+}
+
+export interface LocationFilterState {
+  type: Record<string, boolean>
+  ownership: Record<string, boolean>
+  status: Record<string, boolean>
+  duration: Record<string, boolean>
 }
 
 export enum VoteType {
   UPVOTE = "upvote",
-  DOWNVOTE = "downvote"
+  DOWNVOTE = "downvote",
+}
+
+export interface VoteDetails {
+  id?: string;
+  locationId: string;
+  voteType: VoteType;
+  emailHash: string;
+  verified: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }

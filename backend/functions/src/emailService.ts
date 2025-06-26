@@ -1,13 +1,6 @@
 import { logger } from "firebase-functions";
-import { google } from "googleapis";
-import { OAuth2Client } from "google-auth-library";
-
-interface EmailCredentials {
-  accessToken: string;
-  refreshToken: string;
-  clientId: string;
-  clientSecret: string;
-}
+import FormData from "form-data";
+import Mailgun from "mailgun.js";
 
 interface EmailMessage {
   to: string;
@@ -17,74 +10,36 @@ interface EmailMessage {
 }
 
 class EmailService {
-  private oauth2Client: OAuth2Client;
+  private mailgun: any;
+  private domain: string;
 
-  constructor(credentials: EmailCredentials) {
-    this.oauth2Client = new google.auth.OAuth2(
-      credentials.clientId,
-      credentials.clientSecret,
-      process.env.OAUTH_REDIRECT_URI ||
-        "http://localhost:5001/wastedspaces-prod/us-central1/oauthCallback"
-    );
-
-    this.oauth2Client.setCredentials({
-      access_token: credentials.accessToken,
-      refresh_token: credentials.refreshToken,
+  constructor(apiKey: string, domain: string) {
+    const mailgun = new Mailgun(FormData);
+    this.mailgun = mailgun.client({
+      username: "api",
+      key: apiKey,
+      url: "https://api.eu.mailgun.net",
     });
-  }
-
-  private async refreshCredentials(): Promise<void> {
-    try {
-      const { credentials } = await this.oauth2Client.refreshAccessToken();
-      this.oauth2Client.setCredentials(credentials);
-      logger.info("Credentials refreshed successfully.");
-    } catch (error) {
-      logger.error("Error refreshing credentials:", error);
-      throw error;
-    }
-  }
-
-  private createEmailMessage(message: EmailMessage): string {
-    const contentType = message.isHtml
-      ? "Content-Type: text/html; charset=utf-8"
-      : "Content-Type: text/plain; charset=utf-8";
-
-    const emailMessage = [
-      `To: ${message.to}`,
-      `Subject: ${message.subject}`,
-      contentType,
-      "",
-      message.body,
-    ].join("\n");
-
-    return Buffer.from(emailMessage)
-      .toString("base64")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_");
+    this.domain = domain;
   }
 
   async sendEmail(message: EmailMessage): Promise<void> {
     try {
-      // Refresh credentials if needed
-      await this.refreshCredentials();
+      const messageData = {
+        from:
+          process.env.MAILGUN_SENDER ||
+          "Wasted Spaces <noreply@wastedspaces.org>",
+        to: message.to,
+        subject: message.subject,
+        [message.isHtml ? "html" : "text"]: message.body,
+      };
 
-      // Build Gmail service
-      const gmail = google.gmail({ version: "v1", auth: this.oauth2Client });
-      logger.info("Gmail service built successfully.");
-
-      // Create and encode email message
-      const encodedMessage = this.createEmailMessage(message);
-
-      // Send email
-      const response = await gmail.users.messages.send({
-        userId: "me",
-        requestBody: {
-          raw: encodedMessage,
-        },
-      });
-
+      const response = await this.mailgun.messages.create(
+        this.domain,
+        messageData
+      );
       logger.info(
-        `Email sent successfully to: ${message.to}. Message ID: ${response.data.id}`
+        `Email sent successfully to: ${message.to}. Message ID: ${response.id}`
       );
     } catch (error) {
       logger.error("Error sending email:", error);
@@ -95,27 +50,17 @@ class EmailService {
 
 export function createEmailService(): EmailService | null {
   try {
-    const credentials: EmailCredentials = {
-      accessToken: process.env.GMAIL_ACCESS_TOKEN || "",
-      refreshToken: process.env.GMAIL_REFRESH_TOKEN || "",
-      clientId: process.env.OAUTH_CLIENT_ID || "",
-      clientSecret: process.env.OAUTH_CLIENT_SECRET || "",
-    };
+    const apiKey = process.env.MAILGUN_API_KEY;
+    const domain = process.env.MAILGUN_DOMAIN;
 
-    // Check if all required credentials are present
-    if (
-      !credentials.accessToken ||
-      !credentials.refreshToken ||
-      !credentials.clientId ||
-      !credentials.clientSecret
-    ) {
+    if (!apiKey || !domain) {
       logger.warn(
-        "Email credentials not configured. Email notifications will be disabled."
+        "Mailgun credentials not configured. Email notifications will be disabled."
       );
       return null;
     }
 
-    return new EmailService(credentials);
+    return new EmailService(apiKey, domain);
   } catch (error) {
     logger.error("Error creating email service:", error);
     return null;

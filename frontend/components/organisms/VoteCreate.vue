@@ -81,7 +81,6 @@ const submitVote = async () => {
   }
 
   const result = await addVote(props.locationId, props.voteType, email.value)
-  console.log("result", result)
   if (result) {
     emit("close")
   } else if (error.value) {

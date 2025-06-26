@@ -52,6 +52,7 @@ defineProps<{
 
 .transparent {
   background-color: transparent;
+  text-decoration: underline;
   &:hover {
     opacity: 0.8;
   }

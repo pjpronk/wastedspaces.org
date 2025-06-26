@@ -29,7 +29,7 @@
         title="Stem nu"
         @close="openVoteDialog = false"
       >
-        <VoteCreate :location-id="location.id" :vote-type="VoteType.UPVOTE" />
+        <VoteCreate :location-id="location.id" :vote-type="voteType" />
       </Overlay>
     </Teleport>
   </div>
@@ -42,6 +42,7 @@ import { VoteType } from "~/types/types"
 const config = useRuntimeConfig()
 
 const openVoteDialog = ref(false)
+const voteType = ref(VoteType.UPVOTE)
 
 const props = defineProps<{
   location: LocationDetails
@@ -67,13 +68,13 @@ const streetViewUrl = computed(() => {
 })
 
 const handleUpvote = () => {
+  voteType.value=VoteType.UPVOTE
   openVoteDialog.value = true
-  // Add upvote logic here
 }
 
 const handleDownvote = () => {
+  voteType.value=VoteType.DOWNVOTE
   openVoteDialog.value = true
-  // Add downvote logic here
 }
 </script>
 
