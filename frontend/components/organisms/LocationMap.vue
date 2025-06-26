@@ -9,18 +9,21 @@
           :center="{ lat: center.latitude, lng: center.longitude }"
         >
           <template #default="{ map }">
-            <BaseMarker
-              v-for="location in locations"
-              :key="location.id"
-              :map="map"
-              :location="location"
-              :google="google"
-              :position="{
-                lat: location.latLng.latitude,
-                lng: location.latLng.longitude
-              }"
-              :title="location.address"
-            />
+            <div ref="markersContainer">
+              <BaseMarker
+                v-for="location in staticLocations"
+                v-show="visibleLocations.includes(location.id)"
+                :key="location.id"
+                :map="map"
+                :location="location"
+                :google="google"
+                :position="{
+                  lat: location.latLng.latitude,
+                  lng: location.latLng.longitude
+                }"
+                :title="location.address"
+              />
+            </div>
           </template>
         </BaseMap>
       </template>
@@ -39,6 +42,8 @@ const props = defineProps<{
 
 const config = useRuntimeConfig()
 const mapRef = ref()
+const staticLocations = ref<LocationDetails[]>([])
+const visibleLocations = ref<string[]>([])
 
 const mapConfig = {
   center: { lat: props.center.latitude, lng: props.center.longitude },
@@ -46,6 +51,14 @@ const mapConfig = {
   zoom: 12,
   disableDefaultUI: true
 }
+
+// Watch for changes in locations to manage visibility
+watch(() => props.locations, (newLocations) => {
+  if(!staticLocations.value.length) {
+    staticLocations.value = props.locations
+  }
+  visibleLocations.value = newLocations.map(location => location.id)
+}, { deep: true })
 </script>
 
 <style scoped lang="scss">
