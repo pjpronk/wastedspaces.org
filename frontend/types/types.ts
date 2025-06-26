@@ -6,7 +6,6 @@ export interface LocationDetails {
   city: string
   type: LocationType
   ownership: LocationOwnership
-  status: LocationStatus
   vacatedSince: Timestamp
   latLng: GeoPoint
   verified: boolean

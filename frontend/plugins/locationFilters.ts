@@ -60,7 +60,7 @@ export default defineNuxtPlugin(() => {
     // If no statuses are selected, return all locations
     const selectedStatusTypes = Object.entries(selectedStatuses)
       .filter(([_, isSelected]) => isSelected)
-      .map(([status]) => status)
+      .map(([status]) => status.toLowerCase())
 
     if (selectedStatusTypes.length === 0) return locations
 
@@ -77,8 +77,7 @@ export default defineNuxtPlugin(() => {
       } else {
         status = LocationStatus.ONGEVERIFIEERD
       }
-
-      return selectedStatusTypes.includes(status)
+      return selectedStatusTypes.includes(status.toLowerCase())
     })
   }
 
@@ -97,7 +96,6 @@ export default defineNuxtPlugin(() => {
     const filtered = locations.filter((location) =>
       selectedTypes.includes(location.type.toLowerCase())
     )
-    console.log(filtered)
     return filtered
   }
 
@@ -145,8 +143,6 @@ export default defineNuxtPlugin(() => {
         duration = "langdurig"
       }
     
-      console.log(location.address, monthsDiff, selectedDurationTypes, duration)
-
       return selectedDurationTypes.includes(duration)
     })
   }

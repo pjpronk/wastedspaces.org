@@ -11,10 +11,7 @@
           class="mt-1-0"
           @location-selected="handleLocationInput"
         />
-        <FilterTabs
-          v-model="currentFilters"
-          class="mt-1-0"
-        />
+        <FilterTabs v-model="currentFilters" class="mt-1-0" />
         <LocationList
           :locations="currentLocations"
           class="mt-1-0"
@@ -66,7 +63,11 @@
 
 <script setup lang="ts">
 import { GeoPoint } from "@firebase/firestore"
-import type { LocationDetails, LocationFilterState, LocationFilterType } from "~/types/types"
+import type {
+  LocationDetails,
+  LocationFilterState,
+  LocationFilterType
+} from "~/types/types"
 import { useRoute } from "vue-router"
 
 const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
@@ -79,19 +80,19 @@ const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
     ) => LocationDetails[]
     filterByType: (
       locations: LocationDetails[],
-      selectedTypes: LocationFilterState['type']
+      selectedTypes: LocationFilterState["type"]
     ) => LocationDetails[]
     filterByVerificationStatus: (
       locations: LocationDetails[],
-      selectedStatuses: LocationFilterState['status']
+      selectedStatuses: LocationFilterState["status"]
     ) => LocationDetails[]
     filterByOwnership: (
       locations: LocationDetails[],
-      selectedOwnership: LocationFilterState['ownership']
+      selectedOwnership: LocationFilterState["ownership"]
     ) => LocationDetails[]
     filterByDuration: (
       locations: LocationDetails[],
-      selectedDurations: LocationFilterState['duration']
+      selectedDurations: LocationFilterState["duration"]
     ) => LocationDetails[]
   }
 }
@@ -106,8 +107,15 @@ const currentLocations = ref<LocationDetails[]>([])
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
 const route = useRoute()
 
-function parseFiltersFromQuery(query: Record<string, unknown>): LocationFilterState {
-  const filterTypes: LocationFilterType[] = ["type", "ownership", "status", "duration"]
+function parseFiltersFromQuery(
+  query: Record<string, unknown>
+): LocationFilterState {
+  const filterTypes: LocationFilterType[] = [
+    "type",
+    "ownership",
+    "status",
+    "duration"
+  ]
   const filters: LocationFilterState = {
     type: {},
     ownership: {},
@@ -118,7 +126,7 @@ function parseFiltersFromQuery(query: Record<string, unknown>): LocationFilterSt
     const value = query[type]
     if (typeof value === "string" && value.length > 0) {
       value.split(",").forEach((v: string) => {
-        filters[type][v] = true
+        filters[type][v.toUpperCase()] = true
       })
     }
   }
@@ -126,17 +134,26 @@ function parseFiltersFromQuery(query: Record<string, unknown>): LocationFilterSt
 }
 
 // Initialize filters from URL only once on page load
-const currentFilters = ref<LocationFilterState>(parseFiltersFromQuery(route.query))
+const currentFilters = ref<LocationFilterState>({
+  type: {},
+  ownership: {},
+  status: {},
+  duration: {}
+})
 
 // Watch for filter changes and update locations
-watch(currentFilters, (newFilters) => {
-  currentLocations.value = applyAllFilters(
-    allLocations.value,
-    currentCenter.value,
-    searchRadius.value,
-    newFilters
-  )
-}, { deep: true })
+watch(
+  currentFilters,
+  (newFilters) => {
+    currentLocations.value = applyAllFilters(
+      allLocations.value,
+      currentCenter.value,
+      searchRadius.value,
+      newFilters
+    )
+  },
+  { deep: true }
+)
 
 const searchRadius = ref(50) // Default radius in kilometers
 
@@ -150,15 +167,10 @@ const applyAllFilters = (
   filters: LocationFilterState
 ): LocationDetails[] => {
   // First filter by radius
-  let filtered = $locationFilters.filterByRadius(
-    locations,
-    center,
-    radius
-  )
+  let filtered = $locationFilters.filterByRadius(locations, center, radius)
 
   // Then filter by type
   filtered = $locationFilters.filterByType(filtered, filters.type)
-  console.log(filtered, filters.type)
 
   // Then filter by ownership
   filtered = $locationFilters.filterByOwnership(filtered, filters.ownership)
@@ -167,7 +179,10 @@ const applyAllFilters = (
   filtered = $locationFilters.filterByDuration(filtered, filters.duration)
 
   // Finally filter by verification status
-  filtered = $locationFilters.filterByVerificationStatus(filtered, filters.status)
+  filtered = $locationFilters.filterByVerificationStatus(
+    filtered,
+    filters.status
+  )
 
   return filtered
 }
@@ -207,6 +222,10 @@ const openLocationCreate = () => {
 
 // Initial fetch
 fetchLocations()
+
+onMounted(() => {
+  currentFilters.value = parseFiltersFromQuery(route.query)
+})
 </script>
 
 <style lang="scss">

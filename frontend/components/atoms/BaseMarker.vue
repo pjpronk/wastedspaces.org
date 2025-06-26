@@ -3,6 +3,7 @@
     <BaseIcon :icon="statusIcon" class="icon icon-m white" />
     <LocationInfoWindow
       v-if="isActive"
+      :key="location.id"
       class="info-window"
       :location="location"
       @close="handleCloseInfoWindow"

@@ -196,7 +196,7 @@ const submitLocation = async () => {
     city: city.value,
     type: type.value as LocationType,
     ownership: ownership.value as LocationOwnership,
-    vacatedSince: new Date(date.value),
+    vacatedSince: new Timestamp(new Date(date.value).getTime(), 0),
     latLng: latLng.value,
     verified: false,
     createdAt: Timestamp.now(),
@@ -206,7 +206,6 @@ const submitLocation = async () => {
   }
 
   const result = await addLocation(location, email.value)
-  console.log("result", result)
   if (result) {
     emit("close")
   } else if (error.value) {

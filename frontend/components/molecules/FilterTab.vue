@@ -110,7 +110,6 @@ const toggleDropdown = () => {
 
 const applyFilters = () => {
   emit("update:modelValue", selectedFilters.value)
-  emit("apply", selectedFilters.value)
 }
 
 const clearFilters = () => {
