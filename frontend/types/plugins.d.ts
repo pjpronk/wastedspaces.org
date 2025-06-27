@@ -1,4 +1,4 @@
-import type { AddLocationResponse } from "~/plugins/api.client"
+import type { AddLocationResponse, AddVoteResponse } from "~/plugins/api.client"
 import type {
   LocationDetails,
   LocationFilterState,
@@ -45,7 +45,7 @@ declare module "#app" {
           locationId: string
           voteType: VoteType
           verificationEmail: string
-        }): Promise<Response>
+        }): Promise<AddVoteResponse>
       }
     }
   }

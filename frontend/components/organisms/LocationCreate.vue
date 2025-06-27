@@ -79,16 +79,18 @@
 
       <BaseButton
         class="submit primary-inverted mt-1-50"
-        :disabled="isLoading"
+        :disabled="isLoading || error"
         @click="submitLocation"
       >
         {{ isLoading ? "Bezig met melden..." : "Melden" }}
       </BaseButton>
 
-      <div v-if="error" class="error-message mt-0-5">
-        {{ error }}
-        <button type="button" class="error-close" @click="clearError">×</button>
-      </div>
+      <BaseError
+        :error="error"
+        :title="result?.result || 'Er is iets mis gegaan...'"
+        class="mt-1-0"
+        @close="clearError"
+      />
     </div>
   </div>
 </template>
@@ -96,16 +98,19 @@
 <script setup lang="ts">
 import { LocationType, LocationOwnership } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
+import type { AddLocationResponse } from "~/plugins/api.client"
 import BaseDatePicker from "../atoms/BaseDatePicker.vue"
+import BaseError from "../atoms/BaseError.vue"
 import { GeoPoint, Timestamp } from "firebase/firestore"
 import { ref } from "vue"
 import { validationRules } from "~/utils/validation"
 import { useLocationApi } from "~/composables/useLocationApi"
 
-const emit = defineEmits<{
+defineEmits<{
   (e: "close"): void
 }>()
 const { addLocation, isLoading, error, clearError } = useLocationApi()
+const result = ref<AddLocationResponse | null>(null)
 
 // Form refs for validation
 const addressInput = ref()
@@ -185,6 +190,7 @@ const submitLocation = async () => {
   const isEmailValid = emailInput.value?.validate(email.value)
 
   if (
+    !(isLoading || error) ||
     !isAddressValid ||
     !isDateValid ||
     !isTypeValid ||
@@ -209,12 +215,12 @@ const submitLocation = async () => {
     downvotes: 0
   }
 
-  const result = await addLocation(location, email.value)
-  if (result) {
-    emit("close")
+  const apiResult = await addLocation(location, email.value)
+  if (apiResult) {
+    result.value = apiResult
+    error.value = apiResult.message
   } else if (error.value) {
     console.error("Error adding location:", error.value)
-    // Handle error appropriately - the error is now available in the error ref
   }
 }
 </script>
@@ -238,29 +244,5 @@ const submitLocation = async () => {
 
 .report-button {
   margin-left: auto;
-}
-
-.error-message {
-  background-color: rgba($primary-red, 0.5);
-  padding: 0.75rem;
-  border-radius: 4px;
-  color: $white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1rem;
-}
-
-.error-close {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 0.5rem;
-}
-
-.error-close:hover {
-  opacity: 0.7;
 }
 </style>

@@ -33,7 +33,8 @@ defineProps<{
   color: $primary-red;
   border: 1px solid $primary-red;
 
-  &:hover {
+  &:hover,
+  &:disabled {
     color: $white;
     background-color: $primary-red;
   }
@@ -44,7 +45,8 @@ defineProps<{
   color: $white;
   border: 1px solid $primary-red;
 
-  &:hover {
+  &:hover,
+  &:disabled {
     background-color: $primary-red-hover;
     border: 1px solid $primary-red-hover;
   }

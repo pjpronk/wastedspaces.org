@@ -28,7 +28,7 @@
     <Teleport to="body">
       <Overlay
         v-if="openVoteDialog"
-        title="Stem nu"
+        title="Bevestig of betwist locatie"
         @close="openVoteDialog = false"
       >
         <VoteCreate :location-id="location.id" :vote-type="voteType" />

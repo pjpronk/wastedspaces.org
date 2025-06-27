@@ -21,16 +21,18 @@
 
       <BaseButton
         class="submit primary-inverted mt-1-50"
-        :disabled="isLoading"
+        :disabled="isLoading || error"
         @click="submitVote"
       >
         {{ isLoading ? "Bezig met stemmen..." : buttonText }}
       </BaseButton>
 
-      <div v-if="error" class="error-message mt-0-5">
-        {{ error }}
-        <button type="button" class="error-close" @click="clearError">×</button>
-      </div>
+      <BaseError
+        :error="error"
+        :title="result?.result || 'Er is iets mis gegaan...'"
+        class="mt-1-0"
+        @close="clearError"
+      />
     </div>
   </div>
 </template>
@@ -40,6 +42,8 @@ import { VoteType } from "~/types/types"
 import { ref, computed } from "vue"
 import { validationRules } from "~/utils/validation"
 import { useVoteApi } from "~/composables/useVoteApi"
+import BaseError from "../atoms/BaseError.vue"
+import type { AddVoteResponse } from "~/plugins/api.client"
 
 // Props
 const props = defineProps<{
@@ -47,8 +51,9 @@ const props = defineProps<{
   voteType: VoteType
 }>()
 
-const emit = defineEmits(["close"])
+defineEmits(["close"])
 const { addVote, isLoading, error, clearError } = useVoteApi()
+const result = ref<AddVoteResponse | null>(null)
 
 // Form refs for validation
 const emailInput = ref()
@@ -76,16 +81,16 @@ const submitVote = async () => {
   // Validate email field before submission
   const isEmailValid = emailInput.value?.validate(email.value)
 
-  if (!isEmailValid) {
+  if (!(isLoading || error) || !isEmailValid) {
     return // Don't submit if validation fails
   }
 
-  const result = await addVote(props.locationId, props.voteType, email.value)
-  if (result) {
-    emit("close")
+  const apiResult = await addVote(props.locationId, props.voteType, email.value)
+  if (apiResult) {
+    result.value = apiResult
+    error.value = apiResult.message
   } else if (error.value) {
     console.error("Error adding vote:", error.value)
-    // Handle error appropriately - the error is now available in the error ref
   }
 }
 </script>
@@ -96,36 +101,8 @@ const submitVote = async () => {
   flex-direction: column;
   background-color: $white;
 }
-
-.vote-create-form {
-  padding: 0rem 1rem 1rem 1rem;
-}
-
 .submit {
   width: 100%;
-}
-
-.error-message {
-  background-color: rgba($primary-red, 0.5);
-  padding: 0.75rem;
-  border-radius: 4px;
-  color: $white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 1rem;
-}
-
-.error-close {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 0.5rem;
-}
-
-.error-close:hover {
-  opacity: 0.7;
 }
 </style>

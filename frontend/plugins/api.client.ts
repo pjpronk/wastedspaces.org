@@ -1,5 +1,17 @@
 import type { LocationDetails, VoteType } from "~/types/types"
 
+export interface AddLocationResponse {
+  result: string
+  id: string
+  message: string
+}
+
+export interface AddVoteResponse {
+  result: string
+  id: string
+  message: string
+}
+
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
 
@@ -60,8 +72,8 @@ export default defineNuxtPlugin(() => {
       locationId: string
       voteType: VoteType
       verificationEmail: string
-    }): Promise<Response> {
-      return apiClient.request<Response>("addVote", {
+    }): Promise<AddVoteResponse> {
+      return apiClient.request<AddVoteResponse>("addVote", {
         method: "POST",
         body: JSON.stringify(voteData)
       })

@@ -79,7 +79,7 @@ const close = () => {
 
 .overlay-content {
   padding: 0rem 1.5rem 1.5rem 1.5rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .button {

@@ -1,4 +1,5 @@
 import type { VoteType } from "~/types/types"
+import type { AddVoteResponse } from "~/plugins/api.client"
 
 export const useVoteApi = () => {
   const { $api } = useNuxtApp()
@@ -10,7 +11,7 @@ export const useVoteApi = () => {
     locationId: string,
     voteType: VoteType,
     verificationEmail: string
-  ): Promise<Response | null> => {
+  ): Promise<AddVoteResponse | null> => {
     isLoading.value = true
     error.value = null
 
@@ -38,7 +39,7 @@ export const useVoteApi = () => {
   return {
     addVote,
     isLoading: readonly(isLoading),
-    error: readonly(error),
+    error,
     clearError
   }
 }

@@ -193,8 +193,11 @@ exports.addLocation = onRequest(async (req: Request, res: Response) => {
     }
 
     res.status(201).json({
-      result: `Location created with ID: ${writeResult.id}`,
+      result: `Gelukt! Je hebt mail.`,
       id: writeResult.id,
+      message: `Je stem is bijna voltooid. We hebben je een eenmalige verificatiemail gestuurd.
+                Zodra je deze hebt bevestigd, wordt je bijdrage op de website geplaatst.
+                Je e-mailadres wordt niet opgeslagen en is niet te herleiden.`,
     });
   } catch (err) {
     const error = err as Error;
@@ -355,7 +358,7 @@ exports.addVote = onRequest(async (req: Request, res: Response) => {
 
     if (!existingVoteQuery.empty) {
       res.status(409).json({
-        error: "You have already voted for this location",
+        error: "Je hebt al op deze locatie gestemd...",
       });
       return;
     }
@@ -370,7 +373,8 @@ exports.addVote = onRequest(async (req: Request, res: Response) => {
 
     if (!pendingVoteQuery.empty) {
       res.status(409).json({
-        error: "You already have a pending vote verification for this location",
+        error:
+          "Je hebt nog een stem op deze locatie openstaan. Check je email!",
       });
       return;
     }
@@ -436,15 +440,17 @@ exports.addVote = onRequest(async (req: Request, res: Response) => {
     }
 
     res.status(201).json({
-      result: `Vote created with ID: ${writeResult.id}`,
+      result: `Gelukt! Je hebt mail.`,
       id: writeResult.id,
-      message: "Please check your email to verify your vote",
+      message: `Je stem is bijna voltooid. We hebben je een eenmalige verificatiemail gestuurd.
+                Zodra je deze hebt bevestigd, wordt je bijdrage op de website geplaatst.
+                Je e-mailadres wordt niet opgeslagen en is niet te herleiden.`,
     });
   } catch (err) {
     const error = err as Error;
     logger.error("Error adding vote:", error);
     res.status(500).json({
-      error: "Failed to add vote",
+      error: "Er is iets misgegaan…",
       details: error.message,
     });
   }
