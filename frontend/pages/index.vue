@@ -50,7 +50,6 @@
             icon="info"
             @click="openInfoModal"
           />
-          <BaseButton class="primary-inverted" icon="documents" />
         </div>
         <BaseButton
           class="primary-inverted"
