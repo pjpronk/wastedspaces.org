@@ -61,7 +61,10 @@ const close = () => {
     left: 0;
     width: 100%;
     height: 100%;
+    
     min-width: unset;
+    max-width: unset;
+
     background-color: $white;
   }
 }
@@ -76,6 +79,7 @@ const close = () => {
 
 .overlay-content {
   padding: 0rem 1.5rem 1.5rem 1.5rem;
+  overflow-y: scroll;
 }
 
 .button {

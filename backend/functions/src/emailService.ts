@@ -10,7 +10,7 @@ interface EmailMessage {
 }
 
 class EmailService {
-  private mailgun: unknown;
+  private mailgun: ReturnType<Mailgun["client"]>;
   private domain: string;
 
   constructor(apiKey: string, domain: string) {
@@ -31,7 +31,7 @@ class EmailService {
           "Wasted Spaces <noreply@wastedspaces.org>",
         to: message.to,
         subject: message.subject,
-        [message.isHtml ? "html" : "text"]: message.body,
+        ...(message.isHtml ? { html: message.body } : { text: message.body }),
       };
 
       const response = await this.mailgun.messages.create(

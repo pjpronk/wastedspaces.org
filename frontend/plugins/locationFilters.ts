@@ -127,7 +127,7 @@ export default defineNuxtPlugin(() => {
     if (selectedDurationTypes.length === 0) return locations
 
     return locations.filter((location) => {
-      const vacatedDate = location.vacatedSince.toDate()
+      const vacatedDate = location.vacatedSince
       const now = new Date()
 
       // Calculate months between dates

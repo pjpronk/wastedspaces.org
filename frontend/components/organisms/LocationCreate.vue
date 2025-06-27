@@ -102,7 +102,9 @@ import { ref } from "vue"
 import { validationRules } from "~/utils/validation"
 import { useLocationApi } from "~/composables/useLocationApi"
 
-const emit = defineEmits(["close"])
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
 const { addLocation, isLoading, error, clearError } = useLocationApi()
 
 // Form refs for validation
@@ -198,10 +200,7 @@ const submitLocation = async () => {
     city: city.value,
     type: type.value as LocationType,
     ownership: ownership.value as LocationOwnership,
-    vacatedSince: new Timestamp(
-      new Date(date.value + "-01").getTime() / 1000,
-      0
-    ),
+    vacatedSince: new Date(date.value + "-01"),
     latLng: latLng.value,
     verified: false,
     createdAt: Timestamp.now(),

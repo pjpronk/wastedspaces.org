@@ -10,7 +10,7 @@
       }}</BaseText>
       <BaseText class="text-grey text-s">{{ location.city }}</BaseText>
       <BaseText class="text-grey text-s">{{
-        $relativeTime(location.vacatedSince.toDate())
+        $relativeTime(location.vacatedSince)
       }}</BaseText>
     </div>
   </div>

@@ -2,9 +2,9 @@
   <div class="index">
     <div class="map-overlay">
       <div class="sidebar">
-        <div class="flex-row">
-          <BaseIcon class="logo" icon="logo"/>        
-        </div>
+          <BaseLink :external=true link="/">
+            <BaseIcon class="logo" icon="logo"/>        
+          </BaseLink>
         <div class="flex-row mt-1-50">
           <LocationInput
             id="sidebar-input"
@@ -20,7 +20,9 @@
       </div>
       <div class="top-bar">
         <div class = "flex-row gap-8">
-        <BaseIcon class="white icon-lxl" icon="logo_standalone_red" />
+          <BaseLink :external=true link="/">
+            <BaseIcon class="white icon-lxl" icon="logo_standalone_red" />
+          </BaseLink>
         <LocationInput
           id="topbar-input"
           @location-selected="handleLocationInput"
