@@ -61,7 +61,7 @@ const close = () => {
     left: 0;
     width: 100%;
     height: 100%;
-    
+
     min-width: unset;
     max-width: unset;
 

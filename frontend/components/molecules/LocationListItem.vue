@@ -3,7 +3,7 @@
     <LocationHeader :location="location" />
     <div class="location-tags flex-row">
       <div class="flex-row gap-8">
-        <BaseTag :tag="location.type.toString()" class="hide-mobile"/>
+        <BaseTag :tag="location.type.toString()" class="hide-mobile" />
         <BaseTag :tag="location.ownership.toString()" />
       </div>
       <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes" />

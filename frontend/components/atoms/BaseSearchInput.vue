@@ -51,8 +51,6 @@ watch(
   outline: none;
   border: none;
   padding: 10px;
-
-  
 }
 
 .border-grey {

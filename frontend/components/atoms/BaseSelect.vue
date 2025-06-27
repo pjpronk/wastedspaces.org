@@ -86,8 +86,13 @@ defineEmits(["update:modelValue"]) // Emits update event for v-model
   border: 1px solid $grey;
   background-color: white;
 
-
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   font-weight: 400;
   font-size: 1rem;
   color: currentColor;

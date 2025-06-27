@@ -2,9 +2,9 @@
   <div class="index">
     <div class="map-overlay">
       <div class="sidebar">
-          <BaseLink :external=true link="/">
-            <BaseIcon class="logo" icon="logo"/>        
-          </BaseLink>
+        <BaseLink :external="true" link="/">
+          <BaseIcon class="logo" icon="logo" />
+        </BaseLink>
         <div class="flex-row mt-1-50">
           <LocationInput
             id="sidebar-input"
@@ -19,25 +19,37 @@
         />
       </div>
       <div class="top-bar">
-        <div class = "flex-row gap-8">
-          <BaseLink :external=true link="/">
+        <div class="flex-row gap-8">
+          <BaseLink :external="true" link="/">
             <BaseIcon class="white icon-lxl" icon="logo_standalone_red" />
           </BaseLink>
-        <LocationInput
-          id="topbar-input"
-          @location-selected="handleLocationInput"
-        />
-        <BaseButton class="secondary icon-s" icon="filter" @click="toggleFilters"></BaseButton>
-      </div>
+          <LocationInput
+            id="topbar-input"
+            @location-selected="handleLocationInput"
+          />
+          <BaseButton
+            class="secondary icon-s"
+            icon="filter"
+            @click="toggleFilters"
+          ></BaseButton>
+        </div>
 
         <Transition name="slide-fade">
-          <FilterTabs v-model="currentFilters" class="mt-0-50 flex-column" v-if="isFilterVisible" />
+          <FilterTabs
+            v-if="isFilterVisible"
+            v-model="currentFilters"
+            class="mt-0-50 flex-column"
+          />
         </Transition>
       </div>
 
       <div class="info-buttons">
         <div class="info-buttons-aside">
-          <BaseButton class="primary-inverted" icon="info" @click="openInfoModal"/>
+          <BaseButton
+            class="primary-inverted"
+            icon="info"
+            @click="openInfoModal"
+          />
           <BaseButton class="primary-inverted" icon="documents" />
         </div>
         <BaseButton

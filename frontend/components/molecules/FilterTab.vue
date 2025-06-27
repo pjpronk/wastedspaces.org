@@ -12,9 +12,9 @@
     >
       {{ label }}
       <div class="flex-row">
-      <span class="filter-count">{{
-        activeFilterCount ? `(${activeFilterCount})` : ""
-      }}</span>
+        <span class="filter-count">{{
+          activeFilterCount ? `(${activeFilterCount})` : ""
+        }}</span>
         <BaseIcon
           icon="chevron-down"
           class="icon-sxs"

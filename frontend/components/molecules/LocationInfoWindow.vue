@@ -14,13 +14,13 @@
     <LocationHeader :location="location" />
     <div class="buttons mt-0-75">
       <div class="flex-row">
-      <BaseButton class="primary" @click="handleUpvote">
-        <BaseVote :count="location.upvotes || 0" type="upvotes" />
-      </BaseButton>
-      <BaseButton class="primary" @click="handleDownvote">
-        <BaseVote :count="location.downvotes || 0" type="downvotes" />
-      </BaseButton>
-    </div>
+        <BaseButton class="primary" @click="handleUpvote">
+          <BaseVote :count="location.upvotes || 0" type="upvotes" />
+        </BaseButton>
+        <BaseButton class="primary" @click="handleDownvote">
+          <BaseVote :count="location.downvotes || 0" type="downvotes" />
+        </BaseButton>
+      </div>
       <BaseButton class="primary-inverted" @click.stop="$emit('close')">
         Sluiten
       </BaseButton>

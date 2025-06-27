@@ -12,4 +12,4 @@ Disclaimer: Wasted Spaces is een open-source platform waaraan elke gebruiker inf
 <br><br>
 Dit project is mede mogelijk gemaakt door steun van het Stimuleringsfonds Creatieve Industrie.
 </i>
-`; 
+`

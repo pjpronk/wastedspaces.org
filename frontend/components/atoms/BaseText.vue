@@ -1,6 +1,7 @@
 <template>
+  <!-- eslint-disable-next-line vue/no-v-html -->
   <p v-if="safeText" v-html="safeText" />
-  <p v-else ><slot/></p>
+  <p v-else><slot /></p>
 </template>
 
 <script setup lang="ts">

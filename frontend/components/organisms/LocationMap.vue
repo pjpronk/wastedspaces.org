@@ -34,17 +34,14 @@
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
-import { useRouter } from "vue-router"
-
-const router = useRouter()
 
 const props = defineProps<{
   locations: LocationDetails[]
   center: GeoPoint
 }>()
 
-const emit = defineEmits<{
-  (e: 'locationSelected', latLng: GeoPoint): void
+defineEmits<{
+  (e: "locationSelected", latLng: GeoPoint): void
 }>()
 
 const config = useRuntimeConfig()

@@ -47,13 +47,16 @@ const handleOpenInfoWindow = () => {
   }
 }
 
-watch(() => route.query.selected, (newSelectedId) => {
-  if (newSelectedId === props.location.id) {
-    handleOpenInfoWindow()
-  } else {
-    handleCloseInfoWindow()
+watch(
+  () => route.query.selected,
+  (newSelectedId) => {
+    if (newSelectedId === props.location.id) {
+      handleOpenInfoWindow()
+    } else {
+      handleCloseInfoWindow()
+    }
   }
-})
+)
 
 const statusIcon = computed(() => {
   const { upvotes = 0, downvotes = 0 } = props.location

@@ -103,7 +103,7 @@ import { validationRules } from "~/utils/validation"
 import { useLocationApi } from "~/composables/useLocationApi"
 
 const emit = defineEmits<{
-  (e: 'close'): void
+  (e: "close"): void
 }>()
 const { addLocation, isLoading, error, clearError } = useLocationApi()
 
