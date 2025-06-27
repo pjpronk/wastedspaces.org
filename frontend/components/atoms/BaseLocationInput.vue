@@ -6,7 +6,7 @@
       class="input"
       :value="modelValue"
       type="text"
-      placeholder="Zoek op locatie"
+      placeholder="Sorteer op locatie"
       @input="
         (e: Event) =>
           $emit('update:modelValue', (e.target as HTMLInputElement).value)
@@ -145,7 +145,7 @@ function initializeAutocomplete() {
   border: 1px solid $grey;
 }
 .input {
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 100%;
   border: none;
   width: 100%;

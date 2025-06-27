@@ -3,7 +3,7 @@
     <BaseIcon :icon="statusIcon" class="icon icon-m white" />
     <LocationInfoWindow
       v-if="isActive"
-      :key="location.id"
+      :key="`${location.id}-${Date.now()}`"
       class="info-window"
       :location="location"
       @close="handleCloseInfoWindow"
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import type { LocationDetails } from "~/types/types"
+import { useRoute } from "vue-router"
 
 const props = defineProps<{
   map: google.maps.Map
@@ -32,8 +33,27 @@ const props = defineProps<{
 
 const markerContent = ref<HTMLElement>()
 const isActive = ref(false)
+const route = useRoute()
 
 let marker: google.maps.marker.AdvancedMarkerElement
+
+const handleOpenInfoWindow = () => {
+  if (marker?.content && marker.content instanceof HTMLElement) {
+    marker.content.classList.add("active")
+    marker.style.zIndex = "9999"
+    isActive.value = true
+    marker.content.style.left = "calc(50% - 12px)"
+    marker.style.pointerEvents = "none"
+  }
+}
+
+watch(() => route.query.selected, (newSelectedId) => {
+  if (newSelectedId === props.location.id) {
+    handleOpenInfoWindow()
+  } else {
+    handleCloseInfoWindow()
+  }
+})
 
 const statusIcon = computed(() => {
   const { upvotes = 0, downvotes = 0 } = props.location
@@ -62,7 +82,7 @@ onMounted(() => {
   marker = new google.maps.marker.AdvancedMarkerElement({
     map: toRaw(props.map),
     position: { lat: props.position.lat, lng: props.position.lng },
-    content: markerContent.value
+    content: toRaw(markerContent.value)
   })
   marker.addListener("gmp-click", () => {
     if (marker.content && marker.content instanceof HTMLElement) {
@@ -123,7 +143,6 @@ onUnmounted(() => {
   box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.4);
   height: auto;
   width: auto;
-  min-width: 200px;
   filter: unset;
   padding: 0px;
   left: calc(50% - 12px);

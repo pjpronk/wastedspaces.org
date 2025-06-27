@@ -29,7 +29,7 @@
       <ValidatedInput
         id="email-input"
         ref="emailInput"
-        label="E-mailadres (voor verificatie)"
+        label="E-mailadres (voor eenmalige verificatie)"
         :validation-rules="emailValidationRules"
       >
         <template #default="{ hasError, onValidationError }">
@@ -54,6 +54,7 @@
             <BaseSelect
               v-model="type"
               :options="typeOptions"
+              placeholder="-"
               @update:model-value="validateType"
             />
           </template>
@@ -62,13 +63,14 @@
         <ValidatedInput
           id="ownership-input"
           ref="ownershipInput"
-          label="Ownership"
+          label="Eigenaar"
           :validation-rules="ownershipValidationRules"
         >
           <template #default="{ hasError, onValidationError }">
             <BaseSelect
               v-model="ownership"
               :options="ownershipOptions"
+              placeholder="-"
               @update:model-value="validateOwnership"
             />
           </template>
@@ -129,7 +131,7 @@ const dateValidationRules = [
 
 const typeValidationRules = [validationRules.selectRequired("Type")]
 
-const ownershipValidationRules = [validationRules.selectRequired("Ownership")]
+const ownershipValidationRules = [validationRules.selectRequired("Eigenaar")]
 
 const emailValidationRules = [
   validationRules.required("E-mailadres"),
@@ -196,7 +198,10 @@ const submitLocation = async () => {
     city: city.value,
     type: type.value as LocationType,
     ownership: ownership.value as LocationOwnership,
-    vacatedSince: new Timestamp(new Date(date.value).getTime(), 0),
+    vacatedSince: new Timestamp(
+      new Date(date.value + "-01").getTime() / 1000,
+      0
+    ),
     latLng: latLng.value,
     verified: false,
     createdAt: Timestamp.now(),
@@ -222,12 +227,9 @@ const submitLocation = async () => {
   background-color: $white;
 }
 
-.location-create-form {
-  padding: 0rem 1rem 1rem 1rem;
-}
-
 .submit {
   width: 100%;
+  font-size: 1rem;
 }
 
 .row {
@@ -247,13 +249,13 @@ const submitLocation = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .error-close {
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 1rem;
   cursor: pointer;
   padding: 0;
   margin-left: 0.5rem;

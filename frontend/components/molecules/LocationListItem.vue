@@ -3,7 +3,7 @@
     <LocationHeader :location="location" />
     <div class="location-tags flex-row">
       <div class="flex-row gap-8">
-        <BaseTag :tag="location.type.toString()" />
+        <BaseTag :tag="location.type.toString()" class="hide-mobile"/>
         <BaseTag :tag="location.ownership.toString()" />
       </div>
       <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes" />
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
+import { useRouter } from "vue-router"
 
 const props = defineProps<{
   location: LocationDetails
@@ -23,8 +24,13 @@ const emit = defineEmits<{
   (e: "locationSelected", latLng: GeoPoint): void
 }>()
 
+const router = useRouter()
+
 const handleClick = () => {
   emit("locationSelected", props.location.latLng)
+  router.push({
+    query: { ...router.currentRoute.value.query, selected: props.location.id }
+  })
 }
 </script>
 
@@ -45,6 +51,12 @@ const handleClick = () => {
   justify-content: space-between;
   width: 100%;
   align-items: center;
+}
+
+.hide-mobile {
+  @include for-tablet-landscape-down {
+    display: none;
+  }
 }
 
 .gap-8 {

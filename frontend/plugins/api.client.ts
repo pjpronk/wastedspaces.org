@@ -39,7 +39,7 @@ export default defineNuxtPlugin(() => {
         city: locationData.city,
         type: locationData.type,
         ownership: locationData.ownership,
-        vacatedSince: locationData.vacatedSince.toISOString(),
+        vacatedSince: locationData.vacatedSince,
         latLng: {
           latitude: locationData.latLng.latitude,
           longitude: locationData.latLng.longitude

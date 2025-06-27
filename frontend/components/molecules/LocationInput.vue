@@ -80,7 +80,7 @@ defineExpose({
 <style scoped lang="scss">
 .error-message {
   color: $primary-red;
-  font-size: 12px;
+  font-size: 1rem;
   margin-top: 4px;
   font-weight: 500;
 }

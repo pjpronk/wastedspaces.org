@@ -3,32 +3,40 @@
     <div class="map-overlay">
       <div class="sidebar">
         <div class="flex-row">
-          <BaseIcon class="logo icon-lxl" icon="logo_standalone_red" />
-          <BaseIcon class="logo" icon="logo_text_long" />
+          <BaseIcon class="logo" icon="logo"/>        
         </div>
-        <LocationInput
-          id="sidebar-input"
-          class="mt-1-0"
-          @location-selected="handleLocationInput"
-        />
+        <div class="flex-row mt-1-50">
+          <LocationInput
+            id="sidebar-input"
+            @location-selected="handleLocationInput"
+          />
+        </div>
         <FilterTabs v-model="currentFilters" class="mt-1-0" />
         <LocationList
           :locations="currentLocations"
-          class="mt-1-0"
+          class="mt-1-50"
           @location-selected="handleLocationSelected"
         />
       </div>
       <div class="top-bar">
-        <!-- <BaseIcon class="logo" icon="logo_white" /> -->
+        <div class = "flex-row gap-8">
+        <BaseIcon class="white icon-lxl" icon="logo_standalone_red" />
         <LocationInput
           id="topbar-input"
           @location-selected="handleLocationInput"
         />
+        <BaseButton class="secondary icon-s" icon="filter" @click="toggleFilters"></BaseButton>
       </div>
+
+        <Transition name="slide-fade">
+          <FilterTabs v-model="currentFilters" class="mt-0-50 flex-column" v-if="isFilterVisible" />
+        </Transition>
+      </div>
+
       <div class="info-buttons">
         <div class="info-buttons-aside">
+          <BaseButton class="primary-inverted" icon="info" @click="openInfoModal"/>
           <BaseButton class="primary-inverted" icon="documents" />
-          <BaseButton class="primary-inverted" icon="info" />
         </div>
         <BaseButton
           class="primary-inverted"
@@ -52,11 +60,18 @@
         v-if="overlayState.component === 'LocationCreate'"
         @close="closeOverlay"
       />
+      <BaseText
+        v-if="overlayState.component === 'BaseText'"
+        class="text-black align-justify"
+        :safe-text="infoText"
+        @close="closeOverlay"
+      />
     </Overlay>
     <LocationMap
       class="map"
       :locations="currentLocations"
       :center="currentCenter"
+      @location-selected="handleLocationSelected"
     />
   </div>
 </template>
@@ -69,6 +84,7 @@ import type {
   LocationFilterType
 } from "~/types/types"
 import { useRoute } from "vue-router"
+import { infoText } from "~/content/info-text"
 
 const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
   $firestore: { getLocations: () => Promise<LocationDetails[]> }
@@ -97,15 +113,15 @@ const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
   }
 }
 
-useHead({
-  title: "Wasted Spaces",
-  meta: [{ name: "", content: "" }]
-})
-
 const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
 const route = useRoute()
+
+const isFilterVisible = ref(false)
+const toggleFilters = () => {
+  isFilterVisible.value = !isFilterVisible.value
+}
 
 function parseFiltersFromQuery(
   query: Record<string, unknown>
@@ -220,6 +236,11 @@ const openLocationCreate = () => {
   openOverlay("Meld leegstand", "LocationCreate")
 }
 
+// Specific overlay opening functions
+const openInfoModal = () => {
+  openOverlay("Informatie", "BaseText")
+}
+
 // Initial fetch
 fetchLocations()
 
@@ -310,5 +331,20 @@ onMounted(() => {
   width: 80%;
   margin-right: auto;
   fill: $white;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
 }
 </style>

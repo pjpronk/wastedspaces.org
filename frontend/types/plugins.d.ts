@@ -1,5 +1,10 @@
 import type { AddLocationResponse } from "~/plugins/api.client"
-import type { LocationDetails, LocationFilterState, GeoPoint, VoteType } from "~/types/types"
+import type {
+  LocationDetails,
+  LocationFilterState,
+  GeoPoint,
+  VoteType
+} from "~/types/types"
 
 declare module "#app" {
   interface NuxtApp {
@@ -12,19 +17,19 @@ declare module "#app" {
       ) => LocationDetails[]
       filterByVerificationStatus: (
         locations: LocationDetails[],
-        selectedStatuses: LocationFilterState['status']
+        selectedStatuses: LocationFilterState["status"]
       ) => LocationDetails[]
       filterByType: (
         locations: LocationDetails[],
-        types: LocationFilterState['type']
+        types: LocationFilterState["type"]
       ) => LocationDetails[]
       filterByOwnership: (
         locations: LocationDetails[],
-        selectedOwnership: LocationFilterState['ownership']
+        selectedOwnership: LocationFilterState["ownership"]
       ) => LocationDetails[]
       filterByDuration: (
         locations: LocationDetails[],
-        selectedDurations: LocationFilterState['duration']
+        selectedDurations: LocationFilterState["duration"]
       ) => LocationDetails[]
     }
     $api: {
@@ -45,4 +50,3 @@ declare module "#app" {
     }
   }
 }
-

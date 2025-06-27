@@ -2,8 +2,12 @@
   <div class="overlay-wrapper">
     <div class="overlay">
       <div class="overlay-header">
-        <BaseTitle2 class="text-xl">{{ title }}</BaseTitle2>
-        <BaseButton icon="close" class="icon-sm transparent" @click="close" />
+        <BaseTitle2 class="text-lg">{{ title }}</BaseTitle2>
+        <BaseButton
+          icon="close"
+          class="button icon-xs transparent"
+          @click="close"
+        />
       </div>
       <div class="overlay-content">
         <slot></slot>
@@ -35,7 +39,7 @@ const close = () => {
   right: 0;
   bottom: 0;
 
-  background-color: rgba($black, 0.6);
+  background-color: rgba($full-black, 0.75);
 
   display: flex;
   justify-content: center;
@@ -45,8 +49,9 @@ const close = () => {
 }
 
 .overlay {
-  background-color: $primary-red;
-  min-width: 600px;
+  background-color: $white;
+  min-width: 500px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
 
@@ -62,11 +67,18 @@ const close = () => {
 }
 
 .overlay-header {
-  background-color: $primary-red;
-  color: $white;
-  padding: 0.25rem 1rem;
+  color: $primary-red;
+  padding: 1.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.overlay-content {
+  padding: 0rem 1.5rem 1.5rem 1.5rem;
+}
+
+.button {
+  color: $primary-red;
 }
 </style>

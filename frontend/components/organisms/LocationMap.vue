@@ -34,10 +34,17 @@
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore"
 import type { LocationDetails } from "~/types/types"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
 
 const props = defineProps<{
   locations: LocationDetails[]
   center: GeoPoint
+}>()
+
+const emit = defineEmits<{
+  (e: 'locationSelected', latLng: GeoPoint): void
 }>()
 
 const config = useRuntimeConfig()
@@ -49,16 +56,21 @@ const mapConfig = {
   center: { lat: props.center.latitude, lng: props.center.longitude },
   mapId: config.public.GOOGLE_MAPS_MAP_ID,
   zoom: 12,
+  clickableIcons: false,
   disableDefaultUI: true
 }
 
 // Watch for changes in locations to manage visibility
-watch(() => props.locations, (newLocations) => {
-  if(!staticLocations.value.length) {
-    staticLocations.value = props.locations
-  }
-  visibleLocations.value = newLocations.map(location => location.id)
-}, { deep: true })
+watch(
+  () => props.locations,
+  (newLocations) => {
+    if (!staticLocations.value.length) {
+      staticLocations.value = props.locations
+    }
+    visibleLocations.value = newLocations.map((location) => location.id)
+  },
+  { deep: true }
+)
 </script>
 
 <style scoped lang="scss">

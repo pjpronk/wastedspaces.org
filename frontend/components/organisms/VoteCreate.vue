@@ -5,7 +5,7 @@
       <ValidatedInput
         id="email-input"
         ref="emailInput"
-        label="E-mailadres (voor verificatie)"
+        label="E-mailadres (voor eenmalige verificatie)"
         :validation-rules="emailValidationRules"
       >
         <template #default="{ hasError, onValidationError }">
@@ -113,13 +113,13 @@ const submitVote = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .error-close {
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 1rem;
   cursor: pointer;
   padding: 0;
   margin-left: 0.5rem;

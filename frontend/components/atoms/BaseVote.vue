@@ -24,7 +24,7 @@ export default {
   color: currentColor;
 
   &:before {
-    font-size: 15px;
+    font-size: 1rem;
     font-family: Arial;
     position: relative;
     right: 2px;

@@ -152,3 +152,9 @@ meter {
 :where([draggable="true"]) {
   -webkit-user-drag: element;
 }
+
+select {
+  -webkit-appearance: none; /* Removes the default iOS styling */
+  -moz-appearance: none;    /* For Firefox */
+  appearance: none;         /* Standard property */
+}

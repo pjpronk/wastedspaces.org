@@ -13,12 +13,14 @@
     </div>
     <LocationHeader :location="location" />
     <div class="buttons mt-0-75">
+      <div class="flex-row">
       <BaseButton class="primary" @click="handleUpvote">
         <BaseVote :count="location.upvotes || 0" type="upvotes" />
       </BaseButton>
       <BaseButton class="primary" @click="handleDownvote">
         <BaseVote :count="location.downvotes || 0" type="downvotes" />
       </BaseButton>
+    </div>
       <BaseButton class="primary-inverted" @click.stop="$emit('close')">
         Sluiten
       </BaseButton>
@@ -68,12 +70,12 @@ const streetViewUrl = computed(() => {
 })
 
 const handleUpvote = () => {
-  voteType.value=VoteType.UPVOTE
+  voteType.value = VoteType.UPVOTE
   openVoteDialog.value = true
 }
 
 const handleDownvote = () => {
-  voteType.value=VoteType.DOWNVOTE
+  voteType.value = VoteType.DOWNVOTE
   openVoteDialog.value = true
 }
 </script>
@@ -82,8 +84,12 @@ const handleDownvote = () => {
 .image-container {
   position: relative;
   width: 100%;
-  min-width: 200px;
-  height: 120px;
+  min-width: 80px;
+  height: 200px;
+
+  @include for-tablet-landscape-down {
+    height: 150px;
+  }
 }
 
 .location-image {
@@ -106,8 +112,18 @@ const handleDownvote = () => {
   gap: 8px;
 }
 
+.flex-row {
+  gap: 8px;
+}
+
 .buttons {
   display: flex;
   gap: 8px;
+  @include for-tablet-landscape-down {
+    flex-direction: column;
+  }
+  .button {
+    width: 100%;
+  }
 }
 </style>

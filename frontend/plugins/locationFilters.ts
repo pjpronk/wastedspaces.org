@@ -69,13 +69,13 @@ export default defineNuxtPlugin(() => {
       let status: LocationStatus
 
       if (downvotes >= 5 && upvotes >= 5) {
-        status = LocationStatus.ONGEVERIFIEERD
+        status = LocationStatus.GEMELD
       } else if (upvotes >= 5) {
         status = LocationStatus.BEVESTIGD
       } else if (downvotes >= 5) {
-        status = LocationStatus.BETWIST
+        status = LocationStatus.BETWIJFELD
       } else {
-        status = LocationStatus.ONGEVERIFIEERD
+        status = LocationStatus.GEMELD
       }
       return selectedStatusTypes.includes(status.toLowerCase())
     })
@@ -129,10 +129,11 @@ export default defineNuxtPlugin(() => {
     return locations.filter((location) => {
       const vacatedDate = location.vacatedSince.toDate()
       const now = new Date()
-      
+
       // Calculate months between dates
-      const monthsDiff = (now.getFullYear() - vacatedDate.getFullYear()) * 12 + 
-                        (now.getMonth() - vacatedDate.getMonth())
+      const monthsDiff =
+        (now.getFullYear() - vacatedDate.getFullYear()) * 12 +
+        (now.getMonth() - vacatedDate.getMonth())
 
       let duration: string
       if (monthsDiff < 6) {
@@ -142,7 +143,7 @@ export default defineNuxtPlugin(() => {
       } else {
         duration = "langdurig"
       }
-    
+
       return selectedDurationTypes.includes(duration)
     })
   }

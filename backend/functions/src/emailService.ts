@@ -10,7 +10,7 @@ interface EmailMessage {
 }
 
 class EmailService {
-  private mailgun: any;
+  private mailgun: unknown;
   private domain: string;
 
   constructor(apiKey: string, domain: string) {

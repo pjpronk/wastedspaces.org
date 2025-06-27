@@ -10,9 +10,6 @@
       @update:model-value="(newValue) => handleUpdate(tab.type, newValue)"
       @toggle="(value) => toggleTab(tab.type, value)"
     />
-    <button class="close-button" @click="$emit('close')">
-      <span class="close-icon">×</span>
-    </button>
   </div>
 </template>
 
@@ -36,7 +33,7 @@ const props = defineProps<{
   modelValue: LocationFilterState
 }>()
 
-const emit = defineEmits(["update:modelValue", "close"])
+const emit = defineEmits(["update:modelValue"])
 
 const route = useRoute()
 const router = useRouter()
@@ -80,11 +77,10 @@ watch(
     }
 
     // Update URL without triggering a page reload
-    router.push({ query: sanitizedQuery })
+    router.replace({ query: sanitizedQuery })
   },
   { deep: true }
 )
-
 const tabs = [
   { type: "type" as const, label: "Type" },
   { type: "ownership" as const, label: "Eigendom" },
@@ -127,7 +123,6 @@ const getOptionsForType = (type: LocationFilterType): FilterOption[] => {
 <style scoped lang="scss">
 .filter-tabs {
   display: flex;
-  gap: 8px;
 }
 
 .close-button {
@@ -141,8 +136,11 @@ const getOptionsForType = (type: LocationFilterType): FilterOption[] => {
 }
 
 .close-icon {
-  font-size: 1.5rem;
   line-height: 1;
-  color: #666;
+  color: $black;
+
+  :hover {
+    color: $white;
+  }
 }
 </style>

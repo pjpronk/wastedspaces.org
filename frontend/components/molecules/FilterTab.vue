@@ -11,14 +11,16 @@
       @click.stop="toggleDropdown"
     >
       {{ label }}
+      <div class="flex-row">
       <span class="filter-count">{{
         activeFilterCount ? `(${activeFilterCount})` : ""
       }}</span>
-      <BaseIcon
-        icon="chevron-down"
-        class="icon-sxs"
-        :class="{ 'rotate-180': isActive }"
-      />
+        <BaseIcon
+          icon="chevron-down"
+          class="icon-sxs"
+          :class="{ 'rotate-180': isActive }"
+        />
+      </div>
     </div>
     <div v-if="isActive" class="filter-dropdown">
       <div class="filter-options">
@@ -67,7 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
   isActive: false
 })
 
-const emit = defineEmits(["update:modelValue", "apply", "toggle"])
+const emit = defineEmits(["update:modelValue", "toggle"])
 
 // Initialize selectedFilters with all options set to false
 const selectedFilters = ref<Record<string, boolean>>({})
@@ -123,7 +125,6 @@ const clearFilters = () => {
 
   selectedFilters.value = clearedFilters
   emit("update:modelValue", clearedFilters)
-  emit("apply", clearedFilters)
 }
 </script>
 
@@ -139,6 +140,7 @@ const clearFilters = () => {
   padding: 0.5rem 0.75rem;
   text-align: center;
   background: $white;
+  justify-content: space-between;
 
   .icon-sxs {
     transition: transform 0.2s ease;
@@ -153,6 +155,7 @@ const clearFilters = () => {
   background: $white;
   min-width: 200px;
   padding: 1rem;
+  width: 100%;
 }
 
 .filter-options {
@@ -167,7 +170,7 @@ const clearFilters = () => {
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
 
   input[type="checkbox"] {
     width: 18px;
@@ -186,7 +189,7 @@ const clearFilters = () => {
 }
 
 .filter-count {
-  min-width: 1.25rem;
+  min-width: 20px;
   text-align: center;
 }
 

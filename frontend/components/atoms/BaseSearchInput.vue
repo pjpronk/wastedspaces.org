@@ -47,10 +47,12 @@ watch(
 <style scoped>
 .base-search-input {
   width: 100%;
-  font-size: 16px;
+  font-size: 1rem;
   outline: none;
   border: none;
   padding: 10px;
+
+  
 }
 
 .border-grey {
