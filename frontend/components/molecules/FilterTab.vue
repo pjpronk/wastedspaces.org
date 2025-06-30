@@ -153,7 +153,7 @@ const clearFilters = () => {
   left: 0;
   z-index: 10;
   background: $white;
-  min-width: 200px;
+  min-width: fit-content;
   padding: 1rem;
   width: 100%;
 }
