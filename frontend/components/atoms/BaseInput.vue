@@ -68,7 +68,7 @@ defineEmits(["update:modelValue"]) // Emits input event for v-model
 <style lang="scss" scoped>
 .base-input {
   width: 100%;
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 100%;
   padding: 8px 12px;
   outline: none;

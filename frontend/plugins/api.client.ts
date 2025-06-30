@@ -1,4 +1,16 @@
-import type { LocationDetails } from "~/types/types"
+import type { LocationDetails, VoteType } from "~/types/types"
+
+export interface AddLocationResponse {
+  result: string
+  id: string
+  message: string
+}
+
+export interface AddVoteResponse {
+  result: string
+  id: string
+  message: string
+}
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
@@ -39,7 +51,7 @@ export default defineNuxtPlugin(() => {
         city: locationData.city,
         type: locationData.type,
         ownership: locationData.ownership,
-        vacatedSince: locationData.vacatedSince.toISOString(),
+        vacatedSince: locationData.vacatedSince,
         latLng: {
           latitude: locationData.latLng.latitude,
           longitude: locationData.latLng.longitude
@@ -54,11 +66,26 @@ export default defineNuxtPlugin(() => {
     }
   }
 
+  // Vote API methods
+  const voteApi = {
+    async addVote(voteData: {
+      locationId: string
+      voteType: VoteType
+      verificationEmail: string
+    }): Promise<AddVoteResponse> {
+      return apiClient.request<AddVoteResponse>("addVote", {
+        method: "POST",
+        body: JSON.stringify(voteData)
+      })
+    }
+  }
+
   return {
     provide: {
       api: {
         ...apiClient,
-        location: locationApi
+        location: locationApi,
+        vote: voteApi
       }
     }
   }

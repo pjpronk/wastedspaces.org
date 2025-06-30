@@ -2,42 +2,59 @@
   <div class="index">
     <div class="map-overlay">
       <div class="sidebar">
-        <div class="flex-row">
-          <BaseIcon class="logo icon-lxl" icon="logo_standalone_red" />
-          <BaseIcon class="logo" icon="logo_text_long" />
+        <BaseLink :external="true" link="/">
+          <BaseIcon class="logo" icon="logo" />
+        </BaseLink>
+        <div class="flex-row mt-1-50">
+          <LocationInput
+            id="sidebar-input"
+            @location-selected="handleLocationInput"
+          />
         </div>
-        <LocationInput
-          id="sidebar-input"
-          class="mt-1-0"
-          @location-selected="handleLocationInput"
-        />
-        <FilterTabs
-          class="mt-1-0"
-          model-value="currentFilter"
-          @filter-selected="handleFilterSelected"
-        />
+        <FilterTabs v-model="currentFilters" class="mt-1-0" />
         <LocationList
           :locations="currentLocations"
-          class="mt-1-0"
+          class="mt-1-50"
           @location-selected="handleLocationSelected"
         />
       </div>
       <div class="top-bar">
-        <!-- <BaseIcon class="logo" icon="logo_white" /> -->
-        <LocationInput
-          id="topbar-input"
-          @location-selected="handleLocationInput"
-        />
+        <div class="flex-row gap-8">
+          <BaseLink :external="true" link="/">
+            <BaseIcon class="white icon-lxl" icon="logo_standalone_red" />
+          </BaseLink>
+          <LocationInput
+            id="topbar-input"
+            @location-selected="handleLocationInput"
+          />
+          <BaseButton
+            class="secondary icon-s"
+            icon="filter"
+            @click="toggleFilters"
+          ></BaseButton>
+        </div>
+
+        <Transition name="slide-fade">
+          <FilterTabs
+            v-if="isFilterVisible"
+            v-model="currentFilters"
+            class="mt-0-50 flex-column"
+          />
+        </Transition>
       </div>
+
       <div class="info-buttons">
-        <div>
-          <BaseButton class="primary-inverted" icon="documents" />
-          <BaseButton class="primary-inverted mt-0-5" icon="info" />
+        <div class="info-buttons-aside">
+          <BaseButton
+            class="primary-inverted"
+            icon="info"
+            @click="openInfoModal"
+          />
         </div>
         <BaseButton
           class="primary-inverted"
           icon="add"
-          @click="showLocationCreate = true"
+          @click="openLocationCreate"
         />
       </div>
       <div class="bottom-bar">
@@ -48,109 +65,169 @@
       </div>
     </div>
     <Overlay
-      v-if="showLocationCreate"
-      title="MELD LEEGSTAND"
-      @close="showLocationCreate = false"
+      v-if="overlayState.isOpen"
+      :title="overlayState.title"
+      @close="closeOverlay"
     >
-      <LocationCreate @close="showLocationCreate = false" />
+      <LocationCreate
+        v-if="overlayState.component === 'LocationCreate'"
+        @close="closeOverlay"
+      />
+      <BaseText
+        v-if="overlayState.component === 'BaseText'"
+        class="text-black align-justify"
+        :safe-text="infoText"
+        @close="closeOverlay"
+      />
     </Overlay>
     <LocationMap
       class="map"
       :locations="currentLocations"
       :center="currentCenter"
+      @location-selected="handleLocationSelected"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { GeoPoint } from "@firebase/firestore"
-import type { LocationDetails, LocationType } from "~/types/types"
+import type {
+  LocationDetails,
+  LocationFilterState,
+  LocationFilterType
+} from "~/types/types"
+import { useRoute } from "vue-router"
+import { infoText } from "~/content/info-text"
 
-const router = useRouter()
-const route = useRoute()
-const { $firestore } = useNuxtApp() as unknown as {
+const { $firestore, $locationFilters } = useNuxtApp() as unknown as {
   $firestore: { getLocations: () => Promise<LocationDetails[]> }
+  $locationFilters: {
+    filterByRadius: (
+      locations: LocationDetails[],
+      center: GeoPoint,
+      radius: number
+    ) => LocationDetails[]
+    filterByType: (
+      locations: LocationDetails[],
+      selectedTypes: LocationFilterState["type"]
+    ) => LocationDetails[]
+    filterByVerificationStatus: (
+      locations: LocationDetails[],
+      selectedStatuses: LocationFilterState["status"]
+    ) => LocationDetails[]
+    filterByOwnership: (
+      locations: LocationDetails[],
+      selectedOwnership: LocationFilterState["ownership"]
+    ) => LocationDetails[]
+    filterByDuration: (
+      locations: LocationDetails[],
+      selectedDurations: LocationFilterState["duration"]
+    ) => LocationDetails[]
+  }
 }
-useHead({
-  title: "Wasted Spaces",
-  meta: [{ name: "", content: "" }]
-})
 
 const allLocations = ref<LocationDetails[]>([])
 const currentLocations = ref<LocationDetails[]>([])
-const showLocationCreate = ref(false)
 const currentCenter = ref(new GeoPoint(51.9146308, 4.4709485)) // Default to Rotterdam
-const currentFilter = ref<LocationType | null>(
-  (route.query.filter?.toString().toUpperCase() as LocationType) || null
+const route = useRoute()
+
+const isFilterVisible = ref(false)
+const toggleFilters = () => {
+  isFilterVisible.value = !isFilterVisible.value
+}
+
+function parseFiltersFromQuery(
+  query: Record<string, unknown>
+): LocationFilterState {
+  const filterTypes: LocationFilterType[] = [
+    "type",
+    "ownership",
+    "status",
+    "duration"
+  ]
+  const filters: LocationFilterState = {
+    type: {},
+    ownership: {},
+    status: {},
+    duration: {}
+  }
+  for (const type of filterTypes) {
+    const value = query[type]
+    if (typeof value === "string" && value.length > 0) {
+      value.split(",").forEach((v: string) => {
+        filters[type][v.toUpperCase()] = true
+      })
+    }
+  }
+  return filters
+}
+
+// Initialize filters from URL only once on page load
+const currentFilters = ref<LocationFilterState>({
+  type: {},
+  ownership: {},
+  status: {},
+  duration: {}
+})
+
+// Watch for filter changes and update locations
+watch(
+  currentFilters,
+  (newFilters) => {
+    currentLocations.value = applyAllFilters(
+      allLocations.value,
+      currentCenter.value,
+      searchRadius.value,
+      newFilters
+    )
+  },
+  { deep: true }
 )
+
 const searchRadius = ref(50) // Default radius in kilometers
+
+// Use the overlay composable
+const { overlayState, openOverlay, closeOverlay } = useOverlay()
+
+const applyAllFilters = (
+  locations: LocationDetails[],
+  center: GeoPoint,
+  radius: number,
+  filters: LocationFilterState
+): LocationDetails[] => {
+  // First filter by radius
+  let filtered = $locationFilters.filterByRadius(locations, center, radius)
+
+  // Then filter by type
+  filtered = $locationFilters.filterByType(filtered, filters.type)
+
+  // Then filter by ownership
+  filtered = $locationFilters.filterByOwnership(filtered, filters.ownership)
+
+  // Then filter by duration
+  filtered = $locationFilters.filterByDuration(filtered, filters.duration)
+
+  // Finally filter by verification status
+  filtered = $locationFilters.filterByVerificationStatus(
+    filtered,
+    filters.status
+  )
+
+  return filtered
+}
 
 const fetchLocations = async () => {
   try {
     allLocations.value = await $firestore.getLocations()
-    currentLocations.value = filterLocationsByRadius(allLocations.value)
-    currentLocations.value = filterLocationsByType(
-      currentLocations.value,
-      currentFilter.value
+    currentLocations.value = applyAllFilters(
+      allLocations.value,
+      currentCenter.value,
+      searchRadius.value,
+      currentFilters.value
     )
   } catch (error) {
     console.error("Error fetching locations:", error)
   }
-}
-
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371 // Earth's radius in kilometers
-  const dLat = toRad(lat2 - lat1)
-  const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c
-}
-
-function toRad(degrees: number): number {
-  return degrees * (Math.PI / 180)
-}
-
-const filterLocationsByRadius = (locations: LocationDetails[]) => {
-  // Calculate distances and filter locations within radius
-  return locations
-    .map((loc: LocationDetails) => ({
-      ...loc,
-      distance: calculateDistance(
-        currentCenter.value.latitude,
-        currentCenter.value.longitude,
-        loc.latLng.latitude,
-        loc.latLng.longitude
-      )
-    }))
-    .filter(
-      (loc: LocationDetails & { distance: number }) =>
-        loc.distance <= searchRadius.value
-    )
-    .sort(
-      (
-        a: LocationDetails & { distance: number },
-        b: LocationDetails & { distance: number }
-      ) => a.distance - b.distance
-    )
-}
-
-const filterLocationsByType = (
-  locations: LocationDetails[],
-  type: LocationType | null
-) => {
-  if (!type) return locations
-  return locations.filter((location) => location.type === type)
 }
 
 const handleLocationSelected = (latLng: GeoPoint) => {
@@ -159,23 +236,30 @@ const handleLocationSelected = (latLng: GeoPoint) => {
 
 const handleLocationInput = (latLng: GeoPoint) => {
   currentCenter.value = latLng
-  currentLocations.value = filterLocationsByRadius(allLocations.value)
+  currentLocations.value = applyAllFilters(
+    allLocations.value,
+    currentCenter.value,
+    searchRadius.value,
+    currentFilters.value
+  )
 }
 
-const handleFilterSelected = (filter: LocationType | null) => {
-  currentFilter.value = filter
-  router.push({
-    query: {
-      ...route.query,
-      filter: filter?.toString().toLowerCase() || undefined
-    }
-  })
-  currentLocations.value = filterLocationsByRadius(allLocations.value)
-  currentLocations.value = filterLocationsByType(currentLocations.value, filter)
+// Specific overlay opening functions
+const openLocationCreate = () => {
+  openOverlay("Meld leegstand", "LocationCreate")
+}
+
+// Specific overlay opening functions
+const openInfoModal = () => {
+  openOverlay("Informatie", "BaseText")
 }
 
 // Initial fetch
 fetchLocations()
+
+onMounted(() => {
+  currentFilters.value = parseFiltersFromQuery(route.query)
+})
 </script>
 
 <style lang="scss">
@@ -186,21 +270,21 @@ fetchLocations()
 .info-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   pointer-events: none;
   height: 100%;
   justify-content: space-between;
   padding: 1rem;
-
-  @include for-tablet-landscape-down {
-    flex-direction: column;
-    align-items: flex-end;
-    padding: 2rem;
-  }
+  align-items: flex-end;
 
   button {
     pointer-events: auto;
   }
+}
+
+.info-buttons-aside {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
 }
 
 .top-bar {
@@ -224,7 +308,6 @@ fetchLocations()
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 320px;
   height: 100%;
   background-color: $primary-red;
   pointer-events: auto;
@@ -261,5 +344,20 @@ fetchLocations()
   width: 80%;
   margin-right: auto;
   fill: $white;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
 }
 </style>

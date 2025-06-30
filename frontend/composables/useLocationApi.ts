@@ -1,4 +1,5 @@
 import type { LocationDetails } from "~/types/types"
+import type { AddLocationResponse } from "~/plugins/api.client"
 
 export const useLocationApi = () => {
   const { $api } = useNuxtApp()
@@ -9,12 +10,15 @@ export const useLocationApi = () => {
   const addLocation = async (
     location: LocationDetails,
     verificationEmail: string
-  ): Promise<Response | null> => {
+  ): Promise<AddLocationResponse | null> => {
     isLoading.value = true
     error.value = null
 
     try {
-      const response = await $api.location.addLocation(location, verificationEmail)
+      const response = await $api.location.addLocation(
+        location,
+        verificationEmail
+      )
       return response
     } catch (err) {
       error.value =
@@ -33,7 +37,7 @@ export const useLocationApi = () => {
   return {
     addLocation,
     isLoading: readonly(isLoading),
-    error: readonly(error),
+    error,
     clearError
   }
 }

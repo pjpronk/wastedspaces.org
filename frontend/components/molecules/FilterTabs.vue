@@ -1,64 +1,146 @@
 <template>
   <div class="filter-tabs">
-    <BaseTag
-      v-for="option in typeOptions"
-      :key="option.value"
-      :class="['filter-tag', { active: modelValue === option.value }]"
-      class="skewed"
-      @click="handleSelect(option.value)"
-    >
-      {{ option.label }}
-    </BaseTag>
+    <FilterTab
+      v-for="tab in tabs"
+      :key="tab.type"
+      :model-value="props.modelValue[tab.type]"
+      :label="tab.label"
+      :is-active="activeTab === tab.type"
+      :options="getOptionsForType(tab.type)"
+      @update:model-value="(newValue) => handleUpdate(tab.type, newValue)"
+      @toggle="(value) => toggleTab(tab.type, value)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from "vue"
-import BaseTag from "../atoms/BaseTag.vue"
-import { LocationType } from "~/types/types"
+import { ref, watch } from "vue"
+import FilterTab from "./FilterTab.vue"
+import type {
+  LocationFilterType,
+  LocationFilterState,
+  FilterOption
+} from "~/types/types"
+import {
+  LocationType,
+  LocationOwnership,
+  LocationStatus,
+  LocationDuration
+} from "~/types/types"
+import { useRoute, useRouter } from "vue-router"
 
-defineProps<{
-  modelValue: string
+const props = defineProps<{
+  modelValue: LocationFilterState
 }>()
 
-const emit = defineEmits(["update:modelValue", "filterSelected"])
+const emit = defineEmits(["update:modelValue"])
 
-const typeOptions = computed(() =>
-  Object.entries(LocationType).map(([key, label]) => ({
-    value: key,
-    label
-  }))
+const route = useRoute()
+const router = useRouter()
+
+const activeTab = ref<LocationFilterType | null>(null)
+
+const handleUpdate = (
+  type: LocationFilterType,
+  newValue: Record<string, boolean>
+) => {
+  emit("update:modelValue", {
+    ...props.modelValue,
+    [type]: newValue
+  })
+  activeTab.value = null
+}
+
+// Watch for filter changes and update URL
+watch(
+  () => props.modelValue,
+  (newFilters) => {
+    // Serialize filters to query params
+    const query: Record<string, unknown> = { ...route.query }
+    for (const type of Object.keys(newFilters)) {
+      const selected = Object.entries(newFilters[type as LocationFilterType])
+        .filter(([_, v]) => v)
+        .map(([k]) => k)
+      if (selected.length > 0) {
+        query[type] = selected.join(",")
+      } else {
+        Reflect.deleteProperty(query, type)
+      }
+    }
+
+    // Remove any keys with null/undefined values and convert to lowercase
+    const sanitizedQuery: Record<string, string> = {}
+    for (const key in query) {
+      if (typeof query[key] === "string" && query[key] !== undefined) {
+        sanitizedQuery[key] = (query[key] as string).toLowerCase()
+      }
+    }
+
+    // Update URL without triggering a page reload
+    router.replace({ query: sanitizedQuery })
+  },
+  { deep: true }
 )
+const tabs = [
+  { type: "type" as const, label: "Type" },
+  { type: "ownership" as const, label: "Eigendom" },
+  { type: "status" as const, label: "Status" },
+  { type: "duration" as const, label: "Duur" }
+]
 
-function handleSelect(value: string) {
-  emit("update:modelValue", value)
-  emit("filterSelected", value)
+const toggleTab = (type: LocationFilterType, value: boolean) => {
+  activeTab.value = !value ? type : null
+}
+
+const getOptionsForType = (type: LocationFilterType): FilterOption[] => {
+  switch (type) {
+    case "type":
+      return Object.entries(LocationType).map(([value, label]) => ({
+        value,
+        label
+      }))
+    case "ownership":
+      return Object.entries(LocationOwnership).map(([value, label]) => ({
+        value,
+        label
+      }))
+    case "status":
+      return Object.entries(LocationStatus).map(([value, label]) => ({
+        value,
+        label
+      }))
+    case "duration":
+      return Object.entries(LocationDuration).map(([value, label]) => ({
+        value,
+        label
+      }))
+    default:
+      return []
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .filter-tabs {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.filter-tag {
-  cursor: pointer;
-  background: $white;
-  padding: 0.5rem 0.5rem;
-}
-.filter-tag.active {
-  background: $primary-red;
-  color: $white;
 }
 
-.skewed {
-  transform: skew(
-    -2deg
-  ); /* Adjust the angle (10deg) to control how much the element is slanted */
-  /* Optional: if you want to keep the content straight while the container is skewed */
-  & > * {
-    transform: skew(2deg); /* Counter-skew the content to keep it straight */
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-icon {
+  line-height: 1;
+  color: $black;
+
+  :hover {
+    color: $white;
   }
 }
 </style>

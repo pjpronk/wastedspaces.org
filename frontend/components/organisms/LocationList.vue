@@ -2,7 +2,7 @@
   <div class="location-list">
     <LocationListItem
       v-for="location in locations"
-      :key="location.latLng.latitude + ',' + location.latLng.longitude"
+      :key="location.id"
       :location="location"
       @location-selected="handleLocationSelected"
     />
@@ -33,5 +33,6 @@ const handleLocationSelected = (latLng: GeoPoint) => {
   overflow-y: scroll;
   gap: 8px;
   padding-right: 8px;
+  scrollbar-color: $primary-red $white;
 }
 </style>

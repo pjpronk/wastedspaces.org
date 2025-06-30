@@ -42,8 +42,13 @@ export const validationRules = {
   dateNotInFuture:
     (fieldName: string = "Datum"): ValidationRule =>
     (value: string) => {
-      if (value && new Date(value) > new Date()) {
-        return `${fieldName} kan niet in de toekomst liggen`
+      if (value) {
+        const inputDate = new Date(value + "-01")
+        const now = new Date()
+        const currentMonth = new Date(now.getFullYear(), now.getMonth())
+        if (inputDate > currentMonth) {
+          return `${fieldName} kan niet in de toekomst liggen`
+        }
       }
       return null
     },

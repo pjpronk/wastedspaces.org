@@ -36,10 +36,16 @@ const icon = props.icon && (await icons?.[props.icon]?.())
 }
 
 .secondary {
-  background-color: $white;
   :deep(path) {
     stroke: $primary-red;
     fill: $primary-red;
+  }
+}
+
+.white {
+  :deep(path) {
+    stroke: $white;
+    fill: $white;
   }
 }
 

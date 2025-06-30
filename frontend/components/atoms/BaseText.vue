@@ -1,15 +1,19 @@
 <template>
-  <p><slot /></p>
+  <!-- eslint-disable-next-line vue/no-v-html -->
+  <p v-if="safeText" v-html="safeText" />
+  <p v-else><slot /></p>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  safeText?: string
+}>()
+</script>
 
 <style scoped lang="scss">
 p {
   color: $white;
-  line-height: 100%;
-}
-
-.bold {
-  font-weight: bold;
+  line-height: 130%;
 }
 
 .text-primary {
@@ -25,5 +29,9 @@ p {
 }
 .nowrap {
   white-space: nowrap;
+}
+
+.align-justify {
+  text-align: justify;
 }
 </style>

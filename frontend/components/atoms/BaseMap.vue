@@ -7,19 +7,21 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  google: google.maps.Map
+  google: typeof google
   mapConfig: google.maps.MapOptions
   center: { lat: number; lng: number }
 }>()
 
 const mapContainer = ref(null)
-const map = ref(null)
+const map = ref<google.maps.Map | null>(null)
 
 onMounted(async () => {
   try {
-    map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
+    if (mapContainer.value) {
+      map.value = new props.google.maps.Map(mapContainer.value, props.mapConfig)
+    }
   } catch (error) {
-    console.error("Error aloading map: ", error)
+    console.error("Error loading map: ", error)
   }
 })
 
@@ -27,7 +29,23 @@ watch(
   () => props.center,
   (newCenter) => {
     if (map.value) {
-      map.value.panTo(newCenter)
+      // Convert pixel offset to lat/lng offset
+      const scale = Math.pow(2, map.value.getZoom() || 0)
+      const projection = map.value.getProjection()
+      if (projection) {
+        const centerPoint = projection.fromLatLngToPoint(
+          new props.google.maps.LatLng(newCenter)
+        )
+        if (centerPoint) {
+          // Apply pixel offsets (75px right, 100px up)
+          centerPoint.x += 120 / scale
+          centerPoint.y -= 140 / scale // Subtract because y increases downward
+          const offsetCenter = projection.fromPointToLatLng(centerPoint)
+          if (offsetCenter) {
+            map.value.panTo(offsetCenter)
+          }
+        }
+      }
     }
   },
   { deep: true }

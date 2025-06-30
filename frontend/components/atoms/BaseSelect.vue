@@ -79,11 +79,23 @@ defineEmits(["update:modelValue"]) // Emits update event for v-model
 <style lang="scss" scoped>
 .base-select {
   width: 100%;
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 100%;
   padding: 8px 12px;
   outline: none;
   border: 1px solid $grey;
+  background-color: white;
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: currentColor;
 }
 
 .base-select-wrapper {

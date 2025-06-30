@@ -6,7 +6,7 @@
       class="input"
       :value="modelValue"
       type="text"
-      placeholder="Zoek op locatie"
+      placeholder="Sorteer op locatie"
       @input="
         (e: Event) =>
           $emit('update:modelValue', (e.target as HTMLInputElement).value)
@@ -46,15 +46,8 @@ const emit = defineEmits<{
     e: "update:modelValue",
     value: { address: string; city: string; latLng: GeoPoint } | string
   ): void
-  (
-    e:
-      | "update:address"
-      | "update:city"
-      | "locationSelected"
-      | "validationError",
-    value: string
-  ): void
-  (e: "update:latLng", value: GeoPoint): void
+  (e: "update:address" | "update:city" | "validationError", value: string): void
+  (e: "update:latLng" | "locationSelected", value: GeoPoint): void
 }>()
 
 const autocomplete = ref<google.maps.places.Autocomplete | null>(null)
@@ -78,9 +71,8 @@ function initializeAutocomplete() {
     if (place) {
       if (props.restrictToSpecificAddresses) {
         const hasStreetNumber = place.address_components?.some(
-          (
-            component: google.maps.places.PlaceResult["address_components"][number]
-          ) => component.types.includes("street_number")
+          (component: google.maps.GeocoderAddressComponent) =>
+            component.types.includes("street_number")
         )
 
         if (!hasStreetNumber) {
@@ -93,8 +85,8 @@ function initializeAutocomplete() {
         }
       }
 
-      const lat = place.geometry?.location.lat()
-      const lng = place.geometry?.location.lng()
+      const lat = place.geometry?.location?.lat()
+      const lng = place.geometry?.location?.lng()
       if (lat && lng) {
         const latLng = new GeoPoint(lat, lng)
 
@@ -104,9 +96,7 @@ function initializeAutocomplete() {
         let city = ""
 
         place.address_components?.forEach(
-          (
-            component: google.maps.places.PlaceResult["address_components"][number]
-          ) => {
+          (component: google.maps.GeocoderAddressComponent) => {
             if (component.types.includes("route")) {
               streetName = component.long_name
             }
@@ -155,7 +145,7 @@ function initializeAutocomplete() {
   border: 1px solid $grey;
 }
 .input {
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 100%;
   border: none;
   width: 100%;

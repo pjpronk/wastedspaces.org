@@ -11,33 +11,63 @@ export interface LocationDetails {
   verified: boolean
   createdAt: Timestamp
   updatedAt: Timestamp
-}
-
-export enum LocationOwnership {
-  PRIVATE = "Particulier",
-  ORGANIZATION = "Organisatie",
-  GOVERNMENT = "Overheid",
-  UNKNOWN = "Onbekend"
+  upvotes: number
+  downvotes: number
 }
 
 export enum LocationType {
-  RESIDENTIAL = "Woning",
-  COMMERCIAL = "Commercieel",
-  INDUSTRIAL = "Industrieel",
-  OFFICE = "Kantoor",
-  PLOT = "Terrein",
-  OTHER = "Anders"
+  WONING = "Woning",
+  WINKEL = "Winkel",
+  INDUSTRIEEL = "Industrieel",
+  KANTOOR = "Kantoor",
+  TERREIN = "Terrein",
+  ANDERS = "Anders"
 }
 
-export const typeToIcon = (type: string) => {
-  switch (type) {
-    case "COMERCIEEL":
-      return "office"
-    case "PRIVAAT":
-      return "house"
-    case "PUBLIEK":
-      return "farm"
-    default:
-      return "other"
-  }
+export enum LocationOwnership {
+  PARTICULIER = "Particulier",
+  ORGANISATIE = "Organisatie",
+  OVERHEID = "Overheid",
+  ONBEKEND = "Onbekend"
+}
+
+export enum LocationStatus {
+  BEVESTIGD = "Bevestigd",
+  GEMELD = "Gemeld",
+  BETWIJFELD = "Betwijfeld"
+}
+
+export enum LocationDuration {
+  KORTDURIG = "Kortdurig (<6m)",
+  MIDDELLANG = "Middellang (6m-2j)",
+  LANGDURIG = "Langdurig (>2j)"
+}
+
+export type LocationFilterType = "type" | "ownership" | "status" | "duration"
+
+export interface FilterOption {
+  label: string
+  value: string
+}
+
+export interface LocationFilterState {
+  type: Record<string, boolean>
+  ownership: Record<string, boolean>
+  status: Record<string, boolean>
+  duration: Record<string, boolean>
+}
+
+export enum VoteType {
+  UPVOTE = "upvote",
+  DOWNVOTE = "downvote"
+}
+
+export interface VoteDetails {
+  id?: string
+  locationId: string
+  voteType: VoteType
+  emailHash: string
+  verified: boolean
+  createdAt: Timestamp
+  updatedAt: Timestamp
 }

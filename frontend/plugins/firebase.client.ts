@@ -4,7 +4,9 @@ import {
   doc,
   getDoc,
   getDocs,
-  collection as firestoreCollection
+  collection as firestoreCollection,
+  query,
+  where
 } from "firebase/firestore"
 import type { LocationDetails } from "~/types/types"
 export default defineNuxtPlugin(() => {
@@ -43,11 +45,16 @@ export default defineNuxtPlugin(() => {
 
         getLocations: async () => {
           const collectionRef = firestoreCollection(db, "locations")
-          const querySnapshot = await getDocs(collectionRef)
-          return querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data()
-          })) as LocationDetails[]
+          const q = query(collectionRef, where("verified", "==", true))
+          const querySnapshot = await getDocs(q)
+          return querySnapshot.docs.map((doc) => {
+            const data = doc.data()
+            return {
+              id: doc.id,
+              ...data,
+              vacatedSince: data.vacatedSince?.toDate() || null
+            }
+          }) as LocationDetails[]
         }
       }
     }

@@ -3,7 +3,6 @@ import { getFirestore, collection, addDoc, GeoPoint } from "firebase/firestore"
 import fetch from "node-fetch"
 import dotenv from "dotenv"
 
-// Load environment variables
 dotenv.config()
 
 const firebaseConfig = {

@@ -1,6 +1,12 @@
 <template>
-  <div class="base-tag text-s"><slot /></div>
+  <div class="base-tag text-s">{{ tag }}</div>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  tag: string
+}>()
+</script>
 
 <style scoped lang="scss">
 .base-tag {

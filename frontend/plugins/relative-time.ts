@@ -21,11 +21,11 @@ export default defineNuxtPlugin(() => {
         }
 
         if (diffInMonths < 12) {
-          return `${diffInMonths} maand${diffInMonths > 1 ? "en" : ""} geleden`
+          return `${diffInMonths} maand${diffInMonths > 1 ? "en" : ""} leegstaand`
         }
 
         const years = Math.floor(diffInMonths / 12)
-        return `${years} jaar geleden`
+        return `${years} jaar leegstaand`
       }
     }
   }

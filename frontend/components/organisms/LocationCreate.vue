@@ -29,7 +29,7 @@
       <ValidatedInput
         id="email-input"
         ref="emailInput"
-        label="E-mailadres (voor verificatie)"
+        label="E-mailadres (voor eenmalige verificatie)"
         :validation-rules="emailValidationRules"
       >
         <template #default="{ hasError, onValidationError }">
@@ -54,6 +54,7 @@
             <BaseSelect
               v-model="type"
               :options="typeOptions"
+              placeholder="-"
               @update:model-value="validateType"
             />
           </template>
@@ -62,13 +63,14 @@
         <ValidatedInput
           id="ownership-input"
           ref="ownershipInput"
-          label="Ownership"
+          label="Eigenaar"
           :validation-rules="ownershipValidationRules"
         >
           <template #default="{ hasError, onValidationError }">
             <BaseSelect
               v-model="ownership"
               :options="ownershipOptions"
+              placeholder="-"
               @update:model-value="validateOwnership"
             />
           </template>
@@ -76,17 +78,19 @@
       </div>
 
       <BaseButton
-        class="submit primary-inverted mt-1-5"
-        :disabled="isLoading"
+        class="submit primary-inverted mt-1-50"
+        :disabled="isLoading || error"
         @click="submitLocation"
       >
         {{ isLoading ? "Bezig met melden..." : "Melden" }}
       </BaseButton>
 
-      <div v-if="error" class="error-message mt-0-5">
-        {{ error }}
-        <button type="button" class="error-close" @click="clearError">×</button>
-      </div>
+      <BaseError
+        :error="error"
+        :title="result?.result || 'Er is iets mis gegaan...'"
+        class="mt-1-0"
+        @close="clearError"
+      />
     </div>
   </div>
 </template>
@@ -94,14 +98,19 @@
 <script setup lang="ts">
 import { LocationType, LocationOwnership } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
+import type { AddLocationResponse } from "~/plugins/api.client"
 import BaseDatePicker from "../atoms/BaseDatePicker.vue"
-import { GeoPoint } from "firebase/firestore"
+import BaseError from "../atoms/BaseError.vue"
+import { GeoPoint, Timestamp } from "firebase/firestore"
 import { ref } from "vue"
 import { validationRules } from "~/utils/validation"
 import { useLocationApi } from "~/composables/useLocationApi"
 
-const emit = defineEmits(["close"])
+defineEmits<{
+  (e: "close"): void
+}>()
 const { addLocation, isLoading, error, clearError } = useLocationApi()
+const result = ref<AddLocationResponse | null>(null)
 
 // Form refs for validation
 const addressInput = ref()
@@ -129,29 +138,27 @@ const dateValidationRules = [
 
 const typeValidationRules = [validationRules.selectRequired("Type")]
 
-const ownershipValidationRules = [validationRules.selectRequired("Ownership")]
+const ownershipValidationRules = [validationRules.selectRequired("Eigenaar")]
 
-const emailValidationRules = [validationRules.required("E-mailadres"), validationRules.email("E-mailadres")]
+const emailValidationRules = [
+  validationRules.required("E-mailadres"),
+  validationRules.email("E-mailadres")
+]
 
-// Options
-const ownershipOptions = ref([
-  { value: LocationOwnership.PRIVATE, label: LocationOwnership.PRIVATE },
-  {
-    value: LocationOwnership.ORGANIZATION,
-    label: LocationOwnership.ORGANIZATION
-  },
-  { value: LocationOwnership.GOVERNMENT, label: LocationOwnership.GOVERNMENT },
-  { value: LocationOwnership.UNKNOWN, label: LocationOwnership.UNKNOWN }
-])
+// Options - dynamically generated from enums
+const ownershipOptions = ref(
+  Object.values(LocationOwnership).map((value) => ({
+    value,
+    label: value
+  }))
+)
 
-const typeOptions = ref([
-  { value: LocationType.RESIDENTIAL, label: LocationType.RESIDENTIAL },
-  { value: LocationType.COMMERCIAL, label: LocationType.COMMERCIAL },
-  { value: LocationType.INDUSTRIAL, label: LocationType.INDUSTRIAL },
-  { value: LocationType.OFFICE, label: LocationType.OFFICE },
-  { value: LocationType.PLOT, label: LocationType.PLOT },
-  { value: LocationType.OTHER, label: LocationType.OTHER }
-])
+const typeOptions = ref(
+  Object.values(LocationType).map((value) => ({
+    value,
+    label: value
+  }))
+)
 
 // Validation methods
 const validateAddress = () => {
@@ -182,26 +189,38 @@ const submitLocation = async () => {
   const isOwnershipValid = ownershipInput.value?.validate(ownership.value)
   const isEmailValid = emailInput.value?.validate(email.value)
 
-  if (!isAddressValid || !isDateValid || !isTypeValid || !isOwnershipValid || !isEmailValid) {
+  if (
+    !(isLoading || error) ||
+    !isAddressValid ||
+    !isDateValid ||
+    !isTypeValid ||
+    !isOwnershipValid ||
+    !isEmailValid
+  ) {
     return // Don't submit if validation fails
   }
 
   const location: LocationDetails = {
+    id: "",
     address: address.value,
     city: city.value,
     type: type.value as LocationType,
     ownership: ownership.value as LocationOwnership,
-    vacatedSince: new Date(date.value),
-    latLng: latLng.value
+    vacatedSince: new Date(date.value + "-01"),
+    latLng: latLng.value,
+    verified: false,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+    upvotes: 0,
+    downvotes: 0
   }
 
-  const result = await addLocation(location, email.value)
-  console.log("result", result)
-  if (result) {
-    emit("close")
+  const apiResult = await addLocation(location, email.value)
+  if (apiResult) {
+    result.value = apiResult
+    error.value = apiResult.message
   } else if (error.value) {
     console.error("Error adding location:", error.value)
-    // Handle error appropriately - the error is now available in the error ref
   }
 }
 </script>
@@ -213,12 +232,9 @@ const submitLocation = async () => {
   background-color: $white;
 }
 
-.location-create-form {
-  padding: 0rem 1rem 1rem 1rem;
-}
-
 .submit {
   width: 100%;
+  font-size: 1rem;
 }
 
 .row {
@@ -228,29 +244,5 @@ const submitLocation = async () => {
 
 .report-button {
   margin-left: auto;
-}
-
-.error-message {
-  background-color: rgba($primary-red, 0.5);
-  padding: 0.75rem;
-  border-radius: 4px;
-  color: $white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.error-close {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 0.5rem;
-}
-
-.error-close:hover {
-  opacity: 0.7;
 }
 </style>

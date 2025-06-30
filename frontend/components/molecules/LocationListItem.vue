@@ -1,35 +1,20 @@
 <template>
   <div class="location-list-item" @click="handleClick">
-    <div class="location-header">
-      <BaseIcon
-        class="icon-l secondary"
-        :icon="typeToIcon(location.type.toString())"
-      />
-      <div class="flex-column">
-        <BaseText class="text-primary bold">{{ location.address }}</BaseText>
-        <BaseText class="text-grey text-s">{{ location.city }}</BaseText>
-      </div>
-    </div>
+    <LocationHeader :location="location" />
     <div class="location-tags flex-row">
-      <BaseText class="text-black text-s flex-row icon-text">
-        <BaseIcon icon="calendar" class="secondary icon-xs" />
-        {{ $relativeTime(location.createdAt.toDate()) }}
-      </BaseText>
-      <BaseTag>{{ toSentenceCase(location.type) }}</BaseTag>
+      <div class="flex-row gap-8">
+        <BaseTag :tag="location.type.toString()" class="hide-mobile" />
+        <BaseTag :tag="location.ownership.toString()" />
+      </div>
+      <VoteCount :upvotes="location.upvotes" :downvotes="location.downvotes" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { GeoPoint } from "@firebase/firestore"
-import { typeToIcon } from "~/types/types"
 import type { LocationDetails } from "~/types/types"
-
-const toSentenceCase = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
-}
-
-const { $relativeTime } = useNuxtApp()
+import { useRouter } from "vue-router"
 
 const props = defineProps<{
   location: LocationDetails
@@ -39,8 +24,13 @@ const emit = defineEmits<{
   (e: "locationSelected", latLng: GeoPoint): void
 }>()
 
+const router = useRouter()
+
 const handleClick = () => {
   emit("locationSelected", props.location.latLng)
+  router.push({
+    query: { ...router.currentRoute.value.query, selected: props.location.id }
+  })
 }
 </script>
 
@@ -53,14 +43,7 @@ const handleClick = () => {
   flex-direction: column;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  padding: 4px;
-}
-
-.location-header {
-  border-bottom: 1px solid $grey;
-  display: flex;
-  width: 100%;
-  padding: 4px;
+  min-width: 265px;
 }
 
 .location-tags {
@@ -70,7 +53,13 @@ const handleClick = () => {
   align-items: center;
 }
 
-.icon-text {
-  gap: 4px;
+.hide-mobile {
+  @include for-tablet-landscape-down {
+    display: none;
+  }
+}
+
+.gap-8 {
+  gap: 8px;
 }
 </style>

@@ -1,24 +1,46 @@
 <template>
   <div class="base-date-picker-wrapper" :class="$attrs.class">
     <BaseLabel v-if="label" :label="label" :for="id" />
-    <input
-      v-bind="$attrs"
-      :id="id"
-      class="base-date-picker"
-      type="date"
-      :value="modelValue"
-      :name="name"
-      :required="required"
-      :disabled="disabled"
-      :min="min"
-      :max="max"
-      @input="$emit('update:modelValue', $event.target.value)"
-    />
+    <div class="date-selects">
+      <select
+        :id="`${id}-month`"
+        class="base-select month-select"
+        :value="selectedMonth"
+        :disabled="disabled"
+        :required="required"
+        @change="updateMonth($event.target.value)"
+      >
+        <option value="" disabled>Maand</option>
+        <option
+          v-for="(month, index) in months"
+          :key="index"
+          :value="String(index + 1).padStart(2, '0')"
+        >
+          {{ month }}
+        </option>
+      </select>
+
+      <select
+        :id="`${id}-year`"
+        class="base-select year-select"
+        :value="selectedYear"
+        :disabled="disabled"
+        :required="required"
+        @change="updateYear($event.target.value)"
+      >
+        <option value="" disabled>Jaar</option>
+        <option v-for="year in yearRange" :key="year" :value="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from "vue"
+
+const props = defineProps({
   modelValue: {
     type: String,
     default: ""
@@ -45,7 +67,7 @@ defineProps({
   },
   min: {
     type: String,
-    default: "1900-01-01"
+    default: "1900-01"
   },
   max: {
     type: String,
@@ -57,16 +79,88 @@ defineProps({
   }
 })
 
-defineEmits(["update:modelValue"])
+const emit = defineEmits(["update:modelValue"])
+
+const months = [
+  "Januari",
+  "Februari",
+  "Maart",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Augustus",
+  "September",
+  "Oktober",
+  "November",
+  "December"
+]
+
+const selectedMonth = computed(() => {
+  if (!props.modelValue) return ""
+  return props.modelValue.split("-")[1]
+})
+
+const selectedYear = computed(() => {
+  if (!props.modelValue) return ""
+  return props.modelValue.split("-")[0]
+})
+
+const minYear = computed(() => 1960)
+const maxYear = computed(() =>
+  props.max ? parseInt(props.max.split("-")[0]) : new Date().getFullYear()
+)
+
+const yearRange = computed(() => {
+  const years = []
+  for (let year = maxYear.value; year >= minYear.value; year--) {
+    years.push(year)
+  }
+  return years
+})
+
+const updateMonth = (month) => {
+  const year = selectedYear.value || new Date().getFullYear()
+  emit("update:modelValue", `${year}-${month}`)
+}
+
+const updateYear = (year) => {
+  const month = selectedMonth.value || "01"
+  emit("update:modelValue", `${year}-${month}`)
+}
 </script>
 
 <style scoped lang="scss">
-.base-date-picker {
+.date-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.base-select {
   font-family: Tahoma;
-  width: 100%;
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 100%;
   padding: 8px 12px;
   border: 1px solid $grey;
+  background-color: white;
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: currentColor;
+}
+
+.month-select {
+  flex: 3;
+}
+
+.year-select {
+  flex: 2;
 }
 </style>
