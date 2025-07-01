@@ -34,7 +34,7 @@ export default defineNuxtPlugin(() => {
   function filterByRadius(
     locations: LocationDetails[],
     center: GeoPoint,
-    radius: number
+    _radius: number
   ): LocationDetails[] {
     return locations
       .map(
@@ -48,7 +48,6 @@ export default defineNuxtPlugin(() => {
           )
         })
       )
-      .filter((loc) => loc.distance <= radius)
       .sort((a, b) => a.distance - b.distance)
       .map(({ distance, ...loc }) => loc) // Remove the distance property before returning
   }
