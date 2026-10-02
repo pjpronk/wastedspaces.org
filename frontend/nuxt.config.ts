@@ -2,7 +2,14 @@
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
-
+  routeRules: {
+    '/files': {
+      redirect: {
+        to: 'https://drive.google.com/drive/folders/1b19N9VHD-AZGeBv9M_L-0zOwiaWaFn1p',
+        statusCode: 302,
+      },
+    },
+  },
   runtimeConfig: {
     public: {
       BACKEND_URL: process.env.BACKEND_URL || "http://localhost:5050/api", // Accessible everywhere
